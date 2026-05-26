@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B6914"/>
+      <stop offset="50%" style="stop-color:#C4A76D"/>
+      <stop offset="100%" style="stop-color:#8B6914"/>
+    </linearGradient>
+  </defs>
+  <!-- Lotus Flower - Mithila Motif -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#gold)" stroke-width="3"/>
+  <path d="M50 15 C55 30, 65 35, 50 50 C35 35, 45 30, 50 15Z" fill="#C62828" opacity="0.9"/>
+  <path d="M85 50 C70 55, 65 65, 50 50 C65 35, 70 45, 85 50Z" fill="#E65100" opacity="0.9"/>
+  <path d="M50 85 C45 70, 35 65, 50 50 C65 65, 55 70, 50 85Z" fill="#2E7D32" opacity="0.9"/>
+  <path d="M15 50 C30 45, 35 35, 50 50 C35 65, 30 55, 15 50Z" fill="#1565C0" opacity="0.9"/>
+  <circle cx="50" cy="50" r="8" fill="url(#gold)"/>
+  <circle cx="50" cy="50" r="4" fill="#FFF8F0"/>
+</svg>
