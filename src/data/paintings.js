@@ -9,7 +9,7 @@ import ramSitaDarshan from "../assets/paintings/WhatsApp Image 2026-05-25 at 5.4
 import shivParvatiPainting from "../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg";
 import peacockOne from "../assets/paintings/peacockOne.jpeg";
 import bridePainting from "../assets/paintings/bride.jpeg";
-import shivParvatiMarriage from "../assets/paintings/shivParvatiMarriage.jpeg";
+import shivParvatiMarriage from "../assets/paintings/Shivparvatimarriage.jpeg";
 import fish from "../assets/paintings/fish.jpeg";
 import idkthecontext from '../assets/paintings/idkthecontext.jpeg';
 import shivparvatiblackwhite from '../assets/paintings/shivparvatiblacknwhite.jpeg';
