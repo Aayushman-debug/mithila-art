@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 export function buildApiPath(path) {
@@ -6,3 +8,86 @@ export function buildApiPath(path) {
   }
   return `${API_BASE_URL}${path}`;
 }
+
+// Create axios instance
+const api = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+// Add token to request headers if it exists
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Handle response errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('authUser');
+      sessionStorage.removeItem('authToken');
+      sessionStorage.removeItem('authUser');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Auth API calls
+export const authAPI = {
+  register: (data) => api.post('/api/auth/register', data),
+  login: (email, password) => api.post('/api/auth/login', { email, password }),
+  logout: () => api.post('/api/auth/logout'),
+  getProfile: () => api.get('/api/auth/profile'),
+  updateProfile: (data) => api.put('/api/auth/profile', data),
+  forgotPassword: (email) => api.post('/api/auth/forgot', { email }),
+  resetPassword: (token, password, confirmPassword) => api.post(`/api/auth/reset/${token}`, { password, confirmPassword }),
+};
+
+// Commission API calls
+export const commissionAPI = {
+  submitCommission: (data) => api.post('/commissions', data),
+  getCommission: (id) => api.get(`/commission/${id}`),
+};
+
+// User API calls
+export const userAPI = {
+  getCart: () => api.get('/api/user/cart'),
+  saveCart: (cart) => api.post('/api/user/cart', { cart }),
+  getWishlist: () => api.get('/api/user/wishlist'),
+  toggleWishlist: (payload) => api.post('/api/user/wishlist/toggle', payload),
+  getOrders: () => api.get('/api/user/orders'),
+  getCommissions: () => api.get('/api/user/commissions'),
+  getAddresses: () => api.get('/api/user/addresses'),
+  addAddress: (address) => api.post('/api/user/addresses', address),
+  removeAddress: (addressId) => api.delete(`/api/user/addresses/${addressId}`),
+};
+
+// Product API calls
+export const productAPI = {
+  getProducts: () => api.get('/api/products'),
+  getProductById: (productId) => api.get(`/api/products/${productId}`),
+  createProduct: (data) => api.post('/api/products', data),
+  updateProduct: (productId, data) => api.put(`/api/products/${productId}`, data),
+  deleteProduct: (productId) => api.delete(`/api/products/${productId}`),
+};
+
+// Payment API calls
+export const paymentAPI = {
+  createCommissionOrder: (data) => api.post('/create-order', data),
+  verifyCommissionPayment: (data) => api.post('/verify-payment', data),
+  markPaymentFailed: (data) => api.post('/payment-failed', data),
+  createCartOrder: (data) => api.post('/create-cart-order', data),
+  verifyCartPayment: (data) => api.post('/verify-cart-payment', data),
+};
+
+export default api;
+

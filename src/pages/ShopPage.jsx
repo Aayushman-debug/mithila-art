@@ -27,7 +27,9 @@ import SectionHeading from '../components/ui/SectionHeading';
 import PaintingCard from '../components/ui/PaintingCard';
 
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { paintings, categories } from '../data/paintings';
+import { productAPI, userAPI } from '../api';
 import { formatPrice, scrollToTop } from '../utils/helpers';
 
 /* ───────────────── animation variants ───────────────── */
@@ -336,6 +338,12 @@ function FilterSidebar({
 export default function ShopPage() {
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const { isAuthenticated, user } = useAuth();
+
+  const [products, setProducts] = useState(paintings);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState(null);
+  const [wishlistIds, setWishlistIds] = useState(user?.wishlist?.map((item) => item.productId) || []);
 
   /* ─── filter state ──────────────────────────────────────── */
   const [searchTerm, setSearchTerm] = useState('');
@@ -368,14 +376,83 @@ export default function ShopPage() {
     setSearchTerm('');
   }, []);
 
+  const handleAddToCart = (painting) => {
+    if (!isAuthenticated) {
+      return navigate('/login', {
+        state: { from: { pathname: '/shop' }, message: 'Login to add items to your cart.' },
+      });
+    }
+    addItem({
+      id: painting.id,
+      title: painting.title,
+      price: painting.price,
+      image: painting.images?.[0] || painting.image,
+      size: painting.size,
+      category: painting.category,
+      quantity: 1,
+    });
+  };
+
+  const handleToggleWishlist = async (painting) => {
+    if (!isAuthenticated) {
+      return navigate('/login', {
+        state: { from: { pathname: '/shop' }, message: 'Login to manage your wishlist.' },
+      });
+    }
+
+    try {
+      await userAPI.toggleWishlist({
+        productId: painting.id,
+        title: painting.title,
+        price: painting.price,
+        image: painting.images?.[0] || painting.image,
+        size: painting.size,
+        category: painting.category,
+      });
+      setWishlistIds((prev) => {
+        const exists = prev.includes(painting.id);
+        return exists ? prev.filter((id) => id !== painting.id) : [...prev, painting.id];
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const activeFilterCount =
     selectedCategories.length +
     selectedSizes.length +
     (priceRange[0] > 0 || priceRange[1] < 100000 ? 1 : 0);
 
+  useEffect(() => {
+    setWishlistIds(user?.wishlist?.map((item) => item.productId) || []);
+  }, [user]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setProductsLoading(true);
+      setProductsError(null);
+      try {
+        const response = await productAPI.getProducts();
+        if (response.data.success) {
+          setProducts(response.data.products || paintings);
+        } else {
+          setProductsError(response.data.message || 'Unable to load products');
+          setProducts(paintings);
+        }
+      } catch (err) {
+        setProductsError(err.response?.data?.message || 'Unable to load products');
+        setProducts(paintings);
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
   /* ─── filtered + sorted paintings ───────────────────────── */
   const filteredPaintings = useMemo(() => {
-    let result = [...paintings];
+    let result = [...products];
 
     // Search
     if (searchTerm.trim()) {
@@ -735,8 +812,9 @@ export default function ShopPage() {
                           >
                             <PaintingCard
                               painting={painting}
-                              onAddToCart={() => addItem(painting)}
-                              onQuickView={() => navigate(`/painting/${painting.id}`)}
+                              onAddToCart={handleAddToCart}
+                              onToggleWishlist={handleToggleWishlist}
+                              isWishlisted={wishlistIds.includes(painting.id)}
                             />
                           </motion.div>
                         ) : (
@@ -802,7 +880,7 @@ export default function ShopPage() {
                                     whileTap={{ scale: 0.9 }}
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      addItem(painting);
+                                      handleAddToCart(painting);
                                     }}
                                     disabled={!painting.inStock}
                                     className="px-4 py-2 text-sm font-body font-medium rounded-lg bg-earth-500 text-white hover:bg-earth-600 transition-colors disabled:opacity-50 flex items-center gap-1.5"

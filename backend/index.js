@@ -5,7 +5,18 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
 
-const requiredEnv = ["MONGODB_URI", "RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "FRONTEND_URL"];
+// Auth routes
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const { verifyToken, authenticate } = require('./middleware/authMiddleware');
+const User = require('./models/User');
+const Commission = require('./models/Commission');
+const CartOrder = require('./models/CartOrder');
+const Product = require('./models/Product');
+
+const requiredEnv = ["MONGODB_URI", "RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "FRONTEND_URLS"];
 const missingEnv = requiredEnv.filter((name) => !process.env[name]);
 if (missingEnv.length > 0) {
   console.warn("⚠️ Missing required environment variables:", missingEnv.join(", "));
@@ -14,9 +25,23 @@ if (missingEnv.length > 0) {
 
 const app = express();
 
+const allowedFrontendOrigins = (process.env.FRONTEND_URLS || "http://localhost:3000,http://localhost:3001,http://localhost:5173")
+  .split(",")
+  .map((url) => url.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin) {
+      return callback(null, true);
+    }
+    if (allowedFrontendOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS policy does not allow access from origin ${origin}`));
+  },
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
 }));
 app.use(express.json());
 
@@ -36,94 +61,7 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
   console.warn("⚠️ Razorpay keys are not configured. Payment endpoints will fail without them.");
 }
 console.log("Razorpay key loaded:", !!process.env.RAZORPAY_KEY_ID, !!process.env.RAZORPAY_KEY_SECRET);
-console.log("CORS allowed origin:", process.env.FRONTEND_URL || "http://localhost:5173");
-
-// ============ SCHEMAS ============
-
-const CommissionSchema = new mongoose.Schema({
-  // Customer Details
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  location: { type: String, required: true },
-
-  // Artwork Details
-  style: { type: String, required: true },
-  size: { type: String, required: true },
-  colors: { type: String },
-  description: { type: String, required: true },
-  timeline: { type: String },
-
-  // Commission Status
-  status: {
-    type: String,
-    enum: ["submitted", "approved", "rejected", "in-progress", "completed"],
-    default: "submitted"
-  },
-
-  // Quote & Payment
-  quotedBudget: { type: Number },
-  approvalMessage: { type: String },
-
-  // Payment Fields
-  paymentStatus: {
-    type: String,
-    enum: ["pending", "paid", "failed"],
-    default: "pending"
-  },
-  orderId: { type: String },
-  paymentId: { type: String },
-  transactionId: { type: String },
-
-  // Timestamps
-  submittedAt: { type: Date, default: Date.now },
-  approvedAt: { type: Date },
-  paidAt: { type: Date },
-
-  // Admin Reference
-  referenceId: {
-    type: String,
-    default: () => "COM" + Date.now().toString().slice(-6)
-  }
-});
-
-const Commission = mongoose.model("Commission", CommissionSchema);
-
-const CartOrderSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  address: { type: String, required: true },
-  city: { type: String, required: true },
-  state: { type: String, required: true },
-  pincode: { type: String, required: true },
-  items: [
-    {
-      productId: String,
-      title: String,
-      quantity: Number,
-      price: Number,
-      image: String
-    }
-  ],
-  totalAmount: { type: Number, required: true },
-  shipping: { type: Number, required: true },
-  grandTotal: { type: Number, required: true },
-  discount: { type: Number, default: 0 },
-  couponCode: { type: String },
-  orderId: String,
-  paymentId: String,
-  transactionId: String,
-  paymentStatus: {
-    type: String,
-    enum: ["pending", "paid", "failed"],
-    default: "pending"
-  },
-  createdAt: { type: Date, default: Date.now },
-  paidAt: Date
-});
-
-const CartOrder = mongoose.model("CartOrder", CartOrderSchema);
+console.log("CORS allowed origins:", allowedFrontendOrigins);
 
 // ============ ROUTES ============
 
@@ -139,10 +77,22 @@ app.get("/health", (req, res) => {
 // 1. SUBMIT COMMISSION (Customer)
 app.post("/commissions", async (req, res) => {
   try {
+    // If an auth token is present, try to attach the commission to the user
+    const authHeader = req.headers.authorization;
+    let attachedUser = null;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      const decoded = verifyToken(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
+      if (decoded && decoded.userId) {
+        attachedUser = await User.findById(decoded.userId).select('name email phone');
+      }
+    }
+
     const commission = new Commission({
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
+      user: attachedUser?._id || null,
+      name: attachedUser?.name || req.body.name,
+      email: attachedUser?.email || req.body.email,
+      phone: attachedUser?.phone || req.body.phone,
       location: req.body.location,
       style: req.body.style,
       size: req.body.size,
@@ -154,6 +104,12 @@ app.post("/commissions", async (req, res) => {
     });
 
     const saved = await commission.save();
+
+    if (attachedUser) {
+      await User.findByIdAndUpdate(attachedUser._id, {
+        $push: { commissions: saved._id },
+      });
+    }
 
     res.status(201).json({
       success: true,
@@ -315,7 +271,7 @@ app.post("/create-order", async (req, res) => {
 });
 
 // 4b. CREATE CART ORDER
-app.post("/create-cart-order", async (req, res) => {
+app.post("/create-cart-order", authenticate, async (req, res) => {
   try {
     console.log("/create-cart-order request body:", req.body);
     const { name, email, phone, address, city, state, pincode, totalAmount, shipping, grandTotal, discount, couponCode, items } = req.body;
@@ -339,6 +295,7 @@ app.post("/create-cart-order", async (req, res) => {
     console.log("/create-cart-order created Razorpay order:", order);
 
     const cartOrder = new CartOrder({
+      user: req.user.userId,
       name,
       email,
       phone,
@@ -357,6 +314,10 @@ app.post("/create-cart-order", async (req, res) => {
     });
 
     await cartOrder.save();
+
+    await User.findByIdAndUpdate(req.user.userId, {
+      $push: { orders: cartOrder._id },
+    });
 
     res.json({
       success: true,
@@ -555,6 +516,12 @@ app.get("/reviews", async (req, res) => {
     });
   }
 });
+
+// ============ AUTH ROUTES ============
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/admin", adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

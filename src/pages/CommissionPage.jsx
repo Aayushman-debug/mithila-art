@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoCheckmarkCircle, IoArrowForwardOutline, IoArrowBackOutline, IoTimeOutline } from 'react-icons/io5';
 import SectionHeading from '../components/ui/SectionHeading';
-import { buildApiPath } from '../api';
+import { commissionAPI } from '../api';
+import { useAuth } from '../context/AuthContext';
 import { categories } from '../data/paintings';
 
 const steps = ['Your Details', 'Artwork Preferences', 'Review & Submit'];
@@ -24,6 +25,8 @@ export default function CommissionPage() {
   const [commissionId, setCommissionId] = useState(null);
   const [commissionStatus, setCommissionStatus] = useState(null);
 
+  const { isAuthenticated, user } = useAuth();
+
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', location: '',
     style: '', size: '', colors: '', description: '', budget: '', timeline: '',
@@ -36,19 +39,31 @@ export default function CommissionPage() {
 
     const checkStatus = async () => {
       try {
-        const response = await fetch(buildApiPath(`/commission/${commissionId}`));
-        const data = await response.json();
+        const response = await commissionAPI.getCommission(commissionId);
+        const data = response.data;
         if (data.success) {
           setCommissionStatus(data.commission);
         }
       } catch (error) {
-        console.error("Status check error:", error);
+        console.error('Status check error:', error);
       }
     };
 
     const interval = setInterval(checkStatus, 5000);
     return () => clearInterval(interval);
   }, [commissionId]);
+
+  // Prefill from authenticated user
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+      }));
+    }
+  }, [isAuthenticated, user]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -79,23 +94,13 @@ export default function CommissionPage() {
   const handleSubmit = async () => {
     try {
 
-      const response = await fetch(
-        buildApiPath('/commissions'),
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":"application/json"
-          },
-          body: JSON.stringify(formData)
-        }
-      );
-
-      const data = await response.json();
-      if(response.ok && data.success){
+      const response = await commissionAPI.submitCommission(formData);
+      const data = response.data;
+      if (data.success) {
         setSubmittedData(formData);
         setCommissionId(data.commissionId);
       } else {
-        alert("Error: " + (data.error || "Submission failed"));
+        alert('Error: ' + (data.error || 'Submission failed'));
       }
 
     } catch(error){

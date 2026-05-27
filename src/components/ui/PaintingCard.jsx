@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoChevronBackOutline, IoChevronForwardOutline, IoImagesOutline } from 'react-icons/io5';
+import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoImagesOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
-export default function PaintingCard({ painting, onAddToCart }) {
+export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted }) {
   const navigate = useNavigate();
   const { id, title, artist, price, originalPrice, category, size, inStock } = painting;
   const images = painting.images && painting.images.length > 0 ? painting.images : [painting.image];
@@ -128,8 +128,15 @@ export default function PaintingCard({ painting, onAddToCart }) {
         </div>
 
         {/* Wishlist */}
-        <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:text-mithila-red z-10">
-          <IoHeartOutline size={18} />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleWishlist?.(painting);
+          }}
+          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:text-mithila-red z-10"
+        >
+          {isWishlisted ? <IoHeart size={18} className="text-mithila-red" /> : <IoHeartOutline size={18} />}
         </button>
       </div>
 

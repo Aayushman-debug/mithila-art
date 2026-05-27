@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoMenu, IoClose, IoCartOutline, IoSunnyOutline, IoMoonOutline } from 'react-icons/io5';
+import { IoMenu, IoClose, IoCartOutline, IoSunnyOutline, IoMoonOutline, IoLogOut, IoPersonCircle, IoHeartOutline } from 'react-icons/io5';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -17,10 +18,12 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { itemCount } = useCart();
   const { isDark, toggleTheme } = useTheme();
+  const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -32,6 +35,12 @@ export default function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
+  const handleLogout = async () => {
+    await logout();
+    setIsOpen(false);
+    navigate('/');
+  };
 
   return (
     <>
@@ -113,6 +122,8 @@ export default function Navbar() {
                   )}
                 </AnimatePresence>
               </motion.button>
+
+              {/* Cart */}
               <Link
                 to="/cart"
                 className={`relative p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
@@ -130,6 +141,68 @@ export default function Navbar() {
                   </motion.span>
                 )}
               </Link>
+
+              {/* Auth Buttons (Desktop) */}
+              {isAuthenticated ? (
+                <div className="hidden sm:flex items-center gap-2">
+                  <Link
+                    to="/wishlist"
+                    className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                      scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                    }`}
+                    title="Wishlist"
+                  >
+                    <IoHeartOutline size={22} />
+                  </Link>
+                  <Link
+                    to="/profile"
+                    className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                      scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                    }`}
+                    title="Profile"
+                  >
+                    <IoPersonCircle size={22} />
+                  </Link>
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
+                        scrolled ? 'text-earth-500 hover:bg-earth-500/10' : 'text-cream-200 hover:bg-white/10'
+                      }`}
+                    >
+                      Admin
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                      scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                    }`}
+                    title="Sign out"
+                  >
+                    <IoLogOut size={22} />
+                  </button>
+                </div>
+              ) : (
+                <div className="hidden sm:flex items-center gap-2">
+                  <Link
+                    to="/login"
+                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
+                      scrolled
+                        ? 'text-earth-500 hover:bg-earth-500/10'
+                        : 'text-cream-200 hover:bg-white/10'
+                    }`}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="px-4 py-2 rounded-lg bg-gradient-gold text-white font-medium text-sm hover:shadow-gold transition-all duration-300"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
 
               {/* Mobile Menu Toggle */}
               <button
@@ -200,13 +273,57 @@ export default function Navbar() {
                   ))}
                 </nav>
 
-                <div className="mt-8 pt-8 border-t border-cream-200">
-                  <Link to="/shop" className="btn-primary w-full text-center block">
-                    Shop Now
-                  </Link>
-                </div>
+                {/* Auth Links (Mobile) */}
+                {isAuthenticated ? (
+                  <div className="mt-8 pt-8 border-t border-cream-200 space-y-3">
+                    <Link
+                      to="/wishlist"
+                      className="flex items-center gap-2 px-4 py-3 rounded-xl bg-cream-100 text-earth-700 font-medium hover:bg-cream-200 transition-colors"
+                    >
+                      <IoHeartOutline size={18} />
+                      Wishlist
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="flex items-center gap-2 px-4 py-3 rounded-xl bg-earth-500/10 text-earth-500 font-medium hover:bg-earth-500/20 transition-colors"
+                    >
+                      <IoPersonCircle size={18} />
+                      My Profile
+                    </Link>
+                    {user?.role === 'admin' && (
+                      <Link
+                        to="/admin"
+                        className="flex items-center gap-2 px-4 py-3 rounded-xl bg-cream-100 text-earth-700 font-medium hover:bg-cream-200 transition-colors"
+                      >
+                        Admin
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-mithila-red/10 text-mithila-red font-medium hover:bg-mithila-red/20 transition-colors"
+                    >
+                      <IoLogOut size={18} />
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="mt-8 pt-8 border-t border-cream-200 space-y-3">
+                    <Link
+                      to="/login"
+                      className="block text-center px-4 py-3 rounded-xl border-2 border-earth-500 text-earth-500 font-medium hover:bg-earth-500/10 transition-colors"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="block text-center px-4 py-3 rounded-xl bg-gradient-gold text-white font-medium hover:shadow-gold transition-all"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
 
-                <div className="mt-6 text-center">
+                <div className="mt-6 pt-6 border-t border-cream-200 text-center">
                   <p className="text-body-sm">📞 +91 74883 37792</p>
                   <p className="text-body-sm mt-1">✉️ pathaklalita129@gmail.com</p>
                 </div>

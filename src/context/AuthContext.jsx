@@ -1,17 +1,19 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import { authAPI } from '../api';
 
-/* ─── Demo credentials ─────────────────────────────────────────── */
-const DEMO_USERNAME = 'admin';
-const DEMO_PASSWORD = 'mithila2024';
-const STORAGE_KEY = 'mithilaArt_auth';
+/* ─── Storage Keys ─────────────────────────────────────────── */
+const TOKEN_KEY = 'authToken';
+const USER_KEY = 'authUser';
 
-/* ─── Helpers ──────────────────────────────────────────────────── */
-function loadAuthFromSession() {
+/* ─── Helpers ──────────────────────────────────────────────── */
+function loadAuthFromStorage() {
   try {
-    const stored = sessionStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return parsed?.isAuthenticated ? parsed : null;
+    const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+    const userStr = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+      return { token, user };
     }
     return null;
   } catch {
@@ -19,94 +21,232 @@ function loadAuthFromSession() {
   }
 }
 
-function saveAuthToSession(authState) {
+function getAuthStorage() {
+  if (localStorage.getItem(TOKEN_KEY)) return localStorage;
+  if (sessionStorage.getItem(TOKEN_KEY)) return sessionStorage;
+  return localStorage;
+}
+
+function saveAuthToStorage(token, user, remember = true) {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(authState));
+    const storage = remember ? localStorage : sessionStorage;
+    storage.setItem(TOKEN_KEY, token);
+    storage.setItem(USER_KEY, JSON.stringify(user));
+
+    if (remember) {
+      sessionStorage.removeItem(TOKEN_KEY);
+      sessionStorage.removeItem(USER_KEY);
+    } else {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+    }
   } catch {
-    // Session storage unavailable — fail silently
+    // Storage unavailable
   }
 }
 
-function clearAuthSession() {
+function clearAuthStorage() {
   try {
-    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
   } catch {
     // Fail silently
   }
 }
 
-/* ─── Context ──────────────────────────────────────────────────── */
+/* ─── Context ──────────────────────────────────────────────── */
 const AuthContext = createContext(null);
 
-/* ─── Provider ─────────────────────────────────────────────────── */
+/* ─── Provider ─────────────────────────────────────────────── */
 export function AuthProvider({ children }) {
   const [authState, setAuthState] = useState(() => {
-    const stored = loadAuthFromSession();
-    return (
-      stored || {
-        isAuthenticated: false,
-        user: null,
-      }
-    );
+    const stored = loadAuthFromStorage();
+    return stored
+      ? { isAuthenticated: true, user: stored.user, token: stored.token }
+      : { isAuthenticated: false, user: null, token: null };
   });
 
-  // Sync to sessionStorage whenever authState changes
-  useEffect(() => {
-    if (authState.isAuthenticated) {
-      saveAuthToSession(authState);
-    } else {
-      clearAuthSession();
-    }
-  }, [authState]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   /**
-   * Attempt login with username and password.
-   * @returns {{ success: boolean, error?: string }}
+   * Register a new user
    */
-  const login = useCallback((username, password) => {
-    if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
-      const newState = {
-        isAuthenticated: true,
-        user: {
-          username: DEMO_USERNAME,
-          name: 'Admin',
-          role: 'admin',
-          loginTime: new Date().toISOString(),
-        },
-      };
-      setAuthState(newState);
-      return { success: true };
-    }
+  const register = useCallback(async (name, email, phone, password, confirmPassword, remember = true) => {
+    setLoading(true);
+    setError(null);
 
-    return {
-      success: false,
-      error: 'Invalid username or password. Please try again.',
-    };
+    try {
+      const response = await authAPI.register({
+        name,
+        email,
+        phone,
+        password,
+        confirmPassword,
+      });
+
+      if (response.data.success) {
+        const { token, user } = response.data;
+        saveAuthToStorage(token, user, remember);
+        setAuthState({
+          isAuthenticated: true,
+          user,
+          token,
+        });
+        return { success: true, user };
+      }
+
+      return { success: false, error: response.data.message };
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message || 'Registration failed';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   /**
-   * Log the current user out.
+   * Login user
    */
-  const logout = useCallback(() => {
-    setAuthState({ isAuthenticated: false, user: null });
-    clearAuthSession();
+  const login = useCallback(async (email, password, remember = true) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await authAPI.login(email, password);
+
+      if (response.data.success) {
+        const { token, user } = response.data;
+        saveAuthToStorage(token, user, remember);
+        setAuthState({
+          isAuthenticated: true,
+          user,
+          token,
+        });
+        return { success: true, user };
+      }
+
+      return { success: false, error: response.data.message };
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message || 'Login failed';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // ── Context value ──────────────────────────────────────────────
+  /**
+   * Logout user
+   */
+  const logout = useCallback(async () => {
+    try {
+      if (authState.token) {
+        await authAPI.logout();
+      }
+    } catch {
+      // Fail silently
+    } finally {
+      clearAuthStorage();
+      setAuthState({
+        isAuthenticated: false,
+        user: null,
+        token: null,
+      });
+      setError(null);
+    }
+  }, [authState.token]);
+
+  /**
+   * Get current user profile
+   */
+  const getProfile = useCallback(async () => {
+    if (!authState.token) {
+      return { success: false, error: 'Not authenticated' };
+    }
+
+    try {
+      const response = await authAPI.getProfile();
+
+      if (response.data.success) {
+        const user = response.data.user;
+        saveAuthToStorage(authState.token, user, getAuthStorage() === localStorage);
+        setAuthState((prev) => ({
+          ...prev,
+          user,
+        }));
+        return { success: true, user };
+      }
+
+      return { success: false, error: response.data.message };
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to fetch profile';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    }
+  }, [authState.token]);
+
+  /**
+   * Update user profile
+   */
+  const updateProfile = useCallback(
+    async (updates) => {
+      if (!authState.token) {
+        return { success: false, error: 'Not authenticated' };
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await authAPI.updateProfile(updates);
+
+        if (response.data.success) {
+          const user = response.data.user;
+          saveAuthToStorage(authState.token, user, getAuthStorage() === localStorage);
+          setAuthState((prev) => ({
+            ...prev,
+            user,
+          }));
+          return { success: true, user };
+        }
+
+        return { success: false, error: response.data.message };
+      } catch (err) {
+        const errorMsg = err.response?.data?.message || err.message || 'Profile update failed';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      } finally {
+        setLoading(false);
+      }
+    },
+    [authState.token]
+  );
+
+  // Context value
   const value = useMemo(
     () => ({
       isAuthenticated: authState.isAuthenticated,
       user: authState.user,
+      token: authState.token,
+      loading,
+      error,
+      register,
       login,
       logout,
+      getProfile,
+      updateProfile,
     }),
-    [authState, login, logout],
+    [authState, loading, error, register, login, logout, getProfile, updateProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-/* ─── Hook ─────────────────────────────────────────────────────── */
+/* ─── Hook ─────────────────────────────────────────────────── */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
