@@ -125,6 +125,11 @@ const CartOrder = mongoose.model("CartOrder", CartOrderSchema);
 
 // ============ ROUTES ============
 
+// HEALTH CHECK / ROOT ROUTE
+app.get("/", (req, res) => {
+  res.send("Mithila Art Backend Running 🚀");
+});
+
 // 1. SUBMIT COMMISSION (Customer)
 app.post("/commissions", async (req, res) => {
   try {
