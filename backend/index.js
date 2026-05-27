@@ -25,10 +25,16 @@ if (missingEnv.length > 0) {
 
 const app = express();
 
-const allowedFrontendOrigins = (process.env.FRONTEND_URLS || "http://localhost:3000,http://localhost:3001,http://localhost:5173")
-  .split(",")
-  .map((url) => url.trim())
-  .filter(Boolean);
+const allowedFrontendOrigins = [
+  ...(process.env.FRONTEND_URLS || "").split(","),
+  process.env.FRONTEND_URL,
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:5173",
+]
+  .map((url) => String(url || "").trim())
+  .filter(Boolean)
+  .filter((value, index, self) => self.indexOf(value) === index);
 
 app.use(cors({
   origin: (origin, callback) => {
