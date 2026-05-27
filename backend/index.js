@@ -26,11 +26,13 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mithilaRe
   .catch(err => console.error("✗ MongoDB Error:", err));
 
 // Razorpay Instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+  });
+} else {
   console.warn("⚠️ Razorpay keys are not configured. Payment endpoints will fail without them.");
 }
 console.log("Razorpay key loaded:", !!process.env.RAZORPAY_KEY_ID, !!process.env.RAZORPAY_KEY_SECRET);
@@ -127,6 +129,10 @@ const CartOrder = mongoose.model("CartOrder", CartOrderSchema);
 
 // HEALTH CHECK / ROOT ROUTE
 app.get("/", (req, res) => {
+  res.send("Mithila Art Backend Running 🚀");
+});
+
+app.get("/health", (req, res) => {
   res.send("Mithila Art Backend Running 🚀");
 });
 
