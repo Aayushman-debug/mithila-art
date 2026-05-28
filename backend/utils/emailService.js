@@ -24,6 +24,9 @@ const getPrimarySmtpConfig = () => {
         user: user.trim(),
         pass: pass.trim(),
       },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
     },
   };
 };
