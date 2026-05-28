@@ -433,10 +433,16 @@ export default function ShopPage() {
       setProductsError(null);
       try {
         const response = await productAPI.getProducts();
-        if (response.data.success) {
-          setProducts(response.data.products || paintings);
+        if (response.data.success && response.data.products && response.data.products.length > 0) {
+          const mappedProducts = response.data.products.map(p => ({
+            ...p,
+            id: p.productId || p._id,
+            images: p.gallery && p.gallery.length > 0 ? p.gallery : (p.image ? [p.image] : []),
+            inStock: p.stock > 0 && p.available !== false,
+            artist: p.artist || 'Mithila Artist',
+          }));
+          setProducts(mappedProducts);
         } else {
-          setProductsError(response.data.message || 'Unable to load products');
           setProducts(paintings);
         }
       } catch (err) {

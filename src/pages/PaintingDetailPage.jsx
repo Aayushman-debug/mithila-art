@@ -65,40 +65,12 @@ export default function PaintingDetailPage() {
     }
   }, [painting, addItem]);
 
-  const handleRazorpay = useCallback(() => {
-    const options = {
-      key: "rzp_test_mockkey123456", // Test key for mockup
-      amount: painting.price * 100,
-      currency: "INR",
-      name: "Lalita Pathak Mithila Art",
-      description: painting.title,
-      image: images[0],
-      handler: function (response){
-          alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}\n\nNote: This is a demo integration.`);
-      },
-      prefill: {
-          name: "Art Collector",
-          email: "pathaklalita129@gmail.com",
-          contact: "+917488337792"
-      },
-      theme: {
-          color: "#8B6914"
-      }
-    };
-    
-    if (!window.Razorpay) {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => {
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-      };
-      document.body.appendChild(script);
-    } else {
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+  const handleBuyNow = useCallback(() => {
+    if (painting) {
+      addItem(painting);
+      navigate('/cart');
     }
-  }, [painting, images]);
+  }, [painting, addItem, navigate]);
 
 
   /* ── 404 ── */
@@ -292,15 +264,15 @@ export default function PaintingDetailPage() {
               )}
             </motion.button>
 
-            {/* ── Razorpay Payment Section ── */}
+            {/* ── Buy Now Section ── */}
             <motion.button
-              onClick={handleRazorpay}
+              onClick={handleBuyNow}
               disabled={!painting.inStock}
               className="w-full py-4 rounded-xl bg-charcoal text-white font-display font-semibold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
               whileHover={painting.inStock ? { scale: 1.02 } : {}}
               whileTap={painting.inStock ? { scale: 0.98 } : {}}
             >
-              Pay via Razorpay
+              Buy Now
             </motion.button>
 
             {/* ── UPI Payment Section ── */}
