@@ -1,7 +1,16 @@
 import { motion } from 'framer-motion';
 import { FaWhatsapp } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 export default function WhatsAppButton() {
+  const location = useLocation();
+  const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify'];
+  
+  // Hide WhatsApp button on auth pages
+  if (authRoutes.some(route => location.pathname.includes(route))) {
+    return null;
+  }
+
   return (
     <motion.a
       href="https://wa.me/917488337792?text=Hi%20Lalita%20ji!%20I%27m%20interested%20in%20your%20Mithila%20paintings."

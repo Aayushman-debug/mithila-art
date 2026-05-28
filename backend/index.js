@@ -127,7 +127,7 @@ app.use((req, res, next) => {
 const isProd = process.env.NODE_ENV === 'production';
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isProd ? 10 : 200, // stricter in prod, relaxed for local dev
+  max: isProd ? 100 : 200, // stricter in prod, relaxed for local dev
   message: { success: false, message: 'Too many auth attempts, please try again later.' },
 });
 const generalLimiter = rateLimit({
