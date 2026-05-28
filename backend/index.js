@@ -158,7 +158,6 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
 }
 console.log("Razorpay key loaded:", !!process.env.RAZORPAY_KEY_ID, !!process.env.RAZORPAY_KEY_SECRET);
 console.log("CORS allowed origins:", allowedFrontendOrigins);
-logEnvVars(console);
 (async () => {
   try {
     const result = await createTransporter(console);
