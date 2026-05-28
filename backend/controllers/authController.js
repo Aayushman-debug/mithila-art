@@ -395,25 +395,26 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save({ validateBeforeSave: false });
 
-    const transportResult = await createTransporter(console);
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     console.log('Generated Reset URL:', resetUrl);
 
-    // 6. Prepare email - ONLY send to the requested user's email
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      replyTo: process.env.EMAIL_FROM,
-      to: normalizedEmail,
-      subject: 'Reset your Mithila Art password',
-      html: `<p>Hi ${user.name || 'user'},</p>
-        <p>We received a request to reset your password. Click the link below to proceed:</p>
-        <p><a href="${resetUrl}">Reset Password</a></p>
-        <p>This link will expire in one hour.</p>
-        <p>If you did not request this, please ignore this email.</p>`,
-    };
-
-    // 7. Send email
     try {
+      const transportResult = await createTransporter(console);
+
+      // 6. Prepare email - ONLY send to the requested user's email
+      const mailOptions = {
+        from: process.env.EMAIL_FROM,
+        replyTo: process.env.EMAIL_FROM,
+        to: normalizedEmail,
+        subject: 'Reset your Mithila Art password',
+        html: `<p>Hi ${user.name || 'user'},</p>
+          <p>We received a request to reset your password. Click the link below to proceed:</p>
+          <p><a href="${resetUrl}">Reset Password</a></p>
+          <p>This link will expire in one hour.</p>
+          <p>If you did not request this, please ignore this email.</p>`,
+      };
+
+      // 7. Send email
       const info = await transportResult.transporter.sendMail(mailOptions);
       const responsePayload = {
         success: true,
