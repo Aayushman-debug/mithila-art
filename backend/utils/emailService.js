@@ -44,9 +44,12 @@ const createTransporter = async (logger) => {
   const verifyTransporter = async (candidate, name) => {
     const testTransporter = nodemailer.createTransport(candidate.config);
     try {
+      console.log(`[SMTP] Initializing transporter verification for: ${name}...`);
       await testTransporter.verify();
+      console.log(`[SMTP] Verification successful for: ${name}`);
       return { transporter: testTransporter, provider: name, smtpVerified: true };
     } catch (err) {
+      console.error(`[SMTP] Verification FAILED for: ${name} - Error:`, err.message);
       return { transporter: null, provider: name, smtpVerified: false, lastError: err };
     }
   };

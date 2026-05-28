@@ -103,6 +103,7 @@ const register = async (req, res) => {
     try {
       const transportResult = await createTransporter(console);
       const verifyUrl = `${process.env.BACKEND_URL}/api/auth/verify/${verificationToken}`;
+      console.log('Generated Verification URL:', verifyUrl);
       const mailOptions = {
         from: process.env.EMAIL_FROM,
         to: user.email,
@@ -120,7 +121,7 @@ const register = async (req, res) => {
       }
     } catch (mailErr) {
       emailError = mailErr && mailErr.message ? mailErr.message : String(mailErr);
-      console.error('Registration: email send error:', mailErr);
+      console.error('Registration email send error [sendMail failure]:', mailErr);
     }
 
     // Return response indicating verification required
@@ -157,7 +158,7 @@ const verifyEmail = async (req, res) => {
 
     const user = await User.findOne({ verificationToken: token, verificationExpires: { $gt: Date.now() } });
     if (!user) {
-      const redirectFail = `${process.env.FRONTEND_URL}/verify-failed`;
+      const redirectFail = `${process.env.FRONTEND_URL}/login?verified=false`;
       return res.redirect(redirectFail);
     }
 
@@ -166,7 +167,7 @@ const verifyEmail = async (req, res) => {
     user.verificationExpires = undefined;
     await user.save();
 
-    const redirectSuccess = `${process.env.FRONTEND_URL}/verify-success`;
+    const redirectSuccess = `${process.env.FRONTEND_URL}/login?verified=true`;
     return res.redirect(redirectSuccess);
   } catch (error) {
     console.error('Email verification error:', error);
@@ -206,6 +207,7 @@ const resendVerification = async (req, res) => {
     try {
       const transportResult = await createTransporter(console);
       const verifyUrl = `${process.env.BACKEND_URL}/api/auth/verify/${verificationToken}`;
+      console.log('Generated Resend Verification URL:', verifyUrl);
       const mailOptions = {
         from: process.env.EMAIL_FROM,
         to: user.email,
@@ -219,7 +221,7 @@ const resendVerification = async (req, res) => {
       }
     } catch (mailErr) {
       emailError = mailErr && mailErr.message ? mailErr.message : String(mailErr);
-      console.error('Resend verification: email send error:', mailErr);
+      console.error('Resend verification email send error [sendMail failure]:', mailErr);
     }
     const resp = { success: emailSent, emailSent };
     if (emailSent) {
@@ -394,6 +396,7 @@ const forgotPassword = async (req, res) => {
 
     const transportResult = await createTransporter(console);
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    console.log('Generated Reset URL:', resetUrl);
 
     // 6. Prepare email - ONLY send to the requested user's email
     const mailOptions = {

@@ -33,6 +33,16 @@ export default function LoginPage() {
   const [resendMsg, setResendMsg] = useState('');
   const [resendLoading, setResendLoading] = useState(false);
 
+  // Check URL query parameters for verification redirects
+  useState(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('verified') === 'true') {
+      setSuccess('Email successfully verified! You can now log in.');
+    } else if (params.get('verified') === 'false') {
+      setError('Verification link is invalid or has expired. Please log in and request a new link.');
+    }
+  });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
