@@ -55,10 +55,8 @@ const allowedFrontendOrigins = Array.from(new Set([
         'http://localhost:5173',
       ]
     : []),
-])
+]))
   .map((url) => String(url || '').trim())
-  .filter(Boolean);
-  .map((url) => String(url || "").trim())
   .filter(Boolean)
   .filter((value, index, self) => self.indexOf(value) === index);
 
@@ -205,6 +203,9 @@ app.post("/commissions", async (req, res) => {
     }
 
     if (!validateIndianPhone(phone)) {
+      return res.status(400).json({ success: false, message: 'Invalid Indian phone number' });
+    }
+
     if (description && email) {
       const recent = await Commission.findOne({ email: email.toLowerCase(), description }).sort({ submittedAt: -1 });
       if (recent && recent.submittedAt && (Date.now() - new Date(recent.submittedAt)) < 2 * 60 * 1000) {
@@ -465,14 +466,15 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid grand total amount' });
     }
 
-        currency: "INR",
-        receipt: `CART-${Date.now()}`,
-        notes: {
-          customerName: name,
-          customerEmail: email
-        }
-      });
-    }
+    const order = await razorpay.orders.create({
+      amount: Math.round(requestedGrandTotal * 100),
+      currency: "INR",
+      receipt: `CART-${Date.now()}`,
+      notes: {
+        customerName: name,
+        customerEmail: email
+      }
+    });
     console.log("/create-cart-order created Razorpay order:", order);
 
     const cartOrder = new CartOrder({
