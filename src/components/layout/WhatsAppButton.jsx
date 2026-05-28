@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { FaWhatsapp } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-hot-toast';
 
 export default function WhatsAppButton() {
   const location = useLocation();
@@ -18,7 +17,7 @@ export default function WhatsAppButton() {
   const handleClick = (e) => {
     if (!isAuthenticated) {
       e.preventDefault();
-      toast.error('Please log in first to contact via WhatsApp');
+      alert('Please log in first to contact via WhatsApp');
       navigate('/login');
     }
   };
