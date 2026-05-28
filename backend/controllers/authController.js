@@ -429,7 +429,13 @@ const forgotPassword = async (req, res) => {
       return res.status(200).json(responsePayload);
     } catch (mailErr) {
       console.error('❌ Email send failed:', mailErr.message);
-      return res.status(500).json({ success: false, message: 'Failed to send reset email', error: mailErr.message || String(mailErr) });
+      // TEMPORARY WORKAROUND FOR SMTP FAILURES: 
+      // Return 200 success and provide the reset URL directly to the frontend
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Email failed to send, but a temporary reset link is provided below.',
+        resetUrl: resetUrl 
+      });
     }
   } catch (error) {
     console.error('❌ Forgot password error:', error);

@@ -1,9 +1,13 @@
 import { motion } from 'framer-motion';
 import { FaWhatsapp } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-hot-toast';
 
 export default function WhatsAppButton() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify'];
   
   // Hide WhatsApp button on auth pages
@@ -11,12 +15,21 @@ export default function WhatsAppButton() {
     return null;
   }
 
+  const handleClick = (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      toast.error('Please log in first to contact via WhatsApp');
+      navigate('/login');
+    }
+  };
+
   return (
     <motion.a
       href="https://wa.me/917488337792?text=Hi%20Lalita%20ji!%20I%27m%20interested%20in%20your%20Mithila%20paintings."
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float group"
+      onClick={handleClick}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 2, type: 'spring', stiffness: 200 }}
