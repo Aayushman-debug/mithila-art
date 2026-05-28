@@ -124,6 +124,7 @@ app.use((req, res, next) => {
 });
 
 // Rate limiting
+app.set('trust proxy', 1); // Required for rate limiting behind a reverse proxy (like Render/Vercel)
 const isProd = process.env.NODE_ENV === 'production';
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
