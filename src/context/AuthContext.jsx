@@ -88,13 +88,13 @@ export function AuthProvider({ children }) {
       });
 
       if (response.data.success) {
+        // If backend requires email verification, don't auto-login
+        if (response.data.requiresVerification) {
+          return { success: true, requiresVerification: true, message: response.data.message };
+        }
         const { token, user } = response.data;
         saveAuthToStorage(token, user, remember);
-        setAuthState({
-          isAuthenticated: true,
-          user,
-          token,
-        });
+        setAuthState({ isAuthenticated: true, user, token });
         return { success: true, user };
       }
 

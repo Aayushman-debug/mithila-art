@@ -6,6 +6,8 @@ import SectionHeading from '../components/ui/SectionHeading';
 import { commissionAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { categories } from '../data/paintings';
+import { useToast } from '../context/ToastContext';
+import { validateEmail, validateIndianPhone } from '../utils/helpers';
 
 const steps = ['Your Details', 'Artwork Preferences', 'Review & Submit'];
 
@@ -26,12 +28,15 @@ export default function CommissionPage() {
   const [commissionStatus, setCommissionStatus] = useState(null);
 
   const { isAuthenticated, user } = useAuth();
+  const showToast = useToast();
 
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', location: '',
     style: '', size: '', colors: '', description: '', budget: '', timeline: '',
   });
   const [errors, setErrors] = useState({});
+  const [submissionError, setSubmissionError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   // Poll for commission status updates every 5 seconds
   useEffect(() => {
@@ -75,7 +80,9 @@ export default function CommissionPage() {
     if (step === 0) {
       if (!formData.name.trim()) newErrors.name = 'Name is required';
       if (!formData.email.trim()) newErrors.email = 'Email is required';
+      else if (!validateEmail(formData.email)) newErrors.email = 'Enter a valid email address';
       if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
+      else if (!validateIndianPhone(formData.phone)) newErrors.phone = 'Enter a valid 10-digit Indian mobile number';
     }
     if (step === 1) {
       if (!formData.style) newErrors.style = 'Please select a style';
@@ -92,20 +99,28 @@ export default function CommissionPage() {
   const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
   const handleSubmit = async () => {
+    setSubmissionError('');
+    // Prevent double submissions
+    if (submitting || commissionId) return;
+    setSubmitting(true);
     try {
-
       const response = await commissionAPI.submitCommission(formData);
       const data = response.data;
       if (data.success) {
         setSubmittedData(formData);
         setCommissionId(data.commissionId);
+        showToast('Commission submitted successfully', 'success');
       } else {
-        alert('Error: ' + (data.error || 'Submission failed'));
+        setSubmissionError(data.message || data.error || 'Submission failed');
+        showToast(data.message || data.error || 'Submission failed', 'error');
       }
-
-    } catch(error){
-      console.log(error);
-      alert("Submission failed");
+    } catch (error) {
+      console.error('Commission submit error:', error);
+      const msg = error.response?.data?.message || error.response?.data?.error || error.message || 'Submission failed';
+      setSubmissionError(msg);
+      showToast(msg, 'error');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -245,7 +260,7 @@ export default function CommissionPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Phone *</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={inputClasses} placeholder="+91 74883 37792" />
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={inputClasses} placeholder="9876543210" inputMode="numeric" autoComplete="off" pattern="[6-9][0-9]{9}" />
                     {errors.phone && <p className="text-mithila-red text-xs mt-1">{errors.phone}</p>}
                   </div>
                 </div>
@@ -329,6 +344,13 @@ export default function CommissionPage() {
         </AnimatePresence>
 
         {/* Navigation Buttons */}
+          {submissionError && (
+          <div className="mt-6">
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-mithila-red/10 border border-mithila-red/30">
+              <p className="text-mithila-red text-sm">{submissionError}</p>
+            </div>
+          </div>
+        )}
         <div className="flex justify-between mt-8">
           <button onClick={prevStep} className={`btn-secondary flex items-center gap-2 ${currentStep === 0 ? 'invisible' : ''}`}>
             <IoArrowBackOutline size={18} /> Back
@@ -338,8 +360,8 @@ export default function CommissionPage() {
               Next <IoArrowForwardOutline size={18} />
             </button>
           ) : (
-            <button onClick={handleSubmit} className="btn-primary flex items-center gap-2">
-              Submit Request <IoCheckmarkCircle size={18} />
+            <button onClick={handleSubmit} disabled={submitting || !!commissionId} className="btn-primary flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+              {submitting ? 'Submitting...' : 'Submit Request'} <IoCheckmarkCircle size={18} />
             </button>
           )}
         </div>

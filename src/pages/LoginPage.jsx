@@ -4,7 +4,10 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoEye, IoEyeOff, IoAlertCircle, IoCheckmarkCircle } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
+import { authAPI } from '../api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { useToast } from '../context/ToastContext';
+import { validateEmail } from '../utils/helpers';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -20,12 +23,16 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, loading } = useAuth();
+  const showToast = useToast();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(location.state?.message || '');
+  const [resendMsg, setResendMsg] = useState('');
+  const [resendLoading, setResendLoading] = useState(false);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,16 +50,43 @@ export default function LoginPage() {
       return;
     }
 
+    if (!validateEmail(formData.email)) {
+      setError('Enter a valid email address');
+      return;
+    }
+
     const result = await login(formData.email, formData.password, rememberMe);
 
     if (result.success) {
       setSuccess('Login successful! Redirecting...');
+      showToast('Logged in successfully', 'success');
       setTimeout(() => {
         const from = location.state?.from?.pathname || '/profile';
         navigate(from);
       }, 1000);
     } else {
       setError(result.error || 'Login failed');
+      showToast(result.error || 'Login failed', 'error');
+    }
+  };
+
+  const handleResend = async () => {
+    setResendMsg('');
+    setResendLoading(true);
+    try {
+      const res = await authAPI.resendVerification(formData.email);
+      if (res.data && res.data.success) {
+        setResendMsg('Verification email resent. Check your inbox.');
+        showToast('Verification email resent. Check your inbox.', 'success');
+      } else {
+        setResendMsg(res.data?.message || 'Could not resend verification');
+        showToast(res.data?.message || 'Could not resend verification', 'error');
+      }
+    } catch (err) {
+      setResendMsg(err.response?.data?.message || err.message || 'Could not resend verification');
+      showToast(err.response?.data?.message || err.message || 'Could not resend verification', 'error');
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -162,6 +196,14 @@ export default function LoginPage() {
                   <IoAlertCircle className="text-mithila-red flex-shrink-0" size={20} />
                   <p className="text-mithila-red text-sm">{error}</p>
                 </motion.div>
+              )}
+              {error && error.toLowerCase().includes('verify') && (
+                <div className="mt-2 flex items-center gap-2">
+                  <button onClick={handleResend} disabled={resendLoading} className="text-earth-500 hover:text-earth-600 font-medium">
+                    {resendLoading ? 'Resending...' : 'Resend verification email'}
+                  </button>
+                  {resendMsg && <p className="text-sm text-warm-gray-600">{resendMsg}</p>}
+                </div>
               )}
 
               {/* Success Message */}

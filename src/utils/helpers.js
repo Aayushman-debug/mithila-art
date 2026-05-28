@@ -2,6 +2,36 @@
  * Mithila Art - Utility Helpers
  */
 
+const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const PHONE_REGEX = /^[6-9]\d{9}$/;
+const DISPOSABLE_EMAIL_PATTERNS = [
+  'tempmail',
+  '10minutemail',
+  'mailinator',
+  'yopmail',
+  'guerrillamail',
+  'trashmail',
+  'dispostable',
+  'maildrop',
+  'temp-mail',
+  'fakeinbox',
+];
+
+export function validateEmail(email) {
+  return typeof email === 'string' && EMAIL_REGEX.test(email.trim());
+}
+
+export function isDisposableEmail(email) {
+  if (typeof email !== 'string') return false;
+  const normalized = email.trim().toLowerCase();
+  const domain = normalized.split('@')[1] || '';
+  return DISPOSABLE_EMAIL_PATTERNS.some((pattern) => domain.includes(pattern));
+}
+
+export function validateIndianPhone(phone) {
+  return typeof phone === 'string' && PHONE_REGEX.test(phone.trim());
+}
+
 /**
  * Format a number as Indian Rupee currency string.
  * @param {number} amount — price in INR

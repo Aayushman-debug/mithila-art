@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const envApiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+if (!envApiBaseUrl && import.meta.env.PROD) {
+  throw new Error('VITE_API_BASE_URL is required in production. Set it in your environment before building.');
+}
+
+export const API_BASE_URL = envApiBaseUrl || (import.meta.env.DEV ? 'http://localhost:5000' : '');
 
 export function buildApiPath(path) {
   if (!path.startsWith('/')) {
@@ -50,6 +56,7 @@ export const authAPI = {
   updateProfile: (data) => api.put('/api/auth/profile', data),
   forgotPassword: (email) => api.post('/api/auth/forgot', { email }),
   resetPassword: (token, password, confirmPassword) => api.post(`/api/auth/reset/${token}`, { password, confirmPassword }),
+  resendVerification: (email) => api.post('/api/auth/resend-verification', { email }),
 };
 
 // Commission API calls

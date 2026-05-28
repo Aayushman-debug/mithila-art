@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet-async';
 import { IoEye, IoEyeOff, IoAlertCircle, IoCheckmarkCircle } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { useToast } from '../context/ToastContext';
+import { validateEmail, validateIndianPhone } from '../utils/helpers';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -16,12 +18,11 @@ const slideUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 };
 
-const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-const validatePhone = (phone) => /^[\d\s+\-()]{7,15}$/.test(phone);
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const { register, loading } = useAuth();
+  const showToast = useToast();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -57,8 +58,8 @@ export default function SignupPage() {
       newErrors.email = 'Please enter a valid email';
     }
 
-    if (!validatePhone(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+    if (!validateIndianPhone(formData.phone)) {
+      newErrors.phone = 'Please enter a valid 10-digit Indian mobile number';
     }
 
     if (formData.password.length < 8) {
@@ -91,12 +92,24 @@ export default function SignupPage() {
     );
 
     if (result.success) {
-      setSuccess('Account created successfully! Redirecting...');
-      setTimeout(() => {
-        navigate('/profile');
-      }, 1500);
+      if (result.requiresVerification) {
+        if (result.emailSent === false) {
+          setSuccess('Account created. Could not send verification email. Please resend.');
+          showToast('Could not send verification email. Use resend.', 'error');
+        } else {
+          setSuccess('Account created. Please check your email to verify your account.');
+          showToast('Verification email sent. Check your inbox.', 'success');
+        }
+      } else {
+        setSuccess('Account created successfully! Redirecting...');
+        showToast('Account created. Welcome!', 'success');
+        setTimeout(() => {
+          navigate('/profile');
+        }, 1500);
+      }
     } else {
       setGlobalError(result.error || 'Registration failed');
+      showToast(result.error || 'Registration failed', 'error');
     }
   };
 
@@ -193,7 +206,10 @@ export default function SignupPage() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+91 XXXXX XXXXX"
+                  placeholder="9876543210"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  pattern="[6-9][0-9]{9}"
                   className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
                     errors.phone
                       ? 'border-mithila-red/50'

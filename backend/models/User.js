@@ -97,6 +97,28 @@ const userSchema = new mongoose.Schema(
       type: Date,
       select: false,
     },
+    // Email verification
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      select: false,
+    },
+    verificationExpires: {
+      type: Date,
+      select: false,
+    },
+    // Phone OTP placeholders for future SMS verification
+    phoneOtp: {
+      type: String,
+      select: false,
+    },
+    phoneOtpExpires: {
+      type: Date,
+      select: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
