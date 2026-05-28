@@ -207,14 +207,15 @@ export default function LoginPage() {
                   <p className="text-mithila-red text-sm">{error}</p>
                 </motion.div>
               )}
-              {error && error.toLowerCase().includes('verify') && (
+              {/* TEMPORARILY DISABLED FOR SMTP DEBUGGING */}
+              {/* {error && error.toLowerCase().includes('verify') && (
                 <div className="mt-2 flex items-center gap-2">
                   <button onClick={handleResend} disabled={resendLoading} className="text-earth-500 hover:text-earth-600 font-medium">
                     {resendLoading ? 'Resending...' : 'Resend verification email'}
                   </button>
                   {resendMsg && <p className="text-sm text-warm-gray-600">{resendMsg}</p>}
                 </div>
-              )}
+              )} */}
 
               {/* Success Message */}
               {success && (

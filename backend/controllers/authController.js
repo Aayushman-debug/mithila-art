@@ -130,7 +130,7 @@ const register = async (req, res) => {
     delete userData.verificationToken;
     delete userData.verificationExpires;
 
-    const resp = { success: true, requiresVerification: true, user: userData };
+    const resp = { success: true, requiresVerification: false, user: userData }; // TEMPORARILY DISABLED FOR SMTP DEBUGGING: set requiresVerification to false
     if (emailSent) {
       resp.message = 'Registration successful. Verification email sent.';
       resp.emailSent = true;
@@ -269,10 +269,11 @@ const login = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid password' });
     }
 
+    // TEMPORARILY DISABLED FOR SMTP DEBUGGING
     // Check email verification
-    if (!user.isVerified) {
-      return res.status(403).json({ success: false, message: 'Please verify your email before logging in.' });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(403).json({ success: false, message: 'Please verify your email before logging in.' });
+    // }
 
     // Generate token
     const token = generateToken(user);
