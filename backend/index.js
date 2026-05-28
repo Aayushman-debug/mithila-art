@@ -45,31 +45,28 @@ if (missingEnv.length > 0) {
 
 const app = express();
 
-const allowedFrontendOrigins = Array.from(new Set([
-  ...(process.env.FRONTEND_URLS || "").split(","),
-  process.env.FRONTEND_URL,
-  ...(process.env.NODE_ENV !== 'production'
-    ? [
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'http://localhost:5173',
-      ]
-    : []),
-]))
-  .map((url) => String(url || '').trim())
-  .filter(Boolean)
-  .filter((value, index, self) => self.indexOf(value) === index);
+const allowedFrontendOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:5173",
+  "https://mithila-art-dhe3.vercel.app",
+];
 
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) {
       return callback(null, true);
     }
+
     if (allowedFrontendOrigins.includes(origin)) {
       return callback(null, true);
     }
-    callback(new Error(`CORS policy does not allow access from origin ${origin}`));
+
+    console.log("Blocked Origin:", origin);
+
+    return callback(new Error("Not allowed by CORS"));
   },
+
   credentials: true,
   exposedHeaders: ["set-cookie"],
 }));
@@ -157,21 +154,6 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
   console.warn("⚠️ Razorpay keys are not configured. Payment endpoints will fail without them.");
 }
 console.log("Razorpay key loaded:", !!process.env.RAZORPAY_KEY_ID, !!process.env.RAZORPAY_KEY_SECRET);
-console.log("CORS allowed origins:", allowedFrontendOrigins);
-(async () => {
-  try {
-    const result = await createTransporter(console);
-    if (result.smtpVerified) {
-      console.log('✓ SMTP startup check: provider ready', result.provider);
-    } else if (result.provider === 'ethereal') {
-      console.warn('⚠️ SMTP startup check: using Ethereal dev fallback for non-production environment');
-    }
-  } catch (error) {
-    console.error('✗ SMTP startup check failed:', error);
-    process.exit(1);
-  }
-})();
-
 // ============ ROUTES ============
 
 // HEALTH CHECK / ROOT ROUTE
