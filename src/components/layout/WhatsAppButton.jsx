@@ -9,18 +9,10 @@ export default function WhatsAppButton() {
   const { isAuthenticated } = useAuth();
   const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify'];
   
-  // Hide WhatsApp button on auth pages
-  if (authRoutes.some(route => location.pathname.includes(route))) {
+  // Hide WhatsApp button if not authenticated or on auth pages
+  if (!isAuthenticated || authRoutes.some(route => location.pathname.includes(route))) {
     return null;
   }
-
-  const handleClick = (e) => {
-    if (!isAuthenticated) {
-      e.preventDefault();
-      alert('Please log in first to contact via WhatsApp');
-      navigate('/login');
-    }
-  };
 
   return (
     <motion.a
@@ -28,7 +20,6 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float group"
-      onClick={handleClick}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 2, type: 'spring', stiffness: 200 }}
