@@ -1,12 +1,3 @@
-import imgSita from '../assets/home/mummyone.jpeg';
-import imgGanga from '../assets/home/cardtwo.jpeg';
-import imgMaha from '../assets/home/Cardone.png';
-import imgDulari from '../assets/home/cardfive.jpeg';
-import imgGodavari from '../assets/home/cardfour.jpeg';
-import imgBaua from '../assets/home/cardthree.png';
-import imgBharti from '../assets/paintings/idkthecontext.jpeg';
-import imgYamuna from '../assets/home/cardsix.png';
-
 export const artists = [
   {
     id: 'sita-devi',
@@ -21,7 +12,7 @@ export const artists = [
     legacy: 'Her work is displayed in museums worldwide, including the Victoria and Albert Museum in London.',
     achievements: ['Introduced Mithila art to international audiences', 'Empowered hundreds of local women economically'],
     famousWorks: ['Radha Krishna', 'Sita Swayamvar', 'Kadam Tree'],
-    image: imgSita
+    image: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Mithila_Painting_-_Krishna_with_Gopis.jpg'
   },
   {
     id: 'ganga-devi',
@@ -36,7 +27,7 @@ export const artists = [
     legacy: 'Her "Festival of American Folklife" mural in Washington D.C. remains a landmark achievement in Indian folk art history.',
     achievements: ['Created the famous "Cycle of Life" series', 'Painted the Crafts Museum mural in New Delhi'],
     famousWorks: ['Cycle of Life', 'Ramayana Series', 'Festival of American Folklife'],
-    image: imgGanga
+    image: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Madhubani_art.jpg'
   },
   {
     id: 'mahasundari-devi',
@@ -51,7 +42,7 @@ export const artists = [
     legacy: 'She created a thriving ecosystem for female artists in Ranti village, inspiring generations of women to pursue art professionally.',
     achievements: ['Established an artist cooperative', 'Mastered multiple traditional styles'],
     famousWorks: ['Kohbar Ghar', 'Dashavatar', 'Krishna Leela'],
-    image: imgMaha
+    image: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg'
   },
   {
     id: 'dulari-devi',
@@ -66,7 +57,7 @@ export const artists = [
     legacy: 'Her life story is documented in the book "Following My Paint Brush," serving as an inspiration for underprivileged artists.',
     achievements: ['Elevated Godhana art to national recognition', 'Documented contemporary rural life in traditional styles'],
     famousWorks: ['Village Life Series', 'Following My Paint Brush (Illustrations)', 'Kamla River Rituals'],
-    image: imgDulari
+    image: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Madhubani_Painting.jpg'
   },
   {
     id: 'godavari-dutta',
@@ -81,7 +72,7 @@ export const artists = [
     legacy: 'Credited with founding a Mithila art museum in Japan, cementing the art form\'s global presence.',
     achievements: ['Set up the Mithila Museum in Tokamachi, Japan', 'Trained thousands of rural women'],
     famousWorks: ['Trishul Series', 'Ramayana Epochs', 'Intricate Peacock Patterns'],
-    image: imgGodavari
+    image: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Mithila_Painting_Display.jpg'
   },
   {
     id: 'baua-devi',
@@ -96,7 +87,7 @@ export const artists = [
     legacy: 'She is the only Mithila artist to have her work exhibited at the prestigious Centre Pompidou in Paris.',
     achievements: ['Exhibited at Centre Pompidou (1989)', 'Pioneered large-scale Mithila canvases'],
     famousWorks: ['Naga Devata Series', 'Cosmic Serpent', 'Sita\'s Agnipariksha'],
-    image: imgBaua
+    image: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Mithila_painting_from_bihar.jpg'
   },
   {
     id: 'bharti-dayal',
@@ -111,7 +102,7 @@ export const artists = [
     legacy: 'Her works are widely published and collected globally, serving as a bridge between traditional folk art and contemporary fine art.',
     achievements: ['Brought Mithila art into contemporary fine art galleries', 'Authored extensive literature on the art form'],
     famousWorks: ['Tree of Life', 'Contemporary Radha Krishna', 'Global Warming Series'],
-    image: imgBharti
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Tree_of_life_in_Madhubani_Art.jpg'
   },
   {
     id: 'yamuna-devi',
@@ -126,6 +117,6 @@ export const artists = [
     legacy: 'She opened the doors for Dalit artists to be recognized as master craftsmen in a field previously dominated by upper castes.',
     achievements: ['First Dalit woman to win a National Award in Mithila art', 'Pioneered the use of cow dung wash as a canvas base'],
     famousWorks: ['Chhath Festival Scenes', 'Rahu & Ketu', 'Godhana Motifs'],
-    image: imgYamuna
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Madhubani_art_from_Bihar.jpg'
   }
 ];
