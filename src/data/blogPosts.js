@@ -207,6 +207,72 @@ export const blogPosts = [
     readTime: '7 min read',
     tags: ['pigments', 'natural-dyes', 'materials', 'turmeric', 'indigo', 'traditional'],
   },
+  {
+    id: 'blog007',
+    title: 'Mithila Art in the Modern Home: Blending Tradition with Contemporary Decor',
+    slug: 'mithila-art-modern-home-decor',
+    excerpt: 'Explore how interior designers are using vibrant Mithila paintings to create stunning focal points in minimalist, bohemian, and modern living spaces.',
+    content: `
+      <article>
+        <p>Mithila art, with its deep roots in rural traditions, might seem challenging to incorporate into modern, urban interiors. However, interior designers are increasingly turning to these vibrant, narrative-rich paintings to bring warmth, character, and cultural depth to contemporary spaces.</p>
+
+        <h2>The Power of Contrast in Minimalist Spaces</h2>
+        <p>In a minimalist room characterized by neutral tones and clean lines, a large, colorful Bharni-style Mithila painting acts as a dramatic focal point. The intricate details and bold colors of the painting contrast beautifully with the simplicity of the surrounding decor, drawing the eye and anchoring the space without overwhelming it.</p>
+        <p>For such spaces, consider framing the artwork in a simple, sleek black or white frame, allowing the complex imagery of the painting to speak for itself.</p>
+
+        <h2>Bohemian and Eclectic Aesthetics</h2>
+        <p>For homes with a bohemian or eclectic vibe, Mithila art feels right at home. The dense, pattern-heavy nature of the Kachni style, or the earthy tones of the Godhana style, blend seamlessly with layered textiles, natural materials like rattan and jute, and a mix of vintage and contemporary furniture.</p>
+        <p>A gallery wall featuring several smaller Mithila paintings, perhaps mixed with other forms of Indian folk art or contemporary photography, can create a visually rich and storytelling display.</p>
+
+        <h2>Creating Sacred Spaces</h2>
+        <p>Given the ritualistic origins of Mithila art, these paintings are perfect for creating quiet, contemplative corners or modern prayer spaces (pujaghar) in the home. A painting depicting the Tree of Life or the Lotus Pond can serve as an inspiring backdrop for meditation or yoga practices.</p>
+
+        <h2>Scale and Placement</h2>
+        <p>When selecting a Mithila painting for a modern home, scale is crucial. A small, highly detailed Kachni piece is best suited for intimate spaces like a study or a hallway, where it can be viewed up close. Conversely, a large, expansive narrative piece is ideal for above a sofa in the living room or as a statement piece in the dining area.</p>
+
+        <p>By thoughtfully integrating Mithila art into contemporary interiors, we not only preserve a beautiful tradition but also create living spaces that are rich in history and personal expression.</p>
+      </article>
+    `,
+    author: 'Neha Verma',
+    date: '2026-05-18',
+    category: 'Design',
+    image: 'https://picsum.photos/seed/blog7/1200/630',
+    readTime: '6 min read',
+    tags: ['interior-design', 'decor', 'contemporary', 'styling'],
+  },
+  {
+    id: 'blog008',
+    title: 'The Economic Impact of Mithila Art on Rural Communities',
+    slug: 'economic-impact-mithila-art',
+    excerpt: 'How the commercialization of Mithila painting has transformed the lives of women in Bihar, providing financial independence and fostering community development.',
+    content: `
+      <article>
+        <p>The transformation of Mithila painting from a domestic ritual to a globally recognized art form is not just a story of aesthetic evolution; it is a profound narrative of economic empowerment and social change, particularly for the women of Bihar.</p>
+
+        <h2>From the Walls to the Market</h2>
+        <p>For centuries, the women of Mithila painted without expectation of financial reward. The art was an offering, a prayer, a decoration. The shift occurred in the late 1960s, driven by a severe drought in Bihar. The All India Handicrafts Board encouraged women to transfer their traditional wall motifs onto handmade paper to generate income.</p>
+        <p>This initiative marked a turning point. Suddenly, the skills passed down from mother to daughter possessed economic value. Women who had never earned an independent income began to sell their work, initially locally, and soon, internationally.</p>
+
+        <h2>Financial Independence and Social Shifts</h2>
+        <p>The influx of income from art sales has had cascading effects on rural communities. Women artists have become primary breadwinners in many households. This financial independence has led to subtle but significant shifts in social dynamics.</p>
+        <p>With their own earnings, women have gained greater decision-making power within their families. They have invested in better housing, healthcare, and crucially, the education of their children, including their daughters, breaking cycles of poverty.</p>
+
+        <h2>The Rise of Artist Cooperatives</h2>
+        <p>To navigate the complexities of the commercial art market, many women have formed artist cooperatives and self-help groups. These organizations provide training, source high-quality materials, negotiate fair prices, and organize exhibitions.</p>
+        <p>By working collectively, artists protect themselves from exploitation by middlemen and ensure that a larger share of the profits remains within the community.</p>
+
+        <h2>Challenges and the Future</h2>
+        <p>Despite these successes, challenges remain. The market can be volatile, and artists face issues like copyright infringement and the mass production of cheap imitations. Furthermore, ensuring that the younger generation sees a viable future in traditional art is an ongoing concern.</p>
+        <p>However, the resilience of the Mithila artists is evident. By adapting their themes, embracing new mediums, and leveraging digital platforms to reach global audiences, they are ensuring that their art—and the economic lifeline it provides—endures for generations to come.</p>
+      </article>
+    `,
+    author: 'Rahul Pathak',
+    date: '2026-05-25',
+    category: 'Culture',
+    image: 'https://picsum.photos/seed/blog8/1200/630',
+    readTime: '8 min read',
+    tags: ['economy', 'empowerment', 'community', 'history'],
+  }
 ];
 
 export default blogPosts;

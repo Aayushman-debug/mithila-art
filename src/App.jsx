@@ -22,6 +22,7 @@ const CulturePage = lazy(() => import('./pages/CulturePage'));
 const ArtistsPage = lazy(() => import('./pages/ArtistsPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
+const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 const PaintingDetailPage = lazy(() => import('./pages/PaintingDetailPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -78,6 +79,7 @@ export default function App() {
               <Route path="/artists" element={<ArtistsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
               <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
               <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
