@@ -178,7 +178,7 @@ function HeroSection() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
 
   return (
-    <section ref={heroRef} className="relative h-[90vh] min-h-[600px] overflow-hidden flex items-center justify-center">
+    <section ref={heroRef} className="relative h-[90vh] min-h-[600px] overflow-hidden flex items-center justify-center pt-24">
       {/* Parallax Background */}
       <motion.div className="absolute inset-0 z-0" style={{ y, scale }}>
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?w=1920&q=80')] bg-cover bg-center" />

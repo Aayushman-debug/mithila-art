@@ -264,9 +264,9 @@ export default function GalleryPage() {
         {/* ─── Filters & Search ─── */}
         <section className="sticky top-0 z-40 bg-cream-50/95 dark:bg-warm-gray-900/95 backdrop-blur-lg border-b border-cream-200/50 dark:border-warm-gray-700/50 py-4">
           <div className="container-custom px-4">
-            <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
               {/* Category pills */}
-              <div className="flex-1 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              <div className="w-full md:w-auto flex-1 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 <FaFilter className="text-warm-gray-400 text-sm flex-shrink-0 mr-1" />
                 {allCategories.map((cat) => (
                   <motion.button

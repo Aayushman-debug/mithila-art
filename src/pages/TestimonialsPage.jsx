@@ -79,7 +79,7 @@ export default function TestimonialsPage() {
               className="break-inside-avoid bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-shadow duration-500"
             >
               <FaQuoteLeft className="text-earth-500/20 mb-4" size={28} />
-              <p className="font-body text-warm-gray-600 leading-relaxed mb-4">
+              <p className="font-body text-sm sm:text-base text-warm-gray-600 leading-relaxed mb-4 break-words whitespace-normal">
                 "{testimonial.text}"
               </p>
               <StarRating rating={testimonial.rating} />

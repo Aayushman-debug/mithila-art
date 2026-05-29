@@ -145,15 +145,15 @@
 
   /* ═══ PREMIUM BUTTONS ═══ */
   .btn-primary {
-    @apply px-8 py-3.5 bg-gradient-gold text-white font-display font-semibold text-lg rounded-full 
+    @apply px-6 py-3 md:px-8 md:py-3.5 bg-gradient-gold text-white font-display font-semibold text-base md:text-lg rounded-full 
            shadow-gold transition-all duration-300 
            hover:shadow-glass-lg hover:scale-105 active:scale-95
            tracking-wide;
   }
 
   .btn-secondary {
-    @apply px-8 py-3.5 bg-transparent border-2 border-earth-500 text-earth-500 font-display font-semibold 
-           text-lg rounded-full transition-all duration-300 
+    @apply px-6 py-3 md:px-8 md:py-3.5 bg-transparent border-2 border-earth-500 text-earth-500 font-display font-semibold 
+           text-base md:text-lg rounded-full transition-all duration-300 
            hover:bg-earth-500 hover:text-white hover:shadow-gold;
   }
 
@@ -162,8 +162,8 @@
   }
 
   .btn-ghost {
-    @apply px-6 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-body 
-           font-medium rounded-full transition-all duration-300 
+    @apply px-5 py-2 md:px-6 md:py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-body 
+           font-medium text-sm md:text-base rounded-full transition-all duration-300 
            hover:bg-white/20;
   }
 
@@ -178,11 +178,11 @@
 
   /* ═══ PREMIUM TYPOGRAPHY ═══ */
   .heading-xl {
-    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight tracking-tight;
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight tracking-tight break-words;
   }
 
   .heading-lg {
-    @apply text-3xl sm:text-4xl md:text-5xl font-display font-bold leading-tight tracking-tight;
+    @apply text-3xl sm:text-4xl md:text-5xl font-display font-bold leading-tight tracking-tight break-words;
   }
 
   .heading-md {

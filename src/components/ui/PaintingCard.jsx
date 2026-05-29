@@ -88,7 +88,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
             whileTap={{ scale: 0.9 }}
             onClick={() => onAddToCart?.(painting)}
             disabled={!inStock}
-            className="flex-1 py-2.5 bg-white/90 backdrop-blur-sm text-charcoal font-body font-semibold text-sm rounded-xl flex items-center justify-center gap-2 hover:bg-white transition-colors disabled:opacity-50"
+            className="flex-1 py-2.5 px-2 bg-white/90 backdrop-blur-sm text-charcoal font-body font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-1 sm:gap-2 hover:bg-white transition-colors disabled:opacity-50 whitespace-nowrap"
           >
             <IoCartOutline size={18} />
             {inStock ? 'Add to Cart' : 'Sold Out'}
@@ -149,7 +149,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
           {title}
         </h3>
         <p className="text-warm-gray-400 dark:text-warm-gray-500 text-sm font-body mb-3">{size}</p>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">
             {formatPrice(price)}
           </span>

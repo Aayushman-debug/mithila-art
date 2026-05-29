@@ -72,31 +72,31 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold group-hover:scale-110 transition-transform duration-300">
+            <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                 <span className="text-white font-display font-bold text-lg">म</span>
               </div>
               <div className="hidden sm:block">
-                <h1 className={`font-display font-bold text-lg leading-none transition-colors duration-300 ${
+                <h1 className={`whitespace-nowrap font-display font-bold text-base md:text-lg leading-none transition-colors duration-300 ${
                   scrolled ? 'text-earth-700 dark:text-cream-200' : 'text-white'
                 }`}>
                   Lalita Pathak
                 </h1>
-                <p className={`text-xs font-body tracking-[0.2em] uppercase transition-colors duration-300 ${
+                <p className={`hidden lg:block whitespace-nowrap text-[10px] xl:text-xs font-body tracking-[0.1em] xl:tracking-[0.2em] uppercase transition-colors duration-300 mt-1 ${
                   scrolled ? 'text-earth-500 dark:text-earth-400' : 'text-cream-200'
                 }`}>
-                  Lalita Pathak Mithila Art Studio
+                  Mithila Art Studio
                 </p>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center max-w-5xl">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-4 py-2 font-body text-sm font-medium transition-colors duration-300 rounded-full hover:bg-earth-500/10 ${
+                  className={`whitespace-nowrap relative px-2 xl:px-3 py-2 font-body text-xs xl:text-sm font-medium transition-colors duration-300 rounded-full hover:bg-earth-500/10 ${
                     location.pathname === link.path
                       ? scrolled ? 'text-earth-500' : 'text-cream-100'
                       : scrolled ? 'text-warm-gray-600 dark:text-warm-gray-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'

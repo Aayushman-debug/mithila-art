@@ -373,7 +373,7 @@ function FeaturedPaintings() {
           {featured.map((painting, i) => (
             <motion.div
               key={painting.id}
-              className="flex-shrink-0 w-[300px] md:w-[340px] snap-center"
+              className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-center"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 * i }}
@@ -577,7 +577,7 @@ function TestimonialsSection() {
                         </div>
 
                         {/* Quote */}
-                        <p className="text-charcoal dark:text-cream-200 font-body text-lg md:text-xl leading-relaxed italic mb-8 max-w-2xl mx-auto">
+                        <p className="text-charcoal dark:text-cream-200 font-body text-base sm:text-lg md:text-xl leading-relaxed italic mb-8 max-w-2xl mx-auto break-words whitespace-normal">
                           &ldquo;{testimonial.text}&rdquo;
                         </p>
 
