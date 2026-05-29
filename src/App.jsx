@@ -19,6 +19,7 @@ const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 const TestimonialsPage = lazy(() => import('./pages/TestimonialsPage'));
 const MithilaHistoryPage = lazy(() => import('./pages/MithilaHistoryPage'));
 const CulturePage = lazy(() => import('./pages/CulturePage'));
+const ArtistsPage = lazy(() => import('./pages/ArtistsPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
@@ -74,6 +75,7 @@ export default function App() {
               <Route path="/testimonials" element={<TestimonialsPage />} />
               <Route path="/mithila-history" element={<MithilaHistoryPage />} />
               <Route path="/culture" element={<CulturePage />} />
+              <Route path="/artists" element={<ArtistsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />

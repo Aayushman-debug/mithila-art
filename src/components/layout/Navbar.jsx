@@ -15,6 +15,7 @@ const navLinks = [
   { name: 'Commission', path: '/commission' },
   { name: 'History', path: '/mithila-history' },
   { name: 'Culture', path: '/culture' },
+  { name: 'Artists', path: '/artists' },
   { name: 'Blog', path: '/blog' },
   { name: 'Contact', path: '/contact' },
 ];
