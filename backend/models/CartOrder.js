@@ -31,6 +31,11 @@ const CartOrderSchema = new mongoose.Schema({
     enum: ['pending', 'paid', 'failed'],
     default: 'pending',
   },
+  status: {
+    type: String,
+    enum: ['Pending', 'Processing', 'Shipped', 'Delivered'],
+    default: 'Pending',
+  },
   createdAt: { type: Date, default: Date.now },
   paidAt: Date,
 });
