@@ -5,6 +5,7 @@ import { IoMenu, IoClose, IoCartOutline, IoSunnyOutline, IoMoonOutline, IoLogOut
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import SearchBar from '../ui/SearchBar';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -113,6 +114,8 @@ export default function Navbar() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
+              <SearchBar />
+
               {/* Theme toggle */}
               <motion.button
                 onClick={toggleTheme}
