@@ -18,6 +18,7 @@ const CommissionPage = lazy(() => import('./pages/CommissionPage'));
 const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 const TestimonialsPage = lazy(() => import('./pages/TestimonialsPage'));
 const MithilaHistoryPage = lazy(() => import('./pages/MithilaHistoryPage'));
+const CulturePage = lazy(() => import('./pages/CulturePage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
@@ -72,6 +73,7 @@ export default function App() {
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/testimonials" element={<TestimonialsPage />} />
               <Route path="/mithila-history" element={<MithilaHistoryPage />} />
+              <Route path="/culture" element={<CulturePage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />

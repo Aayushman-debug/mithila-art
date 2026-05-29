@@ -13,8 +13,9 @@ const navLinks = [
   { name: 'Gallery', path: '/gallery' },
   { name: 'Shop', path: '/shop' },
   { name: 'Commission', path: '/commission' },
-  { name: 'Blog', path: '/blog' },
   { name: 'History', path: '/mithila-history' },
+  { name: 'Culture', path: '/culture' },
+  { name: 'Blog', path: '/blog' },
   { name: 'Contact', path: '/contact' },
 ];
 
