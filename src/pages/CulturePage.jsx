@@ -4,6 +4,26 @@ import { Helmet } from 'react-helmet-async';
 import SectionHeading from '../components/ui/SectionHeading';
 import { IoFlowerOutline, IoMusicalNotesOutline, IoRestaurantOutline, IoPeopleOutline, IoSunnyOutline, IoLeafOutline, IoColorPaletteOutline, IoWaterOutline } from 'react-icons/io5';
 
+import imgHero from '../assets/reference/hero.jpg';
+import imgOrigins from '../assets/reference/origins.jpg';
+import imgSita from '../assets/reference/sita.jpg';
+import imgKohbar from '../assets/reference/kohbar.jpg';
+import imgFish from '../assets/reference/fish_motif.jpg';
+import imgPeacock from '../assets/reference/peacock_motif.jpg';
+import imgGodhana from '../assets/reference/godhana.jpg';
+import imgBharni from '../assets/reference/bharni.jpg';
+import imgKachni from '../assets/reference/kachni.jpg';
+import imgTantrik from '../assets/reference/tantrik.jpg';
+import imgTree from '../assets/reference/tree_of_life.jpg';
+import imgChhath from '../assets/reference/chhath_puja.jpg';
+import imgSama from '../assets/reference/sama_chakeva.jpg';
+import imgCuisine from '../assets/reference/mithila_cuisine.jpg';
+import imgLotus from '../assets/reference/lotus_motif.jpg';
+import imgJanakpur from '../assets/reference/janakpur.jpg';
+import imgTurtle from '../assets/reference/baua_devi.jpg'; // generic fallback for turtle
+import imgBamboo from '../assets/reference/yamuna_devi.jpg'; // generic fallback for bamboo
+import imgSunMoon from '../assets/reference/sita_devi.jpg'; // generic fallback for sun/moon
+
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
@@ -25,7 +45,7 @@ export default function CulturePage() {
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         <motion.div className="absolute inset-0 z-0" style={{ y }}>
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/8/87/Mithila_painting_from_bihar.jpg')` }} />
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${imgHero})` }} />
           <div className="absolute inset-0 bg-gradient-to-b from-warm-black/80 via-warm-black/60 to-cream-50" />
         </motion.div>
         
@@ -47,7 +67,7 @@ export default function CulturePage() {
           {/* Origins */}
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
             <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Madhubani_art.jpg" alt="Mithila Origins" className="rounded-2xl shadow-xl w-full h-[500px] object-cover" />
+              <img src={imgOrigins} alt="Mithila Origins" className="rounded-2xl shadow-xl w-full h-[500px] object-cover" />
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="space-y-6">
               <span className="px-3 py-1 bg-earth-500/10 text-earth-600 rounded-full text-xs font-body font-medium uppercase tracking-wider">Ancient Roots</span>
@@ -64,7 +84,7 @@ export default function CulturePage() {
           {/* Sita and Mithila */}
           <div className="grid lg:grid-cols-2 gap-16 items-center flex-col-reverse lg:flex-row-reverse">
             <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg" alt="Sita and Ram" className="rounded-2xl shadow-xl w-full h-[500px] object-cover" />
+              <img src={imgSita} alt="Sita and Ram" className="rounded-2xl shadow-xl w-full h-[500px] object-cover" />
             </motion.div>
             <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="space-y-6">
               <span className="px-3 py-1 bg-mithila-red/10 text-mithila-red rounded-full text-xs font-body font-medium uppercase tracking-wider">Mythology & Legacy</span>
@@ -93,28 +113,28 @@ export default function CulturePage() {
                 desc: 'The most revered festival in Bihar, dedicated to the Sun God (Surya) and Chhathi Maiya. Celebrated over four days with strict fasting, holy bathing, and offering arghya to the rising and setting sun. Many Mithila paintings vividly depict women making offerings waist-deep in the river.', 
                 icon: IoSunnyOutline, 
                 color: 'text-mithila-orange',
-                image: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Celebrating_Chhath_Puja.jpg'
+                image: imgChhath
               },
               { 
                 title: 'Sama Chakeva', 
                 desc: 'A beautiful winter festival celebrating the bond between brothers and sisters. Women make clay idols of birds and characters from folklore, sing traditional songs, and finally immerse the idols. The themes of Sama Chakeva are heavily represented in local crafts and paintings.', 
                 icon: IoPeopleOutline, 
                 color: 'text-mithila-blue',
-                image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Sama_Chakeva_Festival.jpg'
+                image: imgSama
               },
               { 
                 title: 'Vivah Rituals & Kohbar', 
                 desc: 'Weddings in Mithila are deeply artistic. The Kohbar Ghar (nuptial chamber) is painted with highly symbolic art meant to bless the newlywed couple. It features the bamboo tree (lineage), lotus (purity/female energy), and various deities to ensure fertility and a prosperous union.', 
                 icon: IoFlowerOutline, 
                 color: 'text-mithila-red',
-                image: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Kohbar_Ghar.jpg'
+                image: imgKohbar
               },
               { 
                 title: 'Mithila Cuisine', 
                 desc: 'A culinary tradition tied closely to the land and water. The classic proverb "Paan, Maach, aur Makhan" (Betel leaf, Fish, and Fox nut) highlights the staple delicacies. The reverence for fish is so strong that it features prominently in almost all auspicious Mithila artwork.', 
                 icon: IoRestaurantOutline, 
                 color: 'text-earth-500',
-                image: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Bihari_thali.jpg'
+                image: imgCuisine
               },
             ].map((item, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden flex flex-col sm:flex-row">
@@ -139,13 +159,13 @@ export default function CulturePage() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
             {[
-              { name: 'Fish (Machh)', meaning: 'Fertility, prosperity, and good luck. An essential element in wedding paintings.', icon: '🐟', img: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Madhubani_Painting.jpg' },
-              { name: 'Peacock', meaning: 'Romantic love, beauty, and religion. Often associated with Lord Krishna.', icon: '🦚', img: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Mithila_Painting.jpg' },
-              { name: 'Lotus', meaning: 'Purity, female energy, and the universe. The center of the Kohbar painting.', icon: '🪷', img: 'https://images.unsplash.com/photo-1593595560946-f94d930dbdb4?w=800&q=80' },
-              { name: 'Sun & Moon', meaning: 'Long life, celestial forces, and the eternal nature of the cosmos.', icon: '🌞', img: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Madhubani_art_sun.jpg' },
-              { name: 'Tree of Life', meaning: 'Growth, grounding, and connection between the earth and the heavens.', icon: '🌳', img: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Tree_of_life_in_Madhubani_Art.jpg' },
-              { name: 'Bamboo', meaning: 'Lineage, male energy, and rapid growth. Usually paired with the lotus.', icon: '🎋', img: 'https://images.unsplash.com/photo-1513689531849-01201206f3ed?w=800&q=80' },
-              { name: 'Turtle', meaning: 'Stability, longevity, and Lord Vishnu\'s Kurma avatar.', icon: '🐢', img: 'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800&q=80' },
+              { name: 'Fish (Machh)', meaning: 'Fertility, prosperity, and good luck. An essential element in wedding paintings.', icon: '🐟', img: imgFish },
+              { name: 'Peacock', meaning: 'Romantic love, beauty, and religion. Often associated with Lord Krishna.', icon: '🦚', img: imgPeacock },
+              { name: 'Lotus', meaning: 'Purity, female energy, and the universe. The center of the Kohbar painting.', icon: '🪷', img: imgLotus },
+              { name: 'Sun & Moon', meaning: 'Long life, celestial forces, and the eternal nature of the cosmos.', icon: '🌞', img: imgSunMoon },
+              { name: 'Tree of Life', meaning: 'Growth, grounding, and connection between the earth and the heavens.', icon: '🌳', img: imgTree },
+              { name: 'Bamboo', meaning: 'Lineage, male energy, and rapid growth. Usually paired with the lotus.', icon: '🎋', img: imgBamboo },
+              { name: 'Turtle', meaning: 'Stability, longevity, and Lord Vishnu\'s Kurma avatar.', icon: '🐢', img: imgTurtle },
             ].map((symbol, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="bg-cream-50 rounded-2xl overflow-hidden border border-cream-100 group">
                 <div className="h-40 overflow-hidden relative">
@@ -170,11 +190,11 @@ export default function CulturePage() {
           
           <div className="mt-16 space-y-8">
             {[
-              { name: 'Bharni', desc: 'Meaning "to fill" in Hindi, Bharni is characterized by bold, vibrant colors filling enclosed black outlines. Traditionally practiced by Brahmin women, it predominantly features Hindu deities like Krishna, Ram, and Durga.', img: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Mithila_Painting_-_Krishna_with_Gopis.jpg' },
-              { name: 'Kachni', desc: 'A monochromatic or dual-tone style (usually black and vermilion red) characterized by intricate, incredibly fine line work. It uses detailed hatching and stippling rather than solid color fills, traditionally practiced by Kayastha women.', img: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Mithila_Painting_Display.jpg' },
-              { name: 'Godhana', desc: 'Originating from the body tattoo traditions of marginalized communities (like the Dusadhs), Godhana relies on repeating patterns, circles, and concentric shapes. It often uses a distinctive wash of cow dung on the paper for a rustic background.', img: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Madhubani_art_from_Bihar.jpg' },
-              { name: 'Kohbar', desc: 'Highly symbolic art painted specifically on the walls of the nuptial chamber to bless newlyweds. It is deeply esoteric, featuring the central lingam/yoni motif formed by a bamboo shaft piercing a lotus flower.', img: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Kohbar_Ghar.jpg' },
-              { name: 'Tantrik', desc: 'Reserved exclusively for depicting religious texts and Tantric symbolism, these paintings involve geometric shapes, yantras, and specific deities associated with tantric worship (like Kali or Chhinnamasta).', img: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Madhubani_painting.jpg' },
+              { name: 'Bharni', desc: 'Meaning "to fill" in Hindi, Bharni is characterized by bold, vibrant colors filling enclosed black outlines. Traditionally practiced by Brahmin women, it predominantly features Hindu deities like Krishna, Ram, and Durga.', img: imgBharni },
+              { name: 'Kachni', desc: 'A monochromatic or dual-tone style (usually black and vermilion red) characterized by intricate, incredibly fine line work. It uses detailed hatching and stippling rather than solid color fills, traditionally practiced by Kayastha women.', img: imgKachni },
+              { name: 'Godhana', desc: 'Originating from the body tattoo traditions of marginalized communities (like the Dusadhs), Godhana relies on repeating patterns, circles, and concentric shapes. It often uses a distinctive wash of cow dung on the paper for a rustic background.', img: imgGodhana },
+              { name: 'Kohbar', desc: 'Highly symbolic art painted specifically on the walls of the nuptial chamber to bless newlyweds. It is deeply esoteric, featuring the central lingam/yoni motif formed by a bamboo shaft piercing a lotus flower.', img: imgKohbar },
+              { name: 'Tantrik', desc: 'Reserved exclusively for depicting religious texts and Tantric symbolism, these paintings involve geometric shapes, yantras, and specific deities associated with tantric worship (like Kali or Chhinnamasta).', img: imgTantrik },
             ].map((style, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className={`flex flex-col md:flex-row gap-6 bg-white rounded-2xl overflow-hidden shadow-sm border border-cream-100 ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
                 <div className="md:w-1/2 h-64 md:h-auto relative">
