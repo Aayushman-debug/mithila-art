@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { IoRibbonOutline, IoLocationOutline } from 'react-icons/io5';
 import SectionHeading from '../components/ui/SectionHeading';
 import { artists } from '../data/artists';
+import { IoStarOutline, IoColorPaletteOutline, IoBookOutline } from 'react-icons/io5';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -47,23 +48,64 @@ export default function ArtistsPage() {
                   {artist.village}
                 </div>
 
-                <p className="text-warm-gray-600 font-body text-lg leading-relaxed border-l-2 border-earth-500 pl-4 py-1">
-                  {artist.bio}
-                </p>
+                <div className="space-y-4 text-warm-gray-600 font-body text-[15px] leading-relaxed border-l-2 border-earth-500 pl-4 py-1">
+                  <p>{artist.bio}</p>
+                  {artist.contributions && <p><strong className="text-charcoal font-semibold">Contributions:</strong> {artist.contributions}</p>}
+                  {artist.legacy && <p><strong className="text-charcoal font-semibold">Legacy:</strong> {artist.legacy}</p>}
+                </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-100">
-                  <h4 className="font-display font-semibold text-charcoal flex items-center gap-2 mb-4">
-                    <IoRibbonOutline className="text-mithila-red text-xl" />
-                    Major Awards & Recognition
-                  </h4>
-                  <ul className="space-y-2">
-                    {artist.awards.map((award, i) => (
-                      <li key={i} className="flex items-start gap-2 text-warm-gray-600 font-body text-sm">
-                        <span className="w-1.5 h-1.5 rounded-full bg-mithila-orange mt-1.5 flex-shrink-0" />
-                        {award}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Awards */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-100 h-full">
+                    <h4 className="font-display font-semibold text-charcoal flex items-center gap-2 mb-4 text-sm uppercase tracking-wider">
+                      <IoRibbonOutline className="text-mithila-red text-xl" />
+                      Major Awards
+                    </h4>
+                    <ul className="space-y-2">
+                      {artist.awards.map((award, i) => (
+                        <li key={i} className="flex items-start gap-2 text-warm-gray-600 font-body text-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-mithila-orange mt-1.5 flex-shrink-0" />
+                          {award}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Achievements & Famous Works */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-100 h-full">
+                    {artist.achievements && (
+                      <div className="mb-4">
+                        <h4 className="font-display font-semibold text-charcoal flex items-center gap-2 mb-3 text-sm uppercase tracking-wider">
+                          <IoStarOutline className="text-earth-500 text-xl" />
+                          Key Achievements
+                        </h4>
+                        <ul className="space-y-2">
+                          {artist.achievements.map((ach, i) => (
+                            <li key={i} className="flex items-start gap-2 text-warm-gray-600 font-body text-sm">
+                              <span className="w-1.5 h-1.5 rounded-full bg-earth-500 mt-1.5 flex-shrink-0" />
+                              {ach}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {artist.famousWorks && (
+                      <div>
+                        <h4 className="font-display font-semibold text-charcoal flex items-center gap-2 mb-3 text-sm uppercase tracking-wider pt-2 border-t border-cream-50">
+                          <IoColorPaletteOutline className="text-mithila-blue text-xl" />
+                          Famous Works
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {artist.famousWorks.map((work, i) => (
+                            <span key={i} className="px-2.5 py-1 bg-cream-50 text-warm-gray-600 text-xs rounded-md font-body border border-cream-100">
+                              {work}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </motion.div>
