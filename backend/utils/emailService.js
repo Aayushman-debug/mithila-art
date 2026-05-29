@@ -24,9 +24,9 @@ const getPrimarySmtpConfig = () => {
         user: user.trim(),
         pass: pass.trim(),
       },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000,
+      connectionTimeout: 3000,
+      greetingTimeout: 3000,
+      socketTimeout: 4000,
     },
   };
 };
@@ -45,7 +45,13 @@ const createTransporter = async (logger) => {
     const testTransporter = nodemailer.createTransport(candidate.config);
     try {
       console.log(`[SMTP] Initializing transporter verification for: ${name}...`);
-      await testTransporter.verify();
+      
+      // Ensure the verify step does not hang forever if the socket drops silently
+      await Promise.race([
+        testTransporter.verify(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('SMTP Verification Timeout')), 4500))
+      ]);
+      
       console.log(`[SMTP] Verification successful for: ${name}`);
       return { transporter: testTransporter, provider: name, smtpVerified: true };
     } catch (err) {
@@ -76,27 +82,38 @@ const createTransporter = async (logger) => {
 
   if (process.env.NODE_ENV !== 'production') {
     log(logger, 'warn', 'Email helper: falling back to Ethereal dev SMTP because no valid SMTP provider verified');
-    const testAccount = await nodemailer.createTestAccount();
-    const etherealTransporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
-    await etherealTransporter.verify();
-    return {
-      transporter: etherealTransporter,
-      provider: 'ethereal',
-      smtpVerified: false,
-      lastError,
-      ethereal: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    };
+    try {
+      const testAccount = await Promise.race([
+        nodemailer.createTestAccount(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Ethereal create account timeout')), 4000))
+      ]);
+      const etherealTransporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false,
+        auth: {
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      });
+      await Promise.race([
+        etherealTransporter.verify(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Ethereal verify timeout')), 3000))
+      ]);
+      return {
+        transporter: etherealTransporter,
+        provider: 'ethereal',
+        smtpVerified: false,
+        lastError,
+        ethereal: {
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      };
+    } catch (err) {
+      log(logger, 'warn', 'Ethereal dev SMTP failed or timed out:', err.message);
+      lastError = err;
+    }
   }
 
   throw new Error(`No SMTP transmitter could be initialized${lastError ? `: ${lastError.message}` : ''}`);

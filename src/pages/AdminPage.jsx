@@ -14,29 +14,19 @@ const tabs = [
   { id: 'commissions', label: 'Commissions', icon: IoBrushOutline },
 ];
 
-const mockOrders = [
-  { id: 'MTA001247', customer: 'Rajesh Kumar', email: 'rajesh@email.com', total: 18500, status: 'Delivered', date: '2025-12-15', items: 2 },
-  { id: 'MTA001248', customer: 'Ananya Singh', email: 'ananya@email.com', total: 8500, status: 'Shipped', date: '2025-12-18', items: 1 },
-  { id: 'MTA001249', customer: 'David Chen', email: 'david@email.com', total: 35000, status: 'Processing', date: '2025-12-20', items: 3 },
-  { id: 'MTA001250', customer: 'Deepa Sharma', email: 'deepa@email.com', total: 12000, status: 'Pending', date: '2025-12-22', items: 1 },
-  { id: 'MTA001251', customer: 'Michael Brown', email: 'michael@email.com', total: 25000, status: 'Delivered', date: '2025-12-10', items: 2 },
-];
-
-const mockCommissions = [
-  { id: 'COM001', name: 'Sunita Rao', style: 'Kohbar', budget: '₹10,000 - ₹25,000', status: 'New', date: '2025-12-22' },
-  { id: 'COM002', name: 'James Wilson', style: 'Bharni', budget: '₹25,000 - ₹50,000', status: 'In Progress', date: '2025-12-18' },
-  { id: 'COM003', name: 'Meera Joshi', style: 'Kachni', budget: '₹5,000 - ₹10,000', status: 'Completed', date: '2025-12-05' },
-];
-
 function StatCard({ label, value, icon: Icon, color }) {
   const [count, setCount] = useState(0);
-  const numValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+  const numValue = parseInt(String(value).replace(/[^0-9]/g, '')) || 0;
 
   useEffect(() => {
     let start = 0;
     const end = numValue;
+    if (end === 0) {
+      setCount(0);
+      return;
+    }
     const duration = 1500;
-    const step = Math.ceil(end / (duration / 16));
+    const step = Math.max(1, Math.ceil(end / (duration / 16)));
     const timer = setInterval(() => {
       start += step;
       if (start >= end) { setCount(end); clearInterval(timer); }
@@ -52,7 +42,7 @@ function StatCard({ label, value, icon: Icon, color }) {
           <Icon size={24} className="text-white" />
         </div>
       </div>
-      <p className="font-display font-bold text-3xl text-charcoal">{value.includes('₹') ? formatPrice(count) : count}</p>
+      <p className="font-display font-bold text-3xl text-charcoal">{String(value).includes('₹') ? formatPrice(count) : count}</p>
       <p className="text-body-sm text-warm-gray-400 mt-1">{label}</p>
     </motion.div>
   );
@@ -64,13 +54,13 @@ function LoginScreen({ onLogin }) {
   const [error, setError] = useState('');
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = login(username, password);
+    const result = await login(username, password);
     if (result.success) {
       onLogin();
     } else {
-      setError(result.error);
+      setError(result.error || 'Login failed');
     }
   };
 
@@ -114,7 +104,7 @@ function LoginScreen({ onLogin }) {
 
         <div className="mt-6 p-3 bg-white/5 rounded-xl border border-white/10">
           <p className="text-cream-300/50 text-xs font-body text-center">
-            Demo: <span className="text-earth-400">admin</span> / <span className="text-earth-400">mithila2024</span>
+            Demo: <span className="text-earth-400">admin@mithila.com</span> / <span className="text-earth-400">mithila2024</span>
           </p>
         </div>
       </motion.div>
@@ -126,15 +116,12 @@ export default function AdminPage() {
   const { user, logout, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loggedIn, setLoggedIn] = useState(isAuthenticated);
+  const [realOrders, setRealOrders] = useState([]);
+  const [realCommissions, setRealCommissions] = useState([]);
 
-  if (!loggedIn) {
-    return (
-      <>
-        <Helmet><title>Admin Login — Lalita Pathak Mithila Art</title></Helmet>
-        <LoginScreen onLogin={() => setLoggedIn(true)} />
-      </>
-    );
-  }
+  useEffect(() => {
+    setLoggedIn(isAuthenticated);
+  }, [isAuthenticated]);
 
   const statusColors = {
     Delivered: 'bg-mithila-green/10 text-mithila-green',
@@ -142,19 +129,23 @@ export default function AdminPage() {
     Processing: 'bg-mithila-orange/10 text-mithila-orange',
     Pending: 'bg-warm-gray-100 text-warm-gray-600',
     New: 'bg-mithila-blue/10 text-mithila-blue',
+    'in-progress': 'bg-mithila-orange/10 text-mithila-orange',
     'In Progress': 'bg-mithila-orange/10 text-mithila-orange',
     Completed: 'bg-mithila-green/10 text-mithila-green',
+    approved: 'bg-mithila-green/10 text-mithila-green',
+    submitted: 'bg-warm-gray-100 text-warm-gray-600',
   };
 
-  const [realOrders, setRealOrders] = useState([]);
   useEffect(() => {
     if (loggedIn) {
       import('../api').then(({ adminAPI }) => {
         adminAPI.getOrders().then(res => {
-          if (res.data.success) {
-            setRealOrders(res.data.orders);
-          }
+          if (res.data.success) setRealOrders(res.data.orders);
         }).catch(err => console.error("Failed to fetch admin orders", err));
+
+        adminAPI.getCommissions().then(res => {
+          if (res.data.success) setRealCommissions(res.data.commissions);
+        }).catch(err => console.error("Failed to fetch admin commissions", err));
       });
     }
   }, [loggedIn]);
@@ -172,13 +163,24 @@ export default function AdminPage() {
     }
   };
 
+  if (!loggedIn) {
+    return (
+      <>
+        <Helmet><title>Admin Login — Lalita Pathak Mithila Art</title></Helmet>
+        <LoginScreen onLogin={() => setLoggedIn(true)} />
+      </>
+    );
+  }
+
+  const totalRevenue = realOrders.reduce((sum, order) => sum + (order.grandTotal || 0), 0);
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen bg-cream-50">
       <Helmet><title>Admin Dashboard — Lalita Pathak Mithila Art</title></Helmet>
 
       <div className="flex">
         {/* Sidebar */}
-        <div className="hidden md:flex w-64 min-h-screen bg-earth-900 text-cream-200 flex-col fixed left-0 top-0">
+        <div className="hidden md:flex w-64 min-h-screen bg-earth-900 text-cream-200 flex-col fixed left-0 top-0 z-10">
           <div className="p-6 border-b border-white/10">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center">
@@ -245,43 +247,47 @@ export default function AdminPage() {
             {activeTab === 'dashboard' && (
               <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <StatCard label="Total Paintings" value="24" icon={IoCubeOutline} color="bg-mithila-blue" />
-                  <StatCard label="Total Orders" value="156" icon={IoReceiptOutline} color="bg-mithila-green" />
-                  <StatCard label="Revenue" value="₹487500" icon={IoGridOutline} color="bg-earth-500" />
-                  <StatCard label="Commissions" value="12" icon={IoBrushOutline} color="bg-mithila-orange" />
+                  <StatCard label="Total Paintings" value={paintings.length.toString()} icon={IoCubeOutline} color="bg-mithila-blue" />
+                  <StatCard label="Total Orders" value={realOrders.length.toString()} icon={IoReceiptOutline} color="bg-mithila-green" />
+                  <StatCard label="Revenue" value={`₹${totalRevenue}`} icon={IoGridOutline} color="bg-earth-500" />
+                  <StatCard label="Commissions" value={realCommissions.length.toString()} icon={IoBrushOutline} color="bg-mithila-orange" />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white rounded-2xl p-6 shadow-card">
                     <h3 className="font-display font-semibold text-lg text-charcoal mb-4">Recent Orders</h3>
                     <div className="space-y-3">
-                      {mockOrders.slice(0, 4).map((order) => (
-                        <div key={order.id} className="flex items-center justify-between p-3 bg-cream-50 rounded-xl">
+                      {realOrders.length > 0 ? realOrders.slice(0, 4).map((order) => (
+                        <div key={order._id} className="flex items-center justify-between p-3 bg-cream-50 rounded-xl border border-cream-100">
                           <div>
-                            <p className="font-body font-medium text-sm text-charcoal">{order.customer}</p>
-                            <p className="text-xs text-warm-gray-400">{order.id}</p>
+                            <p className="font-body font-medium text-sm text-charcoal">{order.name}</p>
+                            <p className="text-xs text-warm-gray-400">#{order.orderId || order._id.slice(-8)}</p>
                           </div>
                           <div className="text-right">
-                            <p className="font-display font-semibold text-earth-700">{formatPrice(order.total)}</p>
-                            <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium ${statusColors[order.status]}`}>{order.status}</span>
+                            <p className="font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</p>
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium ${statusColors[order.status || 'Pending'] || 'bg-warm-gray-100'}`}>{order.status || 'Pending'}</span>
                           </div>
                         </div>
-                      ))}
+                      )) : (
+                        <p className="text-sm text-warm-gray-500 py-4">No recent orders found.</p>
+                      )}
                     </div>
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 shadow-card">
                     <h3 className="font-display font-semibold text-lg text-charcoal mb-4">Commission Requests</h3>
                     <div className="space-y-3">
-                      {mockCommissions.map((com) => (
-                        <div key={com.id} className="flex items-center justify-between p-3 bg-cream-50 rounded-xl">
+                      {realCommissions.length > 0 ? realCommissions.slice(0, 4).map((com) => (
+                        <div key={com._id} className="flex items-center justify-between p-3 bg-cream-50 rounded-xl border border-cream-100">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal">{com.name}</p>
-                            <p className="text-xs text-warm-gray-400">{com.style} • {com.budget}</p>
+                            <p className="text-xs text-warm-gray-400">{com.style || 'Custom'} • {com.size || 'Standard'}</p>
                           </div>
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium ${statusColors[com.status]}`}>{com.status}</span>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium ${statusColors[com.status] || 'bg-warm-gray-100'}`}>{com.status}</span>
                         </div>
-                      ))}
+                      )) : (
+                        <p className="text-sm text-warm-gray-500 py-4">No recent commission requests found.</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -376,7 +382,7 @@ export default function AdminPage() {
                               <select 
                                 value={order.status || 'Pending'} 
                                 onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                                className={`text-xs px-2 py-1 rounded-full font-body font-medium cursor-pointer border-none outline-none ${statusColors[order.status || 'Pending']}`}
+                                className={`text-xs px-2 py-1 rounded-full font-body font-medium cursor-pointer border border-transparent hover:border-earth-200 outline-none ${statusColors[order.status || 'Pending']}`}
                               >
                                 <option value="Pending">Pending</option>
                                 <option value="Processing">Processing</option>
@@ -390,6 +396,13 @@ export default function AdminPage() {
                             </td>
                           </tr>
                         ))}
+                        {realOrders.length === 0 && (
+                          <tr>
+                            <td colSpan="7" className="px-4 py-8 text-center text-warm-gray-500 font-body">
+                              No orders found.
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -420,22 +433,32 @@ export default function AdminPage() {
                           <th className="px-4 py-3">ID</th>
                           <th className="px-4 py-3">Client</th>
                           <th className="px-4 py-3">Style</th>
-                          <th className="px-4 py-3">Budget</th>
+                          <th className="px-4 py-3">Location</th>
                           <th className="px-4 py-3">Status</th>
                           <th className="px-4 py-3">Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {mockCommissions.map((com) => (
-                          <tr key={com.id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
-                            <td className="px-4 py-3 font-mono text-sm text-earth-700">#{com.id}</td>
-                            <td className="px-4 py-3 font-body font-medium text-sm text-charcoal">{com.name}</td>
-                            <td className="px-4 py-3"><span className="text-xs px-2 py-1 bg-earth-500/10 text-earth-500 rounded-full font-body font-medium">{com.style}</span></td>
-                            <td className="px-4 py-3 text-sm text-warm-gray-600 font-body">{com.budget}</td>
-                            <td className="px-4 py-3"><span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${statusColors[com.status]}`}>{com.status}</span></td>
-                            <td className="px-4 py-3 text-sm text-warm-gray-500 font-body">{com.date}</td>
+                        {realCommissions.map((com) => (
+                          <tr key={com._id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
+                            <td className="px-4 py-3 font-mono text-sm text-earth-700">#{com.referenceId || com._id.slice(-6)}</td>
+                            <td className="px-4 py-3">
+                              <p className="font-body font-medium text-sm text-charcoal">{com.name}</p>
+                              <p className="text-xs text-warm-gray-400">{com.email}</p>
+                            </td>
+                            <td className="px-4 py-3"><span className="text-xs px-2 py-1 bg-earth-500/10 text-earth-500 rounded-full font-body font-medium">{com.style || 'Custom'}</span></td>
+                            <td className="px-4 py-3 text-sm text-warm-gray-600 font-body">{com.location}</td>
+                            <td className="px-4 py-3"><span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${statusColors[com.status] || 'bg-warm-gray-100'}`}>{com.status}</span></td>
+                            <td className="px-4 py-3 text-sm text-warm-gray-500 font-body">{new Date(com.submittedAt).toLocaleDateString()}</td>
                           </tr>
                         ))}
+                        {realCommissions.length === 0 && (
+                          <tr>
+                            <td colSpan="6" className="px-4 py-8 text-center text-warm-gray-500 font-body">
+                              No commission requests found.
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
