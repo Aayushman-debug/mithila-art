@@ -4,25 +4,24 @@ import { Helmet } from 'react-helmet-async';
 import SectionHeading from '../components/ui/SectionHeading';
 import { IoFlowerOutline, IoMusicalNotesOutline, IoRestaurantOutline, IoPeopleOutline, IoSunnyOutline, IoLeafOutline, IoColorPaletteOutline, IoWaterOutline } from 'react-icons/io5';
 
-import imgHero from '../assets/reference/hero.jpg';
-import imgOrigins from '../assets/reference/origins.jpg';
-import imgSita from '../assets/reference/sita.jpg';
-import imgKohbar from '../assets/reference/kohbar.jpg';
-import imgFish from '../assets/reference/fish_motif.jpg';
-import imgPeacock from '../assets/reference/peacock_motif.jpg';
-import imgGodhana from '../assets/reference/godhana.jpg';
-import imgBharni from '../assets/reference/bharni.jpg';
-import imgKachni from '../assets/reference/kachni.jpg';
-import imgTantrik from '../assets/reference/tantrik.jpg';
-import imgTree from '../assets/reference/tree_of_life.jpg';
-import imgChhath from '../assets/reference/chhath_puja.jpg';
-import imgSama from '../assets/reference/sama_chakeva.jpg';
-import imgCuisine from '../assets/reference/mithila_cuisine.jpg';
-import imgLotus from '../assets/reference/lotus_motif.jpg';
-import imgJanakpur from '../assets/reference/janakpur.jpg';
-import imgTurtle from '../assets/reference/baua_devi.jpg'; // generic fallback for turtle
-import imgBamboo from '../assets/reference/yamuna_devi.jpg'; // generic fallback for bamboo
-import imgSunMoon from '../assets/reference/sita_devi.jpg'; // generic fallback for sun/moon
+const imgHero = 'https://images.unsplash.com/photo-1599839619722-39751411ea63?w=1600&q=80'; // generic indian art hero
+const imgOrigins = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art.jpg';
+const imgSita = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg';
+const imgKohbar = 'https://commons.wikimedia.org/wiki/Special:FilePath/Kohbar_Ghar.jpg';
+const imgFish = 'https://images.unsplash.com/photo-1524311583145-d5593bd2501a?w=800&q=80'; // koi fish painting Unsplash
+const imgPeacock = 'https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=800&q=80'; // Peacock Unsplash
+const imgGodhana = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art_from_Bihar.jpg';
+const imgBharni = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Painting_-_Krishna_with_Gopis.jpg';
+const imgKachni = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Painting_Display.jpg';
+const imgTantrik = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_painting.jpg';
+const imgTree = 'https://commons.wikimedia.org/wiki/Special:FilePath/Tree_of_life_in_Madhubani_Art.jpg';
+const imgChhath = 'https://images.unsplash.com/photo-1605808581728-660c1fb45a4a?w=800&q=80';
+const imgSama = 'https://images.unsplash.com/photo-1605809798485-64bc6e87f7d1?w=800&q=80';
+const imgCuisine = 'https://images.unsplash.com/photo-1589302168068-98c511241978?w=800&q=80';
+const imgLotus = 'https://images.unsplash.com/photo-1593595560946-f94d930dbdb4?w=800&q=80';
+const imgTurtle = 'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800&q=80'; 
+const imgBamboo = 'https://images.unsplash.com/photo-1513689531849-01201206f3ed?w=800&q=80';
+const imgSunMoon = 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?w=800&q=80';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },

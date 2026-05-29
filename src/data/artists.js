@@ -1,11 +1,11 @@
-import imgSita from '../assets/reference/sita_devi.jpg';
-import imgGanga from '../assets/reference/ganga_devi.jpg';
-import imgMaha from '../assets/reference/mahasundari_devi.jpg';
-import imgDulari from '../assets/reference/dulari_devi.jpg';
-import imgGodavari from '../assets/reference/godavari_dutta.jpg';
-import imgBaua from '../assets/reference/baua_devi.jpg';
-import imgBharti from '../assets/reference/bharti_dayal.jpg';
-import imgYamuna from '../assets/reference/yamuna_devi.jpg';
+const imgSita = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art.jpg';
+const imgGanga = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Painting_-_Krishna_with_Gopis.jpg';
+const imgMaha = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_Painting.jpg';
+const imgDulari = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_painting_from_bihar.jpg';
+const imgGodavari = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Painting_Display.jpg';
+const imgBaua = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art_from_Bihar.jpg';
+const imgBharti = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_art.jpg';
+const imgYamuna = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg';
 
 export const artists = [
   {
