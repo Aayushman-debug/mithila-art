@@ -19,6 +19,11 @@ import radhaKrishnaKachni from '../assets/paintings/gallery_batch_1/radha_krishn
 import radhaKrishnaBharni from '../assets/paintings/gallery_batch_1/radha_krishna_bharni.jpg';
 import ganeshaColored from '../assets/paintings/gallery_batch_1/ganesha_colored.jpg';
 import durgaBlackRed from '../assets/paintings/gallery_batch_1/durga_black_red.jpg';
+
+import krishnaCow from '../assets/paintings/gallery_batch_2/krishna_cow.jpg';
+import radhaKrishnaKachni2 from '../assets/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg';
+import ganeshaPink from '../assets/paintings/gallery_batch_2/ganesha_pink.jpg';
+import paintedSaree from '../assets/paintings/gallery_batch_2/painted_saree.jpg';
 export const categories = [
   {
     id: 'kohbar',
@@ -260,21 +265,20 @@ export const paintings = [
   },
   {
     id: 'p012',
-    title: 'Salhes — The Folk Hero',
-    titleHindi: 'सलहेस — लोक नायक',
-    artist: 'Dulari Devi',
-    price: 2999,
-    originalPrice: 26000,
-    images: ['https://picsum.photos/seed/mithila12/800/600', 'https://picsum.photos/seed/detail_p012_1/800/600', 'https://picsum.photos/seed/detail_p012_2/800/600'],
-    category: 'godhana',
+    title: 'Krishna Leela — Divine Herder',
+    titleHindi: '',
+    artist: 'Lalita Pathak',
+    price: 4200,
+    images: [krishnaCow, 'https://picsum.photos/seed/detail_p012_1/800/600', 'https://picsum.photos/seed/detail_p012_2/800/600'],
+    category: 'religious',
     size: '20 × 24 inches',
     medium: 'Acrylic on canvas',
-    style: 'Godhana',
+    style: 'Bharni',
     description:
-      'The legendary folk hero Salhes, revered in the Mithila Dalit community, depicted in bold Godhana patterns. His story of courage and justice resonates across generations.',
+      'A colorful and vibrant painting in the Bharni style depicting Lord Krishna playing with a cow. Rendered with rich primary colors and traditional decorative elements.',
     inStock: true,
     featured: false,
-    isNew: false,
+    isNew: true,
   },
 
   // ── Tantric ─────────────────────────────────────────────
@@ -352,18 +356,18 @@ export const paintings = [
   },
   {
     id: 'p017',
-    title: 'Digital Devi — Goddess Online',
-    titleHindi: 'डिजिटल देवी — ऑनलाइन देवी',
-    artist: 'Ranjit Jha',
-    price: 2399,
-    images: ['https://picsum.photos/seed/mithila17/800/600', 'https://picsum.photos/seed/detail_p017_1/800/600', 'https://picsum.photos/seed/detail_p017_2/800/600'],
-    category: 'contemporary',
+    title: 'Radha Krishna — Kadamba Tree',
+    titleHindi: '',
+    artist: 'Lalita Pathak',
+    price: 3500,
+    images: [radhaKrishnaKachni2, 'https://picsum.photos/seed/detail_p017_1/800/600', 'https://picsum.photos/seed/detail_p017_2/800/600'],
+    category: 'religious',
     size: '20 × 24 inches',
-    medium: 'Acrylic on canvas',
-    style: 'Contemporary Bharni',
+    medium: 'Ink on handmade paper',
+    style: 'Kachni',
     description:
-      'Goddess Saraswati holds a smartphone instead of a veena, surrounded by WiFi symbols rendered in traditional Bharni fill. A witty meditation on knowledge in the digital age.',
-    inStock: false,
+      'An exquisite black and white Kachni painting with delicate red and yellow accents. It portrays the eternal love of Radha and Krishna standing gracefully under a Kadamba tree.',
+    inStock: true,
     featured: false,
     isNew: true,
   },
@@ -371,38 +375,37 @@ export const paintings = [
   // ── Nature ──────────────────────────────────────────────
   {
     id: 'p018',
-    title: 'Mayura — The Dancing Peacock',
-    titleHindi: 'मयूर — नृत्यरत मोर',
+    title: 'Vighnaharta Ganesha',
+    titleHindi: '',
     artist: 'Lalita Pathak',
-    price: 2699,
-    images: ['https://picsum.photos/seed/mithila18/800/600', 'https://picsum.photos/seed/detail_p018_1/800/600', 'https://picsum.photos/seed/detail_p018_2/800/600'],
-    category: 'nature',
+    price: 2800,
+    images: [ganeshaPink, 'https://picsum.photos/seed/detail_p018_1/800/600', 'https://picsum.photos/seed/detail_p018_2/800/600'],
+    category: 'religious',
     size: '24 × 30 inches',
-    medium: 'Natural dyes on handmade paper',
-    style: 'Bharni',
+    medium: 'Ink on handmade paper',
+    style: 'Kachni',
     description:
-      'A magnificent peacock unfurls its iridescent tail feathers amidst mango blossoms and lotus buds. The peacock symbolises beauty, rain, and renewal in Mithila iconography.',
+      'A striking contemporary take on Lord Ganesha using a unique pink palette. Masterfully detailed in the Kachni line-art style alongside his faithful vahana, Mooshak.',
     inStock: true,
-    featured: false,
-    isNew: false,
+    featured: true,
+    isNew: true,
   },
   {
     id: 'p019',
-    title: 'Hathi — The Auspicious Elephant',
-    titleHindi: 'हाथी — शुभ गजराज',
+    title: 'Mithila Wearable Art Saree',
+    titleHindi: '',
     artist: 'Lalita Pathak',
-    price: 4799,
-    originalPrice: 37000,
-    images: ['https://picsum.photos/seed/mithila19/800/600', 'https://picsum.photos/seed/detail_p019_1/800/600', 'https://picsum.photos/seed/detail_p019_2/800/600'],
-    category: 'nature',
-    size: '24 × 36 inches',
-    medium: 'Acrylic on handmade paper',
-    style: 'Bharni',
+    price: 7500,
+    images: [paintedSaree, 'https://picsum.photos/seed/detail_p019_1/800/600', 'https://picsum.photos/seed/detail_p019_2/800/600'],
+    category: 'contemporary',
+    size: 'Saree',
+    medium: 'Fabric paint on silk',
+    style: 'Wearable Art',
     description:
-      'A regal elephant adorned with ceremonial patterns strides through a floral landscape. In Mithila tradition, the elephant represents wisdom, royalty, and unwavering strength.',
+      'Authentic, hand-painted wearable art. This stunning silk saree is intricately hand-painted with traditional Mithila motifs, transforming an ancient art form into a breathtaking fashion statement.',
     inStock: true,
-    featured: false,
-    isNew: false,
+    featured: true,
+    isNew: true,
   },
   {
     id: 'p020',
