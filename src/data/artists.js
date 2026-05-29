@@ -1,3 +1,12 @@
+import imgSita from '../assets/home/mummyone.jpeg';
+import imgGanga from '../assets/home/cardtwo.jpeg';
+import imgMaha from '../assets/home/Cardone.png';
+import imgDulari from '../assets/home/cardfive.jpeg';
+import imgGodavari from '../assets/home/cardfour.jpeg';
+import imgBaua from '../assets/home/cardthree.png';
+import imgBharti from '../assets/paintings/idkthecontext.jpeg';
+import imgYamuna from '../assets/home/cardsix.png';
+
 export const artists = [
   {
     id: 'sita-devi',
@@ -12,7 +21,7 @@ export const artists = [
     legacy: 'Her work is displayed in museums worldwide, including the Victoria and Albert Museum in London.',
     achievements: ['Introduced Mithila art to international audiences', 'Empowered hundreds of local women economically'],
     famousWorks: ['Radha Krishna', 'Sita Swayamvar', 'Kadam Tree'],
-    image: 'https://picsum.photos/seed/sitadevi/800/1000'
+    image: imgSita
   },
   {
     id: 'ganga-devi',
@@ -27,7 +36,7 @@ export const artists = [
     legacy: 'Her "Festival of American Folklife" mural in Washington D.C. remains a landmark achievement in Indian folk art history.',
     achievements: ['Created the famous "Cycle of Life" series', 'Painted the Crafts Museum mural in New Delhi'],
     famousWorks: ['Cycle of Life', 'Ramayana Series', 'Festival of American Folklife'],
-    image: 'https://picsum.photos/seed/gangadevi/800/1000'
+    image: imgGanga
   },
   {
     id: 'mahasundari-devi',
@@ -42,7 +51,7 @@ export const artists = [
     legacy: 'She created a thriving ecosystem for female artists in Ranti village, inspiring generations of women to pursue art professionally.',
     achievements: ['Established an artist cooperative', 'Mastered multiple traditional styles'],
     famousWorks: ['Kohbar Ghar', 'Dashavatar', 'Krishna Leela'],
-    image: 'https://picsum.photos/seed/mahasundari/800/1000'
+    image: imgMaha
   },
   {
     id: 'dulari-devi',
@@ -57,7 +66,7 @@ export const artists = [
     legacy: 'Her life story is documented in the book "Following My Paint Brush," serving as an inspiration for underprivileged artists.',
     achievements: ['Elevated Godhana art to national recognition', 'Documented contemporary rural life in traditional styles'],
     famousWorks: ['Village Life Series', 'Following My Paint Brush (Illustrations)', 'Kamla River Rituals'],
-    image: 'https://picsum.photos/seed/dulari/800/1000'
+    image: imgDulari
   },
   {
     id: 'godavari-dutta',
@@ -72,7 +81,7 @@ export const artists = [
     legacy: 'Credited with founding a Mithila art museum in Japan, cementing the art form\'s global presence.',
     achievements: ['Set up the Mithila Museum in Tokamachi, Japan', 'Trained thousands of rural women'],
     famousWorks: ['Trishul Series', 'Ramayana Epochs', 'Intricate Peacock Patterns'],
-    image: 'https://picsum.photos/seed/godavari/800/1000'
+    image: imgGodavari
   },
   {
     id: 'baua-devi',
@@ -87,7 +96,7 @@ export const artists = [
     legacy: 'She is the only Mithila artist to have her work exhibited at the prestigious Centre Pompidou in Paris.',
     achievements: ['Exhibited at Centre Pompidou (1989)', 'Pioneered large-scale Mithila canvases'],
     famousWorks: ['Naga Devata Series', 'Cosmic Serpent', 'Sita\'s Agnipariksha'],
-    image: 'https://picsum.photos/seed/baua/800/1000'
+    image: imgBaua
   },
   {
     id: 'bharti-dayal',
@@ -102,7 +111,7 @@ export const artists = [
     legacy: 'Her works are widely published and collected globally, serving as a bridge between traditional folk art and contemporary fine art.',
     achievements: ['Brought Mithila art into contemporary fine art galleries', 'Authored extensive literature on the art form'],
     famousWorks: ['Tree of Life', 'Contemporary Radha Krishna', 'Global Warming Series'],
-    image: 'https://picsum.photos/seed/bharti/800/1000'
+    image: imgBharti
   },
   {
     id: 'yamuna-devi',
@@ -117,6 +126,6 @@ export const artists = [
     legacy: 'She opened the doors for Dalit artists to be recognized as master craftsmen in a field previously dominated by upper castes.',
     achievements: ['First Dalit woman to win a National Award in Mithila art', 'Pioneered the use of cow dung wash as a canvas base'],
     famousWorks: ['Chhath Festival Scenes', 'Rahu & Ketu', 'Godhana Motifs'],
-    image: 'https://picsum.photos/seed/yamuna/800/1000'
+    image: imgYamuna
   }
 ];
