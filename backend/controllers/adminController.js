@@ -43,9 +43,28 @@ const getProducts = async (req, res) => {
   }
 };
 
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!status || !['Pending', 'Processing', 'Shipped', 'Delivered'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status' });
+    }
+    const order = await CartOrder.findByIdAndUpdate(id, { status }, { new: true });
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+    res.status(200).json({ success: true, order });
+  } catch (error) {
+    console.error('Update order status error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not update order status' });
+  }
+};
+
 module.exports = {
   getUsers,
   getOrders,
   getCommissions,
   getProducts,
+  updateOrderStatus,
 };

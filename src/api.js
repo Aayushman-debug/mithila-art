@@ -96,5 +96,14 @@ export const paymentAPI = {
   verifyCartPayment: (data) => api.post('/verify-cart-payment', data),
 };
 
+// Admin API calls
+export const adminAPI = {
+  getUsers: () => api.get('/api/admin/users'),
+  getOrders: () => api.get('/api/admin/orders'),
+  updateOrderStatus: (orderId, status) => api.put(`/api/admin/orders/${orderId}/status`, { status }),
+  getCommissions: () => api.get('/api/admin/commissions'),
+  getProducts: () => api.get('/api/admin/products'),
+};
+
 export default api;
 

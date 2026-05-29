@@ -146,6 +146,32 @@ export default function AdminPage() {
     Completed: 'bg-mithila-green/10 text-mithila-green',
   };
 
+  const [realOrders, setRealOrders] = useState([]);
+  useEffect(() => {
+    if (loggedIn) {
+      import('../api').then(({ adminAPI }) => {
+        adminAPI.getOrders().then(res => {
+          if (res.data.success) {
+            setRealOrders(res.data.orders);
+          }
+        }).catch(err => console.error("Failed to fetch admin orders", err));
+      });
+    }
+  }, [loggedIn]);
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.updateOrderStatus(orderId, newStatus);
+      if (res.data.success) {
+        setRealOrders(orders => orders.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
+      }
+    } catch (err) {
+      console.error("Failed to update status", err);
+      alert("Failed to update status");
+    }
+  };
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen bg-cream-50">
       <Helmet><title>Admin Dashboard — Lalita Pathak Mithila Art</title></Helmet>
@@ -337,19 +363,28 @@ export default function AdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {mockOrders.map((order) => (
-                          <tr key={order.id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
-                            <td className="px-4 py-3 font-mono text-sm text-earth-700 font-medium">#{order.id}</td>
+                        {realOrders.map((order) => (
+                          <tr key={order._id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
+                            <td className="px-4 py-3 font-mono text-sm text-earth-700 font-medium">#{order.orderId || order._id.slice(-8)}</td>
                             <td className="px-4 py-3">
-                              <p className="font-body font-medium text-sm text-charcoal">{order.customer}</p>
+                              <p className="font-body font-medium text-sm text-charcoal">{order.name}</p>
                               <p className="text-xs text-warm-gray-400">{order.email}</p>
                             </td>
-                            <td className="px-4 py-3 text-sm text-warm-gray-600">{order.items}</td>
-                            <td className="px-4 py-3 font-display font-semibold text-earth-700">{formatPrice(order.total)}</td>
+                            <td className="px-4 py-3 text-sm text-warm-gray-600">{order.items?.length || 0} items</td>
+                            <td className="px-4 py-3 font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</td>
                             <td className="px-4 py-3">
-                              <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${statusColors[order.status]}`}>{order.status}</span>
+                              <select 
+                                value={order.status || 'Pending'} 
+                                onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                                className={`text-xs px-2 py-1 rounded-full font-body font-medium cursor-pointer border-none outline-none ${statusColors[order.status || 'Pending']}`}
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                              </select>
                             </td>
-                            <td className="px-4 py-3 text-sm text-warm-gray-500 font-body">{order.date}</td>
+                            <td className="px-4 py-3 text-sm text-warm-gray-500 font-body">{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td className="px-4 py-3">
                               <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors"><IoEyeOutline size={16} /></button>
                             </td>
