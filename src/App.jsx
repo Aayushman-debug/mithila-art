@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import WhatsAppButton from './components/layout/WhatsAppButton';
+import FloatingCompareButton from './components/layout/FloatingCompareButton';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 import ScrollProgress from './components/layout/ScrollProgress';
 import { AdminRoute, ProtectedRoute } from './components/ui/ProtectedRoute';
@@ -33,6 +34,7 @@ const OrdersPage = lazy(() => import('./pages/OrdersPage'));
 const CommissionTrackingPage = lazy(() => import('./pages/CommissionTrackingPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
+const ComparePage = lazy(() => import('./pages/ComparePage'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -71,6 +73,7 @@ export default function App() {
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/compare" element={<ComparePage />} />
               <Route path="/commission" element={<CommissionPage />} />
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/testimonials" element={<TestimonialsPage />} />
@@ -97,6 +100,7 @@ export default function App() {
 
       <Footer />
       <WhatsAppButton />
+      <FloatingCompareButton />
     </div>
   );
 }

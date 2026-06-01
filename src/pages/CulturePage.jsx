@@ -4,24 +4,32 @@ import { Helmet } from 'react-helmet-async';
 import SectionHeading from '../components/ui/SectionHeading';
 import { IoFlowerOutline, IoMusicalNotesOutline, IoRestaurantOutline, IoPeopleOutline, IoSunnyOutline, IoLeafOutline, IoColorPaletteOutline, IoWaterOutline } from 'react-icons/io5';
 
-const imgHero = 'https://images.unsplash.com/photo-1599839619722-39751411ea63?w=1600&q=80'; // generic indian art hero
+// Import local Mithila artwork
+import fishArtwork from '../assets/paintings/fish.jpeg';
+import peacockArtwork from '../assets/paintings/peacockOne.jpeg';
+import brideArtwork from '../assets/paintings/bride.jpeg';
+import shivParvatiArtwork from '../assets/paintings/Shivparvatimarriage.jpeg';
+
+// Wikimedia Commons - Authentic Mithila Art
+const imgHero = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Art.jpg'; // Mithila art hero
 const imgOrigins = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art.jpg';
 const imgSita = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg';
 const imgKohbar = 'https://commons.wikimedia.org/wiki/Special:FilePath/Kohbar_Ghar.jpg';
-const imgFish = 'https://images.unsplash.com/photo-1524311583145-d5593bd2501a?w=800&q=80'; // koi fish painting Unsplash
-const imgPeacock = 'https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=800&q=80'; // Peacock Unsplash
+const imgFish = fishArtwork; // Local Mithila fish motif artwork
+const imgPeacock = peacockArtwork; // Local Mithila peacock artwork
 const imgGodhana = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art_from_Bihar.jpg';
 const imgBharni = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Painting_-_Krishna_with_Gopis.jpg';
 const imgKachni = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Painting_Display.jpg';
 const imgTantrik = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_painting.jpg';
 const imgTree = 'https://commons.wikimedia.org/wiki/Special:FilePath/Tree_of_life_in_Madhubani_Art.jpg';
-const imgChhath = 'https://images.unsplash.com/photo-1605808581728-660c1fb45a4a?w=800&q=80';
-const imgSama = 'https://images.unsplash.com/photo-1605809798485-64bc6e87f7d1?w=800&q=80';
-const imgCuisine = 'https://images.unsplash.com/photo-1589302168068-98c511241978?w=800&q=80';
-const imgLotus = 'https://images.unsplash.com/photo-1593595560946-f94d930dbdb4?w=800&q=80';
-const imgTurtle = 'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800&q=80'; 
-const imgBamboo = 'https://images.unsplash.com/photo-1513689531849-01201206f3ed?w=800&q=80';
-const imgSunMoon = 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?w=800&q=80';
+// Festival images - using Mithila artwork for authentic cultural representation
+const imgChhath = shivParvatiArtwork; // Using traditional Mithila wedding painting that includes sacred elements
+const imgSama = brideArtwork; // Using traditional Mithila artwork showcasing cultural iconography
+const imgCuisine = brideArtwork; // Using Mithila painting showing cultural elements
+const imgLotus = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Lotus_Motif.jpg'; // Mithila lotus artwork
+const imgTurtle = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Turtle_Motif.jpg'; // Mithila turtle symbolism
+const imgBamboo = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Bamboo_Motif.jpg'; // Bamboo in Mithila art
+const imgSunMoon = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Sun_Moon_Painting.jpg'; // Traditional Mithila sun and moon
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },

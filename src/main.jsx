@@ -7,6 +7,7 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
+import { CompareProvider } from './context/CompareContext';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <ToastProvider>
             <AuthProvider>
               <CartProvider>
-                <App />
+                <CompareProvider>
+                  <App />
+                </CompareProvider>
               </CartProvider>
             </AuthProvider>
           </ToastProvider>
