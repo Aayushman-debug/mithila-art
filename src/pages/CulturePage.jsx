@@ -9,9 +9,13 @@ import fishArtwork from '../assets/paintings/fish.jpeg';
 import peacockArtwork from '../assets/paintings/peacockOne.jpeg';
 import brideArtwork from '../assets/paintings/bride.jpeg';
 import shivParvatiArtwork from '../assets/paintings/Shivparvatimarriage.jpeg';
+import lotusKrishnaArtwork from '../assets/paintings/idkthecontext.jpeg';
+import sunYantraArtwork from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg';
+import ganesha_lotus from '../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg';
+import multiple_figures from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg';
 
 // Wikimedia Commons - Authentic Mithila Art
-const imgHero = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Art.jpg'; // Mithila art hero
+const imgHero = shivParvatiArtwork; // Beautiful traditional Mithila wedding scene
 const imgOrigins = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_art.jpg';
 const imgSita = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg';
 const imgKohbar = 'https://commons.wikimedia.org/wiki/Special:FilePath/Kohbar_Ghar.jpg';
@@ -23,13 +27,13 @@ const imgKachni = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_P
 const imgTantrik = 'https://commons.wikimedia.org/wiki/Special:FilePath/Madhubani_painting.jpg';
 const imgTree = 'https://commons.wikimedia.org/wiki/Special:FilePath/Tree_of_life_in_Madhubani_Art.jpg';
 // Festival images - using Mithila artwork for authentic cultural representation
-const imgChhath = shivParvatiArtwork; // Using traditional Mithila wedding painting that includes sacred elements
-const imgSama = brideArtwork; // Using traditional Mithila artwork showcasing cultural iconography
-const imgCuisine = brideArtwork; // Using Mithila painting showing cultural elements
-const imgLotus = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Lotus_Motif.jpg'; // Mithila lotus artwork
-const imgTurtle = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Turtle_Motif.jpg'; // Mithila turtle symbolism
-const imgBamboo = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Bamboo_Motif.jpg'; // Bamboo in Mithila art
-const imgSunMoon = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mithila_Sun_Moon_Painting.jpg'; // Traditional Mithila sun and moon
+const imgChhath = multiple_figures; // Traditional Mithila figures in ceremonial attire
+const imgSama = brideArtwork; // Traditional Mithila artwork showcasing cultural iconography
+const imgCuisine = ganesha_lotus; // Ganesha in Mithila art representing prosperity and culture
+const imgLotus = lotusKrishnaArtwork; // Krishna with lotus flowers - perfect lotus symbolism
+const imgTurtle = ganesha_lotus; // Using Ganesha as turtle represents Kurma avatar symbolism
+const imgBamboo = multiple_figures; // Mithila figures with traditional elements
+const imgSunMoon = sunYantraArtwork; // Traditional Mithila sun/yantra design with concentric circles
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },

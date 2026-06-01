@@ -47,7 +47,7 @@ const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    if (!status || !['Pending', 'Processing', 'Shipped', 'Delivered'].includes(status)) {
+    if (!status || !['Pending', 'Processing', 'Shipped', 'Delivered', 'Pending Payment Verification'].includes(status)) {
       return res.status(400).json({ success: false, message: 'Invalid status' });
     }
     const order = await CartOrder.findByIdAndUpdate(id, { status }, { new: true });
@@ -61,10 +61,49 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+const verifyPayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await CartOrder.findById(id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+    order.paymentVerification = 'verified';
+    order.paymentStatus = 'paid';
+    order.status = 'Processing';
+    order.paidAt = new Date();
+    await order.save();
+    res.status(200).json({ success: true, order });
+  } catch (error) {
+    console.error('Verify payment error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not verify payment' });
+  }
+};
+
+const rejectPayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await CartOrder.findById(id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+    order.paymentVerification = 'rejected';
+    order.paymentStatus = 'failed';
+    order.status = 'Pending';
+    await order.save();
+    res.status(200).json({ success: true, order });
+  } catch (error) {
+    console.error('Reject payment error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not reject payment' });
+  }
+};
+
 module.exports = {
   getUsers,
   getOrders,
   getCommissions,
   getProducts,
   updateOrderStatus,
+  verifyPayment,
+  rejectPayment,
 };

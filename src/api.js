@@ -94,6 +94,7 @@ export const paymentAPI = {
   markPaymentFailed: (data) => api.post('/payment-failed', data),
   createCartOrder: (data) => api.post('/create-cart-order', data),
   verifyCartPayment: (data) => api.post('/verify-cart-payment', data),
+  createUpiOrder: (data) => api.post('/create-upi-order', data),
 };
 
 // Admin API calls
@@ -101,6 +102,8 @@ export const adminAPI = {
   getUsers: () => api.get('/api/admin/users'),
   getOrders: () => api.get('/api/admin/orders'),
   updateOrderStatus: (orderId, status) => api.put(`/api/admin/orders/${orderId}/status`, { status }),
+  verifyPayment: (orderId) => api.put(`/api/admin/orders/${orderId}/verify-payment`),
+  rejectPayment: (orderId) => api.put(`/api/admin/orders/${orderId}/reject-payment`),
   getCommissions: () => api.get('/api/admin/commissions'),
   getProducts: () => api.get('/api/admin/products'),
 };

@@ -70,7 +70,7 @@ app.use(cors({
   credentials: true,
   exposedHeaders: ["set-cookie"],
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(helmet());
 // Use a safe wrapper for mongo-sanitize to avoid issues when req.query is getter-only
 const { sanitize } = mongoSanitize;
@@ -497,6 +497,105 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message || "Could not create payment order"
+    });
+  }
+});
+
+// 4c. CREATE UPI ORDER
+app.post("/create-upi-order", async (req, res) => {
+  try {
+    console.log("/create-upi-order request body (keys):", Object.keys(req.body));
+    const { name, email, phone, address, city, state, pincode, totalAmount, shipping, grandTotal, discount, couponCode, items, paymentScreenshot } = req.body;
+
+    if (!name || !email || !phone || !address || !city || !state || !pincode || !grandTotal || !Array.isArray(items)) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing UPI order details"
+      });
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Invalid email format' });
+    }
+
+    if (isDisposableEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Disposable email addresses are not permitted' });
+    }
+
+    if (!validateIndianPhone(phone)) {
+      return res.status(400).json({ success: false, error: 'Invalid Indian phone number' });
+    }
+
+    const pinCodeValue = String(pincode).trim();
+    if (!/^[0-9]{6}$/.test(pinCodeValue)) {
+      return res.status(400).json({ success: false, error: 'Invalid pincode format' });
+    }
+
+    const requestedGrandTotal = Number(grandTotal);
+    if (Number.isNaN(requestedGrandTotal) || requestedGrandTotal <= 0) {
+      return res.status(400).json({ success: false, error: 'Invalid grand total amount' });
+    }
+
+    // Optional auth: attach user if token present (same pattern as commissions)
+    const authHeader = req.headers.authorization;
+    let attachedUser = null;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      try {
+        const decoded = verifyToken(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
+        if (decoded && decoded.userId) {
+          attachedUser = await User.findById(decoded.userId).select('_id');
+        }
+      } catch (e) {
+        attachedUser = null;
+      }
+    }
+
+    const upiOrderId = `UPI-${Date.now()}`;
+
+    const cartOrder = new CartOrder({
+      user: attachedUser?._id || null,
+      name,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      pincode,
+      items,
+      totalAmount: totalAmount || grandTotal,
+      shipping: shipping || 0,
+      grandTotal,
+      discount: discount || 0,
+      couponCode: couponCode || null,
+      orderId: upiOrderId,
+      paymentMethod: 'upi',
+      paymentScreenshot: paymentScreenshot || null,
+      paymentVerification: 'pending',
+      paymentStatus: 'awaiting_verification',
+      status: 'Pending Payment Verification',
+    });
+
+    await cartOrder.save();
+
+    // If user is authenticated, push order to their orders array
+    if (attachedUser) {
+      await User.findByIdAndUpdate(attachedUser._id, {
+        $push: { orders: cartOrder._id },
+      });
+    }
+
+    res.json({
+      success: true,
+      orderId: upiOrderId,
+      cartOrderId: cartOrder._id,
+      message: 'UPI order created successfully. Payment verification is pending.',
+    });
+  } catch (error) {
+    console.error("UPI order creation error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "Could not create UPI order"
     });
   }
 });

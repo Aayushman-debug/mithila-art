@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline } from 'react-icons/io5';
+import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
@@ -118,7 +118,8 @@ export default function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(isAuthenticated);
   const [realOrders, setRealOrders] = useState([]);
   const [realCommissions, setRealCommissions] = useState([]);
-
+  const [showScreenshotModal, setShowScreenshotModal] = useState(false);
+  const [selectedScreenshot, setSelectedScreenshot] = useState('');
   useEffect(() => {
     setLoggedIn(isAuthenticated);
   }, [isAuthenticated]);
@@ -134,6 +135,7 @@ export default function AdminPage() {
     Completed: 'bg-mithila-green/10 text-mithila-green',
     approved: 'bg-mithila-green/10 text-mithila-green',
     submitted: 'bg-warm-gray-100 text-warm-gray-600',
+    'Pending Payment Verification': 'bg-mithila-orange/10 text-mithila-orange',
   };
 
   useEffect(() => {
@@ -160,6 +162,32 @@ export default function AdminPage() {
     } catch (err) {
       console.error("Failed to update status", err);
       alert("Failed to update status");
+    }
+  };
+
+  const handleVerifyPayment = async (orderId) => {
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.verifyPayment(orderId);
+      if (res.data.success) {
+        setRealOrders(orders => orders.map(o => o._id === orderId ? { ...o, status: 'Processing', paymentStatus: 'paid', paymentVerification: 'verified' } : o));
+      }
+    } catch (err) {
+      console.error("Failed to verify payment", err);
+      alert("Failed to verify payment");
+    }
+  };
+
+  const handleRejectPayment = async (orderId) => {
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.rejectPayment(orderId);
+      if (res.data.success) {
+        setRealOrders(orders => orders.map(o => o._id === orderId ? { ...o, status: 'Pending', paymentStatus: 'failed', paymentVerification: 'rejected' } : o));
+      }
+    } catch (err) {
+      console.error("Failed to reject payment", err);
+      alert("Failed to reject payment");
     }
   };
 
@@ -361,8 +389,9 @@ export default function AdminPage() {
                         <tr className="text-left text-xs font-body font-semibold text-warm-gray-400 uppercase tracking-wider border-b border-cream-100">
                           <th className="px-4 py-3">Order ID</th>
                           <th className="px-4 py-3">Customer</th>
-                          <th className="px-4 py-3">Items</th>
                           <th className="px-4 py-3">Total</th>
+                          <th className="px-4 py-3">Method</th>
+                          <th className="px-4 py-3">Payment</th>
                           <th className="px-4 py-3">Status</th>
                           <th className="px-4 py-3">Date</th>
                           <th className="px-4 py-3">Actions</th>
@@ -376,8 +405,23 @@ export default function AdminPage() {
                               <p className="font-body font-medium text-sm text-charcoal">{order.name}</p>
                               <p className="text-xs text-warm-gray-400">{order.email}</p>
                             </td>
-                            <td className="px-4 py-3 text-sm text-warm-gray-600">{order.items?.length || 0} items</td>
                             <td className="px-4 py-3 font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</td>
+                            <td className="px-4 py-3">
+                              <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${order.paymentMethod === 'upi' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
+                                {order.paymentMethod === 'upi' ? 'UPI' : 'Razorpay'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              {order.paymentMethod === 'upi' ? (
+                                <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${order.paymentVerification === 'verified' ? 'bg-mithila-green/10 text-mithila-green' : order.paymentVerification === 'rejected' ? 'bg-mithila-red/10 text-mithila-red' : 'bg-mithila-orange/10 text-mithila-orange'}`}>
+                                  {order.paymentVerification || 'pending'}
+                                </span>
+                              ) : (
+                                <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${order.paymentStatus === 'paid' ? 'bg-mithila-green/10 text-mithila-green' : 'bg-warm-gray-100 text-warm-gray-600'}`}>
+                                  {order.paymentStatus || 'pending'}
+                                </span>
+                              )}
+                            </td>
                             <td className="px-4 py-3">
                               <select 
                                 value={order.status || 'Pending'} 
@@ -388,11 +432,29 @@ export default function AdminPage() {
                                 <option value="Processing">Processing</option>
                                 <option value="Shipped">Shipped</option>
                                 <option value="Delivered">Delivered</option>
+                                <option value="Pending Payment Verification">Pending Payment Verification</option>
                               </select>
                             </td>
                             <td className="px-4 py-3 text-sm text-warm-gray-500 font-body">{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td className="px-4 py-3">
-                              <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors"><IoEyeOutline size={16} /></button>
+                              <div className="flex items-center gap-2">
+                                <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Order"><IoEyeOutline size={16} /></button>
+                                {order.paymentMethod === 'upi' && order.paymentScreenshot && (
+                                  <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Screenshot">
+                                    <IoImageOutline size={16} />
+                                  </button>
+                                )}
+                                {order.paymentMethod === 'upi' && order.paymentVerification === 'pending' && (
+                                  <>
+                                    <button onClick={() => handleVerifyPayment(order._id)} className="p-1.5 rounded-lg hover:bg-mithila-green/20 text-mithila-green transition-colors" title="Verify Payment">
+                                      <IoCheckmarkOutline size={16} />
+                                    </button>
+                                    <button onClick={() => handleRejectPayment(order._id)} className="p-1.5 rounded-lg hover:bg-mithila-red/20 text-mithila-red transition-colors" title="Reject Payment">
+                                      <IoCloseOutline size={16} />
+                                    </button>
+                                  </>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -468,6 +530,25 @@ export default function AdminPage() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Screenshot Modal */}
+      <AnimatePresence>
+        {showScreenshotModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-earth-900/90 p-4">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+              <div className="p-4 border-b border-cream-200 flex justify-between items-center bg-cream-50">
+                <h3 className="font-display font-bold text-lg text-charcoal">Payment Screenshot</h3>
+                <button onClick={() => setShowScreenshotModal(false)} className="p-2 text-warm-gray-400 hover:text-mithila-red transition-colors bg-white rounded-full shadow-sm">
+                  <IoCloseOutline size={24} />
+                </button>
+              </div>
+              <div className="p-6 overflow-auto bg-cream-50/50 flex items-center justify-center flex-1">
+                <img src={selectedScreenshot} alt="Payment Screenshot" className="max-w-full max-h-full object-contain rounded-xl shadow-md border border-cream-200" />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
