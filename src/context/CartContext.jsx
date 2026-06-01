@@ -21,11 +21,9 @@ function saveCartToStorage(items) {
   }
 }
 
-/* ─── Action types ─────────────────────────────────────────────── */
 const ActionTypes = {
   ADD_ITEM: 'ADD_ITEM',
   REMOVE_ITEM: 'REMOVE_ITEM',
-  UPDATE_QUANTITY: 'UPDATE_QUANTITY',
   CLEAR_CART: 'CLEAR_CART',
   HYDRATE: 'HYDRATE',
 };
@@ -39,27 +37,14 @@ function cartReducer(state, action) {
     case ActionTypes.ADD_ITEM: {
       const existing = state.find((item) => item.id === action.payload.id);
       if (existing) {
-        return state.map((item) =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        );
+        // Enforce 1-of-1 logic for original artwork
+        return state;
       }
       return [...state, { ...action.payload, quantity: 1 }];
     }
 
     case ActionTypes.REMOVE_ITEM:
       return state.filter((item) => item.id !== action.payload);
-
-    case ActionTypes.UPDATE_QUANTITY: {
-      const { id, quantity } = action.payload;
-      if (quantity <= 0) {
-        return state.filter((item) => item.id !== id);
-      }
-      return state.map((item) =>
-        item.id === id ? { ...item, quantity } : item,
-      );
-    }
 
     case ActionTypes.CLEAR_CART:
       return [];
@@ -103,15 +88,6 @@ export function CartProvider({ children }) {
     [],
   );
 
-  const updateQuantity = useCallback(
-    (id, quantity) =>
-      dispatch({
-        type: ActionTypes.UPDATE_QUANTITY,
-        payload: { id, quantity },
-      }),
-    [],
-  );
-
   const clearCart = useCallback(
     () => dispatch({ type: ActionTypes.CLEAR_CART }),
     [],
@@ -134,12 +110,11 @@ export function CartProvider({ children }) {
       items,
       addItem,
       removeItem,
-      updateQuantity,
       clearCart,
       total,
       itemCount,
     }),
-    [items, addItem, removeItem, updateQuantity, clearCart, total, itemCount],
+    [items, addItem, removeItem, clearCart, total, itemCount],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

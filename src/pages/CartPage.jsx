@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoTrashOutline, IoAddOutline, IoRemoveOutline, IoCartOutline, IoArrowBackOutline, IoCheckmarkCircle, IoLogoWhatsapp, IoQrCodeOutline, IoCloudUploadOutline, IoCloseOutline } from 'react-icons/io5';
@@ -9,8 +9,9 @@ import { paymentAPI, buildApiPath } from '../api';
 import { formatPrice } from '../utils/helpers';
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, clearCart, total, itemCount } = useCart();
+  const { items, removeItem, clearCart, total, itemCount } = useCart();
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
   const [step, setStep] = useState('cart'); // cart, auth, checkout, payment, success
   const [checkoutError, setCheckoutError] = useState(null);
   const [formData, setFormData] = useState({
@@ -463,14 +464,8 @@ export default function CartPage() {
                             <div className="flex items-center justify-between flex-wrap gap-2">
                               <span className="font-display font-bold text-xl text-earth-700">{formatPrice(item.price)}</span>
                               <div className="flex items-center gap-2">
-                                <div className="flex items-center bg-cream-100 rounded-xl overflow-hidden">
-                                  <button onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))} className="p-2 hover:bg-cream-200 transition-colors">
-                                    <IoRemoveOutline size={16} />
-                                  </button>
-                                  <span className="px-3 font-body font-semibold text-sm">{item.quantity}</span>
-                                  <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2 hover:bg-cream-200 transition-colors">
-                                    <IoAddOutline size={16} />
-                                  </button>
+                                <div className="flex items-center bg-mithila-orange/10 rounded-xl overflow-hidden px-3 py-1.5">
+                                  <span className="font-body font-semibold text-xs text-mithila-orange tracking-wider">ORIGINAL 1 OF 1</span>
                                 </div>
                                 <button onClick={() => removeItem(item.id)} className="p-2 text-warm-gray-400 hover:text-mithila-red transition-colors">
                                   <IoTrashOutline size={18} />
@@ -486,18 +481,18 @@ export default function CartPage() {
 
                 {step === 'auth' && (
                   <motion.div key="auth" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h2 className="heading-md text-charcoal mb-6">Checkout</h2>
+                    <h2 className="heading-md text-charcoal mb-6">Authentication Required</h2>
                     <div className="bg-white rounded-2xl p-8 shadow-card flex flex-col md:flex-row gap-8">
                       <div className="flex-1 flex flex-col justify-center space-y-4">
-                        <h3 className="font-display font-semibold text-xl text-charcoal">New Customer</h3>
-                        <p className="text-body-sm text-warm-gray-500 mb-4">Checkout as a guest. You will be able to track your order with your email.</p>
-                        <button onClick={() => setStep('checkout')} className="btn-primary w-full">Continue as Guest</button>
+                        <h3 className="font-display font-semibold text-xl text-charcoal">Already have an account?</h3>
+                        <p className="text-body-sm text-warm-gray-500 mb-4">Login to checkout, view your order history, and save artworks to your wishlist.</p>
+                        <Link to="/login" state={{ from: location }} className="btn-primary w-full text-center block">Login</Link>
                       </div>
                       <div className="hidden md:block w-px bg-cream-200" />
                       <div className="flex-1 flex flex-col justify-center space-y-4">
-                        <h3 className="font-display font-semibold text-xl text-charcoal">Returning Customer</h3>
-                        <p className="text-body-sm text-warm-gray-500 mb-4">Login to your account to checkout faster and access your order history.</p>
-                        <Link to="/login?redirect=/cart" className="btn-secondary w-full text-center block">Login to Account</Link>
+                        <h3 className="font-display font-semibold text-xl text-charcoal">New Customer?</h3>
+                        <p className="text-body-sm text-warm-gray-500 mb-4">Create an account to securely purchase original Mithila artworks and manage your collection.</p>
+                        <Link to="/signup" state={{ from: location }} className="btn-secondary w-full text-center block">Create Account</Link>
                       </div>
                     </div>
                   </motion.div>

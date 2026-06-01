@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoHeartOutline, IoCartOutline, IoArrowBackOutline, IoRemoveCircleOutline } from 'react-icons/io5';
@@ -10,8 +10,15 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 export default function WishlistPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const location = useLocation();
+  const { user, isAuthenticated } = useAuth();
   const [wishlist, setWishlist] = useState(user?.wishlist || []);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: location }, replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

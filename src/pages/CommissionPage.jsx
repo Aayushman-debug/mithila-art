@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { IoCheckmarkCircle, IoArrowForwardOutline, IoArrowBackOutline, IoTimeOutline } from 'react-icons/io5';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -29,6 +30,14 @@ export default function CommissionPage() {
 
   const { isAuthenticated, user } = useAuth();
   const showToast = useToast();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: location }, replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
 
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', location: '',
