@@ -291,31 +291,41 @@ function FeaturedCategories() {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   3. FEATURED PAINTINGS (Horizontal Scroll)
+   3. FEATURED PAINTINGS (Sticky Horizontal Scroll)
    ════════════════════════════════════════════════════════════════ */
 function FeaturedPaintings() {
   const { addItem } = useCart();
-  const scrollRef = useRef(null);
+  const featured = paintings.slice(0, 6);
+  
+  // For the desktop sticky horizontal scroll
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
+  
+  // Map vertical scroll progress to horizontal translation.
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-65%"]);
+
+  // Standard scroll for mobile fallback
+  const scrollRefMobile = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-  const featured = paintings.slice(0, 6);
 
   const checkScroll = useCallback(() => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    if (!scrollRefMobile.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRefMobile.current;
     setCanScrollLeft(scrollLeft > 10);
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
   }, []);
 
   const scroll = (direction) => {
-    if (!scrollRef.current) return;
-    const amount = scrollRef.current.clientWidth * 0.7;
-    scrollRef.current.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' });
+    if (!scrollRefMobile.current) return;
+    const amount = scrollRefMobile.current.clientWidth * 0.7;
+    scrollRefMobile.current.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' });
   };
 
   useEffect(() => {
-    const el = scrollRef.current;
+    const el = scrollRefMobile.current;
     if (el) {
       el.addEventListener('scroll', checkScroll);
       checkScroll();
@@ -324,79 +334,106 @@ function FeaturedPaintings() {
   }, [checkScroll]);
 
   return (
-    <section className="section-padding bg-gradient-warm relative overflow-hidden">
-      <div className="absolute inset-0 noise pointer-events-none" />
+    <>
+      {/* ────────────────────────────────────────────────────────────────
+          DESKTOP: Sticky Horizontal Scroll (Hidden on smaller screens)
+          ──────────────────────────────────────────────────────────────── */}
+      <section ref={targetRef} className="hidden lg:block relative h-[300vh] bg-gradient-warm">
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+          <div className="absolute inset-0 noise pointer-events-none" />
+          
+          <div className="container-custom relative z-10 mb-12 mt-12">
+            <SectionHeading
+              title="Featured Collection"
+              subtitle="Hand-picked masterpieces that embody the soul of Mithila tradition"
+              accent
+            />
+          </div>
 
-      <div className="container-custom relative z-10" ref={ref}>
-        <div className="flex items-end justify-between mb-12">
-          <SectionHeading
-            title="Featured Collection"
-            subtitle="Hand-picked masterpieces that embody the soul of Mithila tradition"
-            accent
-          />
-          <div className="hidden md:flex gap-3">
-            <motion.button
-              onClick={() => scroll('left')}
-              className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                canScrollLeft
-                  ? 'border-earth-500 text-earth-500 hover:bg-earth-500 hover:text-white'
-                  : 'border-warm-gray-200 text-warm-gray-300 cursor-not-allowed'
-              }`}
-              whileHover={canScrollLeft ? { scale: 1.1 } : {}}
-              whileTap={canScrollLeft ? { scale: 0.9 } : {}}
-            >
-              <FaChevronLeft />
-            </motion.button>
-            <motion.button
-              onClick={() => scroll('right')}
-              className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                canScrollRight
-                  ? 'border-earth-500 text-earth-500 hover:bg-earth-500 hover:text-white'
-                  : 'border-warm-gray-200 text-warm-gray-300 cursor-not-allowed'
-              }`}
-              whileHover={canScrollRight ? { scale: 1.1 } : {}}
-              whileTap={canScrollRight ? { scale: 0.9 } : {}}
-            >
-              <FaChevronRight />
-            </motion.button>
+          <div className="relative z-10 flex">
+            <motion.div style={{ x }} className="flex gap-10 px-[10vw]">
+              {featured.map((painting, i) => (
+                <div key={painting.id} className="w-[420px] flex-shrink-0">
+                  <PaintingCard painting={painting} onAddToCart={() => addItem(painting)} />
+                </div>
+              ))}
+              
+              {/* View Full Collection Card at the end */}
+              <div className="w-[320px] flex-shrink-0 flex items-center justify-center">
+                <Link to="/shop" className="group flex flex-col items-center justify-center gap-6 text-earth-500 hover:text-earth-600 transition-colors bg-white/40 dark:bg-warm-gray-800/40 backdrop-blur-md border border-earth-500/20 rounded-2xl p-8 w-full h-[70%] shadow-card">
+                  <span className="font-display font-semibold text-3xl text-center leading-tight">View Full<br/>Collection</span>
+                  <div className="w-16 h-16 rounded-full bg-gradient-gold text-white flex items-center justify-center group-hover:scale-110 shadow-gold transition-transform">
+                    <FaArrowRight className="text-2xl" />
+                  </div>
+                </Link>
+              </div>
+            </motion.div>
           </div>
         </div>
+      </section>
 
-        <motion.div
-          ref={scrollRef}
-          className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          initial={{ opacity: 0, x: 40 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {featured.map((painting, i) => (
-            <motion.div
-              key={painting.id}
-              className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-center"
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 * i }}
-            >
-              <PaintingCard painting={painting} onAddToCart={() => addItem(painting)} />
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* ────────────────────────────────────────────────────────────────
+          MOBILE: Native Horizontal Swipe Carousel (Visible only < lg)
+          ──────────────────────────────────────────────────────────────── */}
+      <section className="lg:hidden section-padding bg-gradient-warm relative overflow-hidden">
+        <div className="absolute inset-0 noise pointer-events-none" />
 
-        {/* View All link */}
-        <motion.div
-          className="text-center mt-10"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
-        >
-          <Link to="/shop" className="group inline-flex items-center gap-2 text-earth-500 font-display font-semibold text-lg hover:text-earth-600 transition-colors">
-            View Full Collection
-            <FaArrowRight className="group-hover:translate-x-2 transition-transform duration-300" />
-          </Link>
-        </motion.div>
-      </div>
-    </section>
+        <div className="container-custom relative z-10">
+          <div className="flex items-end justify-between mb-8">
+            <SectionHeading
+              title="Featured Collection"
+              subtitle="Hand-picked masterpieces that embody the soul of Mithila tradition"
+              accent
+            />
+            {/* Manual arrows on tablet/mobile */}
+            <div className="hidden sm:flex gap-3">
+              <button
+                onClick={() => scroll('left')}
+                className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                  canScrollLeft
+                    ? 'border-earth-500 text-earth-500 hover:bg-earth-500 hover:text-white'
+                    : 'border-warm-gray-200 text-warm-gray-300 opacity-50'
+                }`}
+              >
+                <FaChevronLeft className="text-sm" />
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                  canScrollRight
+                    ? 'border-earth-500 text-earth-500 hover:bg-earth-500 hover:text-white'
+                    : 'border-warm-gray-200 text-warm-gray-300 opacity-50'
+                }`}
+              >
+                <FaChevronRight className="text-sm" />
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={scrollRefMobile}
+            className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {featured.map((painting, i) => (
+              <div
+                key={painting.id}
+                className="flex-shrink-0 w-[280px] sm:w-[320px] snap-center"
+              >
+                <PaintingCard painting={painting} onAddToCart={() => addItem(painting)} />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-6">
+            <Link to="/shop" className="group inline-flex items-center gap-2 text-earth-500 font-display font-semibold text-lg hover:text-earth-600 transition-colors">
+              View Full Collection
+              <FaArrowRight className="group-hover:translate-x-2 transition-transform duration-300" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
