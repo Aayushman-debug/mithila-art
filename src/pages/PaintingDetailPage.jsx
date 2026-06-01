@@ -14,12 +14,8 @@ import {
   IoCheckmarkOutline,
   IoShareSocialOutline,
 } from 'react-icons/io5';
-import { FaRupeeSign } from 'react-icons/fa';
-import { MdCompareArrows } from 'react-icons/md';
-
 import { paintings } from '../data/paintings';
 import { useCart } from '../context/CartContext';
-import { useCompare } from '../context/CompareContext';
 import { formatPrice } from '../utils/helpers';
 import ShareModal from '../components/ui/ShareModal';
 
@@ -27,7 +23,6 @@ export default function PaintingDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addItem } = useCart();
-  const { addToCompare, isInCompare, removeFromCompare } = useCompare();
 
   const painting = useMemo(() => paintings.find((p) => p.id === id), [id]);
 
@@ -39,7 +34,6 @@ export default function PaintingDetailPage() {
   }, [painting]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [copied, setCopied] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -57,12 +51,6 @@ export default function PaintingDetailPage() {
   const handleNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % images.length);
   }, [images.length]);
-
-  const handleCopyUPI = useCallback(() => {
-    navigator.clipboard.writeText('9142168466@axl');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, []);
 
   const handleAddToCart = useCallback(() => {
     if (painting) {
@@ -283,101 +271,14 @@ export default function PaintingDetailPage() {
             </motion.button>
 
             {/* ── Secondary Actions ── */}
-            <div className="flex gap-3 mt-3">
-              <button
-                onClick={() => isInCompare(painting.id) ? removeFromCompare(painting.id) : addToCompare(painting)}
-                className={`flex-1 py-3 rounded-xl border flex items-center justify-center gap-2 font-body font-semibold text-sm transition-colors ${isInCompare(painting.id) ? 'bg-mithila-red/10 border-mithila-red text-mithila-red' : 'bg-white dark:bg-warm-gray-800 border-cream-200 dark:border-warm-gray-700 text-charcoal dark:text-cream-100 hover:border-earth-500 hover:text-earth-500'}`}
-              >
-                <MdCompareArrows size={18} />
-                {isInCompare(painting.id) ? 'Remove Compare' : 'Add to Compare'}
-              </button>
+            <div className="mt-3">
               <button
                 onClick={() => setIsShareModalOpen(true)}
-                className="flex-1 py-3 rounded-xl border border-cream-200 dark:border-warm-gray-700 bg-white dark:bg-warm-gray-800 flex items-center justify-center gap-2 font-body font-semibold text-sm text-charcoal dark:text-cream-100 hover:border-earth-500 hover:text-earth-500 transition-colors"
+                className="w-full py-3 rounded-xl border border-cream-200 dark:border-warm-gray-700 bg-white dark:bg-warm-gray-800 flex items-center justify-center gap-2 font-body font-semibold text-sm text-charcoal dark:text-cream-100 hover:border-earth-500 hover:text-earth-500 transition-colors"
               >
                 <IoShareSocialOutline size={18} />
                 Share Artwork
               </button>
-            </div>
-
-            {/* ── UPI Payment Section ── */}
-            <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-5 border border-cream-200/60 dark:border-warm-gray-700/50 space-y-3">
-              <div className="flex items-center gap-2 mb-1">
-                <FaRupeeSign className="text-earth-500" />
-                <h3 className="font-display font-semibold text-charcoal dark:text-cream-100">Pay via UPI</h3>
-              </div>
-              <p className="text-warm-gray-500 text-sm font-body">
-                Send payment directly to purchase this artwork:
-              </p>
-              <div className="flex items-center gap-3 bg-cream-50 dark:bg-warm-gray-700 px-4 py-3 rounded-xl">
-                <code className="flex-1 font-mono text-earth-700 dark:text-earth-400 font-semibold text-base">9142168466@axl</code>
-                <button
-                  onClick={handleCopyUPI}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-earth-500/10 text-earth-600 dark:text-earth-400 text-sm font-body font-medium hover:bg-earth-500/20 transition-colors"
-                >
-                  {copied ? <><IoCheckmarkOutline size={14} /> Copied!</> : <><IoCopyOutline size={14} /> Copy</>}
-                </button>
-              </div>
-              <div className="flex gap-2 pt-1">
-                {['GPay', 'PhonePe', 'Paytm', 'BHIM'].map((app) => (
-                  <span key={app} className="px-3 py-1.5 bg-cream-50 dark:bg-warm-gray-700 border border-cream-200 dark:border-warm-gray-600 rounded-lg text-xs font-body text-warm-gray-500">
-                    {app}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* ── Share This Artwork ── */}
-            <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-5 border border-cream-200/60 dark:border-warm-gray-700/50 space-y-4">
-              <div className="flex items-center gap-2">
-                <IoShareSocialOutline className="text-earth-500" size={18} />
-                <h3 className="font-display font-semibold text-charcoal dark:text-cream-100">Share This Artwork</h3>
-              </div>
-              <p className="text-warm-gray-500 text-sm font-body">
-                Share this painting with friends and family across your favourite platforms.
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <a
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🎨 ${painting.title}\n\nTraditional Mithila Painting\nCreated by Lalita Pathak\n\nView Artwork:\n${window.location.href}\n\n#MithilaArt #MadhubaniArt #LalitaPathak`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#25D366]/10 text-[#25D366] font-body font-semibold text-sm hover:bg-[#25D366] hover:text-white transition-all duration-300"
-                >
-                  <IoLogoWhatsapp size={20} />
-                  WhatsApp
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#1877F2]/10 text-[#1877F2] font-body font-semibold text-sm hover:bg-[#1877F2] hover:text-white transition-all duration-300"
-                >
-                  <IoLogoFacebook size={20} />
-                  Facebook
-                </a>
-                <button
-                  onClick={() => {
-                    const text = `🎨 ${painting.title}\n\nTraditional Mithila Painting\nCreated by Lalita Pathak\n\nView Artwork:\n${window.location.href}\n\n#MithilaArt #MadhubaniArt #LalitaPathak`;
-                    navigator.clipboard.writeText(text);
-                    alert('Caption copied! You can now paste it on Instagram.');
-                  }}
-                  className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#E1306C]/10 text-[#E1306C] font-body font-semibold text-sm hover:bg-[#E1306C] hover:text-white transition-all duration-300"
-                >
-                  <IoLogoInstagram size={20} />
-                  Instagram
-                </button>
-                <button
-                  onClick={() => {
-                    const text = `🎨 ${painting.title}\n\nTraditional Mithila Painting\nCreated by Lalita Pathak\n\nView Artwork:\n${window.location.href}\n\n#MithilaArt #MadhubaniArt #LalitaPathak`;
-                    navigator.clipboard.writeText(text);
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 2000);
-                  }}
-                  className="flex items-center justify-center gap-2 py-3 rounded-xl bg-earth-500/10 text-earth-600 dark:text-earth-400 font-body font-semibold text-sm hover:bg-earth-500 hover:text-white transition-all duration-300"
-                >
-                  {copied ? <><IoCheckmarkOutline size={20} /> Copied!</> : <><IoCopyOutline size={20} /> Copy Link</>}
-                </button>
-              </div>
             </div>
           </div>
         </div>

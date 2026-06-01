@@ -4,12 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoTrashOutline, IoAddOutline, IoRemoveOutline, IoCartOutline, IoArrowBackOutline, IoCheckmarkCircle, IoLogoWhatsapp, IoQrCodeOutline, IoCloudUploadOutline, IoCloseOutline } from 'react-icons/io5';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { paymentAPI, buildApiPath } from '../api';
 import { formatPrice } from '../utils/helpers';
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart, total, itemCount } = useCart();
-  const [step, setStep] = useState('cart'); // cart, checkout, payment, success
+  const { isAuthenticated } = useAuth();
+  const [step, setStep] = useState('cart'); // cart, auth, checkout, payment, success
+  const [checkoutError, setCheckoutError] = useState(null);
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', address: '', city: '', state: '', pincode: ''
   });
@@ -99,8 +102,15 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.state || !formData.pincode) return;
-    if (items.length === 0) return;
+    setCheckoutError(null);
+    if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.state || !formData.pincode) {
+      setCheckoutError('Please fill in all shipping details before continuing.');
+      return;
+    }
+    if (items.length === 0) {
+      setCheckoutError('Your cart is empty.');
+      return;
+    }
     setStep('payment');
   };
 
@@ -406,7 +416,7 @@ export default function CartPage() {
         {/* Step Indicator */}
         <div className="flex items-center justify-center gap-4 mb-12">
           {['Cart', 'Details', 'Payment'].map((s, i) => {
-            const currentStepIndex = step === 'cart' ? 0 : step === 'checkout' ? 1 : 2;
+            const currentStepIndex = step === 'cart' ? 0 : step === 'auth' ? 0 : step === 'checkout' ? 1 : 2;
             const isActive = i <= currentStepIndex;
             return (
               <div key={s} className="flex items-center gap-3">
@@ -470,6 +480,25 @@ export default function CartPage() {
                           </div>
                         </motion.div>
                       ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === 'auth' && (
+                  <motion.div key="auth" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                    <h2 className="heading-md text-charcoal mb-6">Checkout</h2>
+                    <div className="bg-white rounded-2xl p-8 shadow-card flex flex-col md:flex-row gap-8">
+                      <div className="flex-1 flex flex-col justify-center space-y-4">
+                        <h3 className="font-display font-semibold text-xl text-charcoal">New Customer</h3>
+                        <p className="text-body-sm text-warm-gray-500 mb-4">Checkout as a guest. You will be able to track your order with your email.</p>
+                        <button onClick={() => setStep('checkout')} className="btn-primary w-full">Continue as Guest</button>
+                      </div>
+                      <div className="hidden md:block w-px bg-cream-200" />
+                      <div className="flex-1 flex flex-col justify-center space-y-4">
+                        <h3 className="font-display font-semibold text-xl text-charcoal">Returning Customer</h3>
+                        <p className="text-body-sm text-warm-gray-500 mb-4">Login to your account to checkout faster and access your order history.</p>
+                        <Link to="/login?redirect=/cart" className="btn-secondary w-full text-center block">Login to Account</Link>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -697,12 +726,13 @@ export default function CartPage() {
                 </div>
 
                 {step === 'cart' && (
-                  <button onClick={() => setStep('checkout')} className="btn-primary w-full text-center">
+                  <button onClick={() => isAuthenticated ? setStep('checkout') : setStep('auth')} className="btn-primary w-full text-center">
                     Proceed to Checkout
                   </button>
                 )}
                 {step === 'checkout' && (
                   <div className="space-y-3">
+                    {checkoutError && <p className="text-sm text-mithila-red mb-2 bg-mithila-red/10 px-3 py-2 rounded-xl text-center font-body">{checkoutError}</p>}
                     <button onClick={handleCheckout} className="btn-primary w-full text-center">
                       Continue to Payment
                     </button>
