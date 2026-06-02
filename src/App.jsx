@@ -74,7 +74,7 @@ export default function App() {
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/compare" element={<ComparePage />} />
-              <Route path="/commission" element={<CommissionPage />} />
+              <Route path="/commission" element={<ProtectedRoute><CommissionPage /></ProtectedRoute>} />
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/testimonials" element={<TestimonialsPage />} />
               <Route path="/mithila-history" element={<MithilaHistoryPage />} />

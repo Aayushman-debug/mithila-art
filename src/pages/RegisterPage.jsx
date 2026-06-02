@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useToast } from '../context/ToastContext';
 import { validateEmail, validateIndianPhone } from '../utils/helpers';
+import SocialLoginButtons from '../components/auth/SocialLoginButtons';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -323,6 +324,11 @@ export default function SignupPage() {
                 {loading ? 'Creating account...' : 'Create Account'}
               </motion.button>
             </form>
+
+            <SocialLoginButtons onError={(msg) => {
+              setGlobalError(msg);
+              showToast(msg, 'error');
+            }} />
           </motion.div>
 
           {/* Login Link */}

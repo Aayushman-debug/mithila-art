@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const User = require('../models/User');
 const { createTransporter, getPreviewUrl } = require('../utils/emailService');
 const { validateEmail, isDisposableEmail, validateIndianPhone } = require('../utils/validation');
+const { OAuth2Client } = require('google-auth-library');
+const axios = require('axios');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRE = '7d';
@@ -488,6 +490,119 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// ============ GOOGLE LOGIN ============
+const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: 'Google token is required' });
+    }
+
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ success: false, message: 'Invalid Google token payload' });
+    }
+
+    const { email, name } = payload;
+
+    // Check if user exists
+    let user = await User.findOne({ email: email.toLowerCase() });
+    
+    if (!user) {
+      const randomPassword = cryptoRandom(16) + 'A1!';
+      user = new User({
+        name,
+        email: email.toLowerCase(),
+        password: randomPassword,
+        phone: '0000000000',
+        isVerified: true,
+      });
+      await user.save();
+    } else {
+      if (!user.isVerified) {
+        user.isVerified = true;
+        await user.save();
+      }
+    }
+
+    const jwtToken = generateToken(user);
+
+    res.status(200).json({
+      success: true,
+      token: jwtToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || 'user',
+        isVerified: user.isVerified
+      }
+    });
+  } catch (error) {
+    console.error('Google login error:', error);
+    res.status(500).json({ success: false, message: 'Failed to authenticate with Google' });
+  }
+};
+
+// ============ FACEBOOK LOGIN ============
+const facebookLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: 'Facebook token is required' });
+    }
+
+    const fbRes = await axios.get(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);
+    const { email, name } = fbRes.data;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Facebook account must have an email associated' });
+    }
+
+    let user = await User.findOne({ email: email.toLowerCase() });
+    
+    if (!user) {
+      const randomPassword = cryptoRandom(16) + 'A1!';
+      user = new User({
+        name,
+        email: email.toLowerCase(),
+        password: randomPassword,
+        phone: '0000000000',
+        isVerified: true,
+      });
+      await user.save();
+    } else {
+      if (!user.isVerified) {
+        user.isVerified = true;
+        await user.save();
+      }
+    }
+
+    const jwtToken = generateToken(user);
+
+    res.status(200).json({
+      success: true,
+      token: jwtToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || 'user',
+        isVerified: user.isVerified
+      }
+    });
+  } catch (error) {
+    console.error('Facebook login error:', error);
+    res.status(500).json({ success: false, message: 'Failed to authenticate with Facebook' });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -499,5 +614,7 @@ module.exports = {
   generateToken,
   verifyEmail,
   resendVerification,
+  googleLogin,
+  facebookLogin,
 };
 

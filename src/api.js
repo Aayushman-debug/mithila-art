@@ -57,6 +57,8 @@ export const authAPI = {
   forgotPassword: (email) => api.post('/api/auth/forgot', { email }),
   resetPassword: (token, password, confirmPassword) => api.post(`/api/auth/reset/${token}`, { password, confirmPassword }),
   resendVerification: (email) => api.post('/api/auth/resend-verification', { email }),
+  googleLogin: (token) => api.post('/api/auth/google', { token }),
+  facebookLogin: (token) => api.post('/api/auth/facebook', { token }),
 };
 
 // Commission API calls

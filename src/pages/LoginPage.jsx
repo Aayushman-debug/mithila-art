@@ -8,6 +8,7 @@ import { authAPI } from '../api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useToast } from '../context/ToastContext';
 import { validateEmail } from '../utils/helpers';
+import SocialLoginButtons from '../components/auth/SocialLoginButtons';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },

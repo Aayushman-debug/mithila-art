@@ -142,6 +142,48 @@ export function AuthProvider({ children }) {
   /**
    * Logout user
    */
+  const loginWithGoogle = useCallback(async (token, remember = true) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await authAPI.googleLogin(token);
+      if (response.data.success) {
+        const { token: jwtToken, user } = response.data;
+        saveAuthToStorage(jwtToken, user, remember);
+        setAuthState({ isAuthenticated: true, user, token: jwtToken });
+        return { success: true, user };
+      }
+      return { success: false, message: 'Google login failed' };
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to authenticate with Google';
+      setError(msg);
+      return { success: false, message: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loginWithFacebook = useCallback(async (token, remember = true) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await authAPI.facebookLogin(token);
+      if (response.data.success) {
+        const { token: jwtToken, user } = response.data;
+        saveAuthToStorage(jwtToken, user, remember);
+        setAuthState({ isAuthenticated: true, user, token: jwtToken });
+        return { success: true, user };
+      }
+      return { success: false, message: 'Facebook login failed' };
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to authenticate with Facebook';
+      setError(msg);
+      return { success: false, message: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       if (authState.token) {

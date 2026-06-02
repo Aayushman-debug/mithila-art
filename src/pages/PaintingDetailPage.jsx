@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -17,12 +17,15 @@ import {
 import { paintings } from '../data/paintings';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/helpers';
+import { useAuth } from '../context/AuthContext';
 import ShareModal from '../components/ui/ShareModal';
 
 export default function PaintingDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { addItem } = useCart();
+  const { isAuthenticated } = useAuth();
 
   const painting = useMemo(() => paintings.find((p) => p.id === id), [id]);
 
@@ -62,10 +65,14 @@ export default function PaintingDetailPage() {
 
   const handleBuyNow = useCallback(() => {
     if (painting) {
+      if (!isAuthenticated) {
+        navigate('/login', { state: { from: '/cart' } });
+        return;
+      }
       addItem(painting);
       navigate('/cart');
     }
-  }, [painting, addItem, navigate]);
+  }, [painting, addItem, navigate, isAuthenticated]);
 
 
   /* ── 404 ── */

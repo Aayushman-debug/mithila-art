@@ -9,6 +9,8 @@ const {
   resetPassword,
   verifyEmail,
   resendVerification,
+  googleLogin,
+  facebookLogin,
 } = require('../controllers/authController');
 const { authenticate } = require('../middleware/authMiddleware');
 
@@ -21,6 +23,8 @@ router.post('/forgot', forgotPassword);
 router.post('/reset/:token', resetPassword);
 router.get('/verify/:token', verifyEmail);
 router.post('/resend-verification', resendVerification);
+router.post('/google', googleLogin);
+router.post('/facebook', facebookLogin);
 
 // Protected routes
 router.get('/profile', authenticate, getProfile);
