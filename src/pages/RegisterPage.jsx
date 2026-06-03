@@ -102,11 +102,8 @@ export default function SignupPage() {
           showToast('Verification email sent. Check your inbox.', 'success');
         }
       } else {
-        setSuccess('Account created successfully! Redirecting...');
         showToast('Account created. Welcome!', 'success');
-        setTimeout(() => {
-          navigate('/profile');
-        }, 1500);
+        navigate('/profile');
       }
     } else {
       setGlobalError(result.error || 'Registration failed');
@@ -114,9 +111,8 @@ export default function SignupPage() {
     }
   };
 
-  if (loading) {
-    return <LoadingSpinner fullScreen text="Creating your account..." />;
-  }
+  // Don't show a fullscreen spinner — let the form stay visible
+  // The submit button will show its own loading state
 
   return (
     <>

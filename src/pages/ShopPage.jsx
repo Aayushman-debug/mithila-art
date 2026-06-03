@@ -503,7 +503,7 @@ export default function ShopPage() {
     }
 
     return result;
-  }, [searchTerm, selectedCategories, priceRange, selectedSizes, sortBy]);
+  }, [products, searchTerm, selectedCategories, priceRange, selectedSizes, sortBy]);
 
 
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.2 });

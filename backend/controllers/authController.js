@@ -132,15 +132,17 @@ const register = async (req, res) => {
     delete userData.verificationToken;
     delete userData.verificationExpires;
 
-    const resp = { success: true, requiresVerification: false, user: userData }; // TEMPORARILY DISABLED FOR SMTP DEBUGGING: set requiresVerification to false
+    // Generate JWT token so the user is logged in immediately after signup
+    const token = generateToken(user);
+
+    const resp = { success: true, requiresVerification: false, token, user: userData };
     if (emailSent) {
-      resp.message = 'Registration successful. Verification email sent.';
+      resp.message = 'Registration successful.';
       resp.emailSent = true;
       if (previewUrl) resp.previewUrl = previewUrl;
     } else {
-      resp.message = 'Registration successful. Could not send verification email. Please request resend.';
+      resp.message = 'Registration successful.';
       resp.emailSent = false;
-      resp.emailError = emailError;
     }
     res.status(201).json(resp);
   } catch (error) {

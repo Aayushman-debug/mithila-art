@@ -69,12 +69,9 @@ export default function LoginPage() {
     const result = await login(formData.email, formData.password, rememberMe);
 
     if (result.success) {
-      setSuccess('Login successful! Redirecting...');
       showToast('Logged in successfully', 'success');
-      setTimeout(() => {
-        const from = location.state?.from?.pathname || '/profile';
-        navigate(from);
-      }, 1000);
+      const from = location.state?.from?.pathname || '/profile';
+      navigate(from);
     } else {
       setError(result.error || 'Login failed');
       showToast(result.error || 'Login failed', 'error');
@@ -101,9 +98,8 @@ export default function LoginPage() {
     }
   };
 
-  if (loading) {
-    return <LoadingSpinner fullScreen text="Authenticating..." />;
-  }
+  // Don't show a fullscreen spinner — let the form stay visible
+  // The submit button will show its own loading state
 
   return (
     <>
