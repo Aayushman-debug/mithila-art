@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CartOrderSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true },
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
@@ -38,8 +38,9 @@ const CartOrderSchema = new mongoose.Schema({
     type: String,
     enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Pending Payment Verification'],
     default: 'Pending',
+    index: true,
   },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now, index: true },
   paidAt: Date,
 });
 

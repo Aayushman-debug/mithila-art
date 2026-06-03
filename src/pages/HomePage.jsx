@@ -105,40 +105,22 @@ function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-warm-black/70 via-warm-black/40 to-warm-black/80" />
       </motion.div>
 
-      {/* Animated Decorative Elements */}
+      {/* Animated Decorative Elements (Optimized for Performance) */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         {/* Floating mandalas */}
         <motion.div
           className="absolute top-20 left-10 w-32 h-32 rounded-full border border-earth-500/20"
           animate={{ rotate: 360 }}
-          transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+          style={{ willChange: 'transform' }}
         />
         <motion.div
           className="absolute top-40 right-16 w-20 h-20 rounded-full border border-mithila-yellow/20"
           animate={{ rotate: -360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+          style={{ willChange: 'transform' }}
         />
-        <motion.div
-          className="absolute bottom-32 left-1/4 w-16 h-16 rounded-full bg-earth-500/10"
-          animate={{ y: [-10, 10, -10] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-48 right-1/3 w-24 h-24 rounded-full border-2 border-dashed border-cream-300/10"
-          animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        />
-
-        {/* Sparkle particles */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-earth-500/40"
-            style={{ left: `${15 + i * 10}%`, top: `${20 + (i % 3) * 25}%` }}
-            animate={{ opacity: [0, 1, 0], scale: [0, 1.5, 0] }}
-            transition={{ duration: 3, delay: i * 0.5, repeat: Infinity }}
-          />
-        ))}
+        {/* Sparkles removed for CPU performance */}
       </div>
 
       {/* Content */}

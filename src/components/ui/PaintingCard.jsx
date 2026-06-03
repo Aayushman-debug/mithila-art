@@ -56,6 +56,8 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
               src={images[currentImg]}
               alt={`${title} - Image ${currentImg + 1}`}
               loading="lazy"
+              decoding="async"
+              fetchpriority="auto"
               className="w-full h-full object-cover"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

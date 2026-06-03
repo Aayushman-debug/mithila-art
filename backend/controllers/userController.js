@@ -74,7 +74,7 @@ const toggleWishlist = async (req, res) => {
 
 const getOrders = async (req, res) => {
   try {
-    const orders = await CartOrder.find({ user: req.user.userId }).sort({ createdAt: -1 });
+    const orders = await CartOrder.find({ user: req.user.userId }).sort({ createdAt: -1 }).lean();
     res.status(200).json({ success: true, orders });
   } catch (error) {
     console.error('Get orders error:', error);
@@ -84,7 +84,7 @@ const getOrders = async (req, res) => {
 
 const getCommissions = async (req, res) => {
   try {
-    const commissions = await Commission.find({ user: req.user.userId }).sort({ submittedAt: -1 });
+    const commissions = await Commission.find({ user: req.user.userId }).sort({ submittedAt: -1 }).lean();
     res.status(200).json({ success: true, commissions });
   } catch (error) {
     console.error('Get commissions error:', error);

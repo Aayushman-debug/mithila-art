@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const xssLib = require('xss-clean/lib/xss');
+const compression = require('compression');
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
@@ -70,8 +71,19 @@ app.use(cors({
   credentials: true,
   exposedHeaders: ["set-cookie"],
 }));
+app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(helmet());
+
+// Cache Control middleware for static-like API endpoints (e.g. products)
+app.use((req, res, next) => {
+  if (req.method === 'GET' && req.path.startsWith('/api/products')) {
+    res.set('Cache-Control', 'public, max-age=60'); // Cache for 60 seconds
+  } else if (req.method === 'GET') {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  }
+  next();
+});
 // Use a safe wrapper for mongo-sanitize to avoid issues when req.query is getter-only
 const { sanitize } = mongoSanitize;
 app.use((req, res, next) => {

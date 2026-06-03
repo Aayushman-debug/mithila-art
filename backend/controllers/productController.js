@@ -2,7 +2,7 @@ const Product = require('../models/Product');
 
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({ available: true }).sort({ createdAt: -1 });
+    const products = await Product.find({ available: true }).sort({ createdAt: -1 }).lean();
     res.status(200).json({ success: true, products });
   } catch (error) {
     console.error('Get products error:', error);
@@ -12,7 +12,7 @@ const getProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findOne({ productId: req.params.productId });
+    const product = await Product.findOne({ productId: req.params.productId }).lean();
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
     res.status(200).json({ success: true, product });
   } catch (error) {

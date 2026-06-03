@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CommissionSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true },
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
@@ -15,6 +15,7 @@ const CommissionSchema = new mongoose.Schema({
     type: String,
     enum: ['submitted', 'approved', 'rejected', 'in-progress', 'completed'],
     default: 'submitted',
+    index: true,
   },
   quotedBudget: { type: Number },
   approvalMessage: { type: String },

@@ -11,11 +11,12 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   description: String,
-  category: String,
+  category: { type: String, index: true },
   size: String,
   price: {
     type: Number,
     required: true,
+    index: true,
   },
   image: String,
   gallery: [String],
@@ -26,6 +27,7 @@ const ProductSchema = new mongoose.Schema({
   available: {
     type: Boolean,
     default: true,
+    index: true,
   },
   createdAt: {
     type: Date,
