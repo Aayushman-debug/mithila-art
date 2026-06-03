@@ -54,8 +54,8 @@ function LazyImage({ src, alt, className, onClick }) {
           onLoad={() => setLoaded(true)}
           onClick={onClick}
           loading="lazy"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: loaded ? 1 : 1.1 }}
+          initial={{ scale: 1.08 }}
+          animate={{ scale: loaded ? 1 : 1.08 }}
           transition={{ duration: 0.8 }}
         />
       )}
@@ -80,31 +80,36 @@ function GalleryItem({ item, index }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className={`relative group rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-500 cursor-pointer ${heightClass}`}
+      className={`relative group rounded-2xl overflow-hidden shadow-card hover:shadow-glass-lg border border-cream-200/20 dark:border-warm-gray-700/20 transition-all duration-700 cursor-pointer ${heightClass}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => navigate(`/painting/${item.id}`)}
     >
-      <LazyImage
-        src={item.images?.[0] || item.image}
-        alt={item.title}
-        className="absolute inset-0"
-        onClick={() => navigate(`/painting/${item.id}`)}
-      />
+      <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+        <LazyImage
+          src={item.images?.[0] || item.image}
+          alt={item.title}
+          className="absolute inset-0 w-full h-full"
+          onClick={() => navigate(`/painting/${item.id}`)}
+        />
+      </div>
+
+      {/* Interior museum-quality frame overlay */}
+      <div className="absolute inset-4 border border-earth-400/0 group-hover:border-earth-500/30 rounded-xl pointer-events-none transition-all duration-500 z-10" />
 
       {/* Hover overlay */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent flex flex-col justify-end p-5"
+        className="absolute inset-0 bg-gradient-to-t from-warm-black/95 via-warm-black/45 to-transparent flex flex-col justify-end p-6 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4 }}
       >
         {/* Category pill */}
         <motion.span
           className="inline-block self-start px-3 py-1 rounded-full bg-earth-500/20 backdrop-blur-sm text-earth-400 text-xs font-body font-medium mb-3 border border-earth-500/20"
-          initial={{ y: 10, opacity: 0 }}
-          animate={hovered ? { y: 0, opacity: 1 } : { y: 10, opacity: 0 }}
-          transition={{ delay: 0.1 }}
+          initial={{ y: 12, opacity: 0 }}
+          animate={hovered ? { y: 0, opacity: 1 } : { y: 12, opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.05, ease: [0.25, 1, 0.5, 1] }}
         >
           {item.category}
         </motion.span>
@@ -112,9 +117,9 @@ function GalleryItem({ item, index }) {
         {/* Title */}
         <motion.h3
           className="font-display text-white text-lg font-bold leading-tight mb-1"
-          initial={{ y: 10, opacity: 0 }}
-          animate={hovered ? { y: 0, opacity: 1 } : { y: 10, opacity: 0 }}
-          transition={{ delay: 0.15 }}
+          initial={{ y: 12, opacity: 0 }}
+          animate={hovered ? { y: 0, opacity: 1 } : { y: 12, opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
         >
           {item.title}
           {(item.images?.length > 1) && (
@@ -127,9 +132,9 @@ function GalleryItem({ item, index }) {
         {/* Details */}
         <motion.div
           className="flex items-center gap-4 text-cream-200/60 text-sm font-body"
-          initial={{ y: 10, opacity: 0 }}
-          animate={hovered ? { y: 0, opacity: 1 } : { y: 10, opacity: 0 }}
-          transition={{ delay: 0.2 }}
+          initial={{ y: 12, opacity: 0 }}
+          animate={hovered ? { y: 0, opacity: 1 } : { y: 12, opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
         >
           <span>{item.medium}</span>
           {item.size && <span>·</span>}
@@ -139,21 +144,21 @@ function GalleryItem({ item, index }) {
         {/* Action buttons */}
         <motion.div
           className="flex items-center gap-3 mt-4"
-          initial={{ y: 10, opacity: 0 }}
-          animate={hovered ? { y: 0, opacity: 1 } : { y: 10, opacity: 0 }}
-          transition={{ delay: 0.25 }}
+          initial={{ y: 15, opacity: 0 }}
+          animate={hovered ? { y: 0, opacity: 1 } : { y: 15, opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
         >
           <motion.button
             onClick={() => navigate(`/painting/${item.id}`)}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-sm hover:bg-white/25 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm hover:bg-white/20 hover:border-earth-500/50 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <FaExpand className="text-xs" />
+            <FaExpand className="text-xs text-earth-400" />
             View Full
           </motion.button>
           <motion.button
-            className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-mithila-red/50 hover:border-mithila-red/30 transition-colors"
+            className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-mithila-red/50 hover:border-mithila-red/30 transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >

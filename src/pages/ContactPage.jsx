@@ -22,6 +22,7 @@ import { IoSparkles, IoFlower } from 'react-icons/io5';
 import SectionHeading from '../components/ui/SectionHeading';
 import GlassCard from '../components/ui/GlassCard';
 import { scrollToTop, generateWhatsAppLink } from '../utils/helpers';
+import { useAuth } from '../context/AuthContext';
 
 /* ───────── Animation Variants ───────── */
 const staggerContainer = {
@@ -105,6 +106,8 @@ const workingHours = [
    CONTACT FORM COMPONENT
    ═══════════════════════════════════════════════ */
 function ContactForm() {
+  const { isAuthenticated, user } = useAuth();
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -116,6 +119,18 @@ function ContactForm() {
   const [touched, setTouched] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+
+  // Prefill from authenticated user
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setForm((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+      }));
+    }
+  }, [isAuthenticated, user]);
 
   const subjects = [
     'General Inquiry',

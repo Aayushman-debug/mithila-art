@@ -11,24 +11,316 @@
     box-sizing: border-box;
   }
 
+  :root {
+    /* Classic Light (Default) variables */
+    --cream-50: 255 248 240; /* #FFF8F0 */
+    --cream-100: 245 235 217; /* #F5EBD9 */
+    --cream-200: 232 213 181; /* #E8D5B5 */
+    --cream-300: 212 188 142; /* #D4BC8E */
+    --cream-400: 196 167 109; /* #C4A76D */
+    --cream-500: 176 144 74;  /* #B0904A */
+
+    --earth-400: 166 124 46;  /* #A67C2E */
+    --earth-500: 139 105 20;  /* #8B6914 */
+    --earth-600: 111 84 16;   /* #6F5410 */
+    --earth-700: 92 68 0;     /* #5C4400 */
+    --earth-800: 61 46 0;     /* #3D2E00 */
+    --earth-900: 45 36 22;    /* #2D2416 */
+
+    --warm-gray-100: 245 240 235; /* #F5F0EB */
+    --warm-gray-200: 229 221 211; /* #E5DDD3 */
+    --warm-gray-300: 201 189 169; /* #C9BDA9 */
+    --warm-gray-400: 168 152 128; /* #A89880 */
+    --warm-gray-500: 138 122 98;  /* #8A7A62 */
+    --warm-gray-600: 107 93 73;  /* #6B5D49 */
+    --warm-gray-700: 77 66 52;   /* #4D4234 */
+    --warm-gray-800: 53 46 35;   /* #352E23 */
+    --warm-gray-900: 31 26 18;   /* #1F1A12 */
+
+    --gradient-gold-start: #8B6914;
+    --gradient-gold-middle: #C4A76D;
+    --gradient-gold-end: #8B6914;
+
+    --gradient-warm-start: #FFF8F0;
+    --gradient-warm-middle: #F5EBD9;
+    --gradient-warm-end: #E8D5B5;
+
+    --gradient-dark-start: #2D2416;
+    --gradient-dark-end: #1A1A1A;
+
+    --gradient-hero-start: rgba(45, 36, 22, 0.9);
+    --gradient-hero-middle: rgba(45, 36, 22, 0.5);
+    --gradient-hero-end: rgba(45, 36, 22, 0.9);
+  }
+
+  :root.dark {
+    /* Classic Dark Gold (Default Dark) variables */
+    --cream-50: 31 26 18; /* #1F1A12 */
+    --cream-100: 53 46 35; /* #352E23 */
+    --cream-200: 77 66 52; /* #4D4234 */
+    --cream-300: 107 93 73; /* #6B5D49 */
+    --cream-400: 138 122 98; /* #8A7A62 */
+    --cream-500: 168 152 128; /* #A89880 */
+
+    --earth-400: 196 167 109; /* #C4A76D */
+    --earth-500: 232 213 181; /* #E8D5B5 */
+    --earth-600: 196 167 109; /* #C4A76D */
+    --earth-700: 176 144 74;  /* #B0904A */
+    --earth-800: 139 105 20;  /* #8B6914 */
+    --earth-900: 92 68 0;     /* #5C4400 */
+
+    --warm-gray-100: 245 240 235;
+    --warm-gray-200: 229 221 211;
+    --warm-gray-300: 201 189 169;
+    --warm-gray-400: 168 152 128;
+    --warm-gray-500: 138 122 98;
+    --warm-gray-600: 107 93 73;
+    --warm-gray-700: 77 66 52;   /* #4D4234 */
+    --warm-gray-800: 53 46 35;   /* #352E23 */
+    --warm-gray-900: 31 26 18;   /* #1F1A12 */
+
+    --gradient-gold-start: #C4A76D;
+    --gradient-gold-middle: #E8D5B5;
+    --gradient-gold-end: #C4A76D;
+
+    --gradient-dark-start: #352E23;
+    --gradient-dark-end: #1F1A12;
+
+    --gradient-hero-start: rgba(31, 26, 18, 0.9);
+    --gradient-hero-middle: rgba(31, 26, 18, 0.5);
+    --gradient-hero-end: rgba(31, 26, 18, 0.9);
+  }
+
+  /* ─── Light Theme Overrides ─── */
+  :root.theme-light-parchment {
+    --cream-50: 248 241 231; /* #F8F1E7 */
+    --cream-100: 238 227 212; /* #EEE3D4 */
+    --cream-200: 223 207 186; /* #DFCFBA */
+    --cream-300: 204 186 161;
+    --cream-400: 166 137 99;  /* #A68963 */
+    --cream-500: 139 107 63;  /* #8B6B3F */
+
+    --earth-400: 166 137 99;  /* #A68963 */
+    --earth-500: 139 107 63;  /* #8B6B3F */
+    --earth-600: 112 83 46;   /* #70532E */
+    --earth-700: 89 64 32;
+    --earth-800: 64 45 20;
+
+    --gradient-gold-start: #8B6B3F;
+    --gradient-gold-middle: #DFCFBA;
+    --gradient-gold-end: #8B6B3F;
+  }
+
+  :root.theme-light-ivory {
+    --cream-50: 250 249 246; /* #FAF9F6 */
+    --cream-100: 245 242 235; /* #F5F2EB */
+    --cream-200: 230 222 208; /* #E6DED0 */
+    --cream-300: 215 205 188;
+    --cream-400: 212 189 123; /* #D4BD7B */
+    --cream-500: 200 169 81;  /* #C8A951 */
+
+    --earth-400: 212 189 123; /* #D4BD7B */
+    --earth-500: 200 169 81;  /* #C8A951 */
+    --earth-600: 166 137 58;  /* #A6893A */
+    --earth-700: 133 107 38;
+    --earth-800: 99 78 23;
+
+    --gradient-gold-start: #C8A951;
+    --gradient-gold-middle: #FAF9F6;
+    --gradient-gold-end: #C8A951;
+  }
+
+  :root.theme-light-sandstone {
+    --cream-50: 239 228 210; /* #EFE4D2 */
+    --cream-100: 226 211 189; /* #E2D3BD */
+    --cream-200: 209 190 163; /* #D1BEA3 */
+    --cream-300: 194 172 142;
+    --cream-400: 194 153 112; /* #C29970 */
+    --cream-500: 166 124 82;  /* #A67C52 */
+
+    --earth-400: 194 153 112; /* #C29970 */
+    --earth-500: 166 124 82;  /* #A67C52 */
+    --earth-600: 133 96 58;   /* #85603A */
+    --earth-700: 102 71 39;
+    --earth-800: 71 47 23;
+
+    --gradient-gold-start: #A67C52;
+    --gradient-gold-middle: #E2D3BD;
+    --gradient-gold-end: #A67C52;
+  }
+
+  /* ─── Dark Theme Overrides ─── */
+  :root.dark.theme-dark-purple {
+    --earth-400: 167 139 250; /* #A78BFA */
+    --earth-500: 139 92 246;  /* #8B5CF6 */
+    --earth-600: 124 58 237;  /* #7C3AED */
+    --earth-700: 109 40 217;  /* #6D28D9 */
+    --earth-800: 90 23 189;   /* #5B21B6 */
+    --earth-900: 76 29 149;   /* #4C1D95 */
+
+    --warm-gray-900: 18 18 18; /* #121212 */
+    --warm-gray-800: 30 30 30; /* #1E1E1E */
+    --warm-gray-700: 45 45 45; /* #2D2D2D */
+    --warm-gray-600: 64 64 64; /* #404040 */
+    --warm-gray-500: 82 82 82; /* #525252 */
+    --warm-gray-400: 115 115 115; /* #737373 */
+    --warm-gray-300: 163 163 163;
+    --warm-gray-200: 212 212 212;
+    --warm-gray-100: 245 245 245;
+
+    --gradient-gold-start: #7C3AED;
+    --gradient-gold-middle: #A78BFA;
+    --gradient-gold-end: #7C3AED;
+
+    --gradient-dark-start: #1E1E1E;
+    --gradient-dark-end: #121212;
+
+    --gradient-hero-start: rgba(18, 18, 18, 0.9);
+    --gradient-hero-middle: rgba(18, 18, 18, 0.5);
+    --gradient-hero-end: rgba(18, 18, 18, 0.9);
+  }
+
+  :root.dark.theme-dark-emerald {
+    --earth-400: 52 211 153; /* #34D399 */
+    --earth-500: 16 185 129; /* #10B981 */
+    --earth-600: 5 150 105;  /* #059669 */
+    --earth-700: 4 120 87;   /* #047857 */
+    --earth-800: 6 95 70;    /* #065F46 */
+    --earth-900: 6 78 59;    /* #064E3B */
+
+    --warm-gray-900: 18 18 18; /* #121212 */
+    --warm-gray-800: 30 30 30; /* #1E1E1E */
+    --warm-gray-700: 45 45 45; /* #2D2D2D */
+    --warm-gray-600: 64 64 64;
+    --warm-gray-500: 82 82 82;
+    --warm-gray-400: 115 115 115;
+    --warm-gray-300: 163 163 163;
+    --warm-gray-200: 212 212 212;
+    --warm-gray-100: 245 245 245;
+
+    --gradient-gold-start: #059669;
+    --gradient-gold-middle: #34D399;
+    --gradient-gold-end: #059669;
+
+    --gradient-dark-start: #1E1E1E;
+    --gradient-dark-end: #121212;
+
+    --gradient-hero-start: rgba(18, 18, 18, 0.9);
+    --gradient-hero-middle: rgba(18, 18, 18, 0.5);
+    --gradient-hero-end: rgba(18, 18, 18, 0.9);
+  }
+
+  :root.dark.theme-dark-sapphire {
+    --earth-400: 96 165 250; /* #60A5FA */
+    --earth-500: 37 99 235;  /* #2563EB */
+    --earth-600: 29 78 216;  /* #1D4ED8 */
+    --earth-700: 30 58 138;  /* #1E3A8A */
+    --earth-800: 30 41 59;   /* #1E293B */
+    --earth-900: 15 23 42;    /* #0F172A */
+
+    --warm-gray-900: 18 18 18; /* #121212 */
+    --warm-gray-800: 30 30 30; /* #1E1E1E */
+    --warm-gray-700: 45 45 45; /* #2D2D2D */
+    --warm-gray-600: 64 64 64;
+    --warm-gray-500: 82 82 82;
+    --warm-gray-400: 115 115 115;
+    --warm-gray-300: 163 163 163;
+    --warm-gray-200: 212 212 212;
+    --warm-gray-100: 245 245 245;
+
+    --gradient-gold-start: #1D4ED8;
+    --gradient-gold-middle: #60A5FA;
+    --gradient-gold-end: #1D4ED8;
+
+    --gradient-dark-start: #1E1E1E;
+    --gradient-dark-end: #121212;
+
+    --gradient-hero-start: rgba(18, 18, 18, 0.9);
+    --gradient-hero-middle: rgba(18, 18, 18, 0.5);
+    --gradient-hero-end: rgba(18, 18, 18, 0.9);
+  }
+
+  :root.dark.theme-dark-ruby {
+    --earth-400: 248 113 113; /* #F87171 */
+    --earth-500: 220 38 38;   /* #DC2626 */
+    --earth-600: 185 28 28;   /* #B91C1C */
+    --earth-700: 153 27 27;   /* #991B1B */
+    --earth-800: 127 29 29;   /* #7F1D1D */
+    --earth-900: 69 10 10;    /* #450A0A */
+
+    --warm-gray-900: 18 18 18; /* #121212 */
+    --warm-gray-800: 30 30 30; /* #1E1E1E */
+    --warm-gray-700: 45 45 45; /* #2D2D2D */
+    --warm-gray-600: 64 64 64;
+    --warm-gray-500: 82 82 82;
+    --warm-gray-400: 115 115 115;
+    --warm-gray-300: 163 163 163;
+    --warm-gray-200: 212 212 212;
+    --warm-gray-100: 245 245 245;
+
+    --gradient-gold-start: #B91C1C;
+    --gradient-gold-middle: #F87171;
+    --gradient-gold-end: #B91C1C;
+
+    --gradient-dark-start: #1E1E1E;
+    --gradient-dark-end: #121212;
+
+    --gradient-hero-start: rgba(18, 18, 18, 0.9);
+    --gradient-hero-middle: rgba(18, 18, 18, 0.5);
+    --gradient-hero-end: rgba(18, 18, 18, 0.9);
+  }
+
+  :root.dark.theme-dark-ivory {
+    --earth-400: 249 246 238; /* #FAF9F6 */
+    --earth-500: 212 175 55;  /* #D4AF37 */
+    --earth-600: 200 169 81;  /* #C8A951 */
+    --earth-700: 139 105 20;  /* #8B6914 */
+    --earth-800: 92 68 0;     /* #5C4400 */
+    --earth-900: 45 36 22;    /* #2D2416 */
+
+    --warm-gray-900: 22 22 22; /* #161616 */
+    --warm-gray-800: 34 34 34; /* #222222 */
+    --warm-gray-700: 48 48 48; /* #303030 */
+    --warm-gray-600: 64 64 64;
+    --warm-gray-500: 82 82 82;
+    --warm-gray-400: 115 115 115;
+    --warm-gray-300: 163 163 163;
+    --warm-gray-200: 212 212 212;
+    --warm-gray-100: 245 245 245;
+
+    --gradient-gold-start: #D4AF37;
+    --gradient-gold-middle: #FAF9F6;
+    --gradient-gold-end: #D4AF37;
+
+    --gradient-dark-start: #222222;
+    --gradient-dark-end: #161616;
+
+    --gradient-hero-start: rgba(22, 22, 22, 0.9);
+    --gradient-hero-middle: rgba(22, 22, 22, 0.5);
+    --gradient-hero-end: rgba(22, 22, 22, 0.9);
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: #FFF8F0;
+    background-color: rgb(var(--cream-50));
     color: #1A1A1A;
     overflow-x: hidden;
     line-height: 1.6;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark body,
   :root.dark body {
-    background-color: #1F1A12;
-    color: #E8D5B5;
+    background-color: rgb(var(--warm-gray-900));
+    color: rgb(var(--cream-200));
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   ::selection {

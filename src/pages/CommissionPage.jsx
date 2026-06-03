@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { IoCheckmarkCircle, IoArrowForwardOutline, IoArrowBackOutline, IoTimeOutline } from 'react-icons/io5';
 import SectionHeading from '../components/ui/SectionHeading';
 import { commissionAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
-import { categories } from '../data/paintings';
+import { categories, paintings } from '../data/paintings';
 import { useToast } from '../context/ToastContext';
 import { validateEmail, validateIndianPhone } from '../utils/helpers';
 
@@ -31,6 +31,9 @@ export default function CommissionPage() {
   const { isAuthenticated, user } = useAuth();
   const showToast = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const paintingId = searchParams.get('painting');
+  const paintingTitle = searchParams.get('title');
 
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', location: '',
@@ -71,6 +74,22 @@ export default function CommissionPage() {
       }));
     }
   }, [isAuthenticated, user]);
+
+  // Prefill search params if any
+  useEffect(() => {
+    if (paintingId && paintingTitle) {
+      const paintingObj = paintings.find(p => p.id === paintingId);
+      const styleName = paintingObj 
+        ? (categories.find(c => c.id === paintingObj.category)?.name || '') 
+        : '';
+      
+      setFormData(prev => ({
+        ...prev,
+        style: styleName || prev.style,
+        description: `I am interested in commissioning a custom artwork inspired by the painting "${paintingTitle}" (ID: ${paintingId}).\n\n` + prev.description,
+      }));
+    }
+  }, [paintingId, paintingTitle]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -247,6 +266,17 @@ export default function CommissionPage() {
         <AnimatePresence mode="wait">
           {currentStep === 0 && (
             <motion.div key="step0" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white rounded-2xl p-6 sm:p-8 shadow-card">
+              {!isAuthenticated && (
+                <div className="mb-6 p-4 bg-earth-50/50 border border-earth-200/40 rounded-xl text-center">
+                  <p className="text-sm text-earth-800 font-body">
+                    Have an account?{' '}
+                    <Link to="/login" className="text-earth-650 font-bold hover:text-earth-700 transition-colors underline decoration-2 underline-offset-4">
+                      Log in
+                    </Link>{' '}
+                    to save and track your custom commission requests in your dashboard.
+                  </p>
+                </div>
+              )}
               <h2 className="heading-sm text-charcoal mb-6">Personal Details</h2>
               <div className="space-y-4">
                 <div>

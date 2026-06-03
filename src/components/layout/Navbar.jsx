@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoMenu, IoClose, IoCartOutline, IoSunnyOutline, IoMoonOutline, IoLogOut, IoPersonCircle, IoHeartOutline } from 'react-icons/io5';
+import { IoMenu, IoClose, IoCartOutline, IoSunnyOutline, IoMoonOutline, IoLogOut, IoPersonCircle, IoHeartOutline, IoColorPaletteOutline } from 'react-icons/io5';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -20,12 +20,29 @@ const navLinks = [
   { name: 'Contact', path: '/contact' },
 ];
 
+const darkPalettes = [
+  { id: 'gold', name: 'Classic Gold', bg: '#1F1A12', accent: '#C4A76D' },
+  { id: 'purple', name: 'Royal Purple', bg: '#121212', accent: '#8B5CF6' },
+  { id: 'emerald', name: 'Emerald Heritage', bg: '#121212', accent: '#10B981' },
+  { id: 'sapphire', name: 'Deep Sapphire', bg: '#121212', accent: '#2563EB' },
+  { id: 'ruby', name: 'Ruby Heritage', bg: '#121212', accent: '#DC2626' },
+  { id: 'ivory', name: 'Ivory Gold Luxury', bg: '#161616', accent: '#FAF9F6' },
+];
+
+const lightPalettes = [
+  { id: 'classic', name: 'Classic Cream', bg: '#FFF8F0', accent: '#8B6914' },
+  { id: 'parchment', name: 'Ancient Parchment', bg: '#F8F1E7', accent: '#8B6B3F' },
+  { id: 'ivory', name: 'Ivory Luxury', bg: '#FAF9F6', accent: '#C8A951' },
+  { id: 'sandstone', name: 'Sandstone', bg: '#EFE4D2', accent: '#A67C52' },
+];
+
 export default function Navbar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showPaletteMenu, setShowPaletteMenu] = useState(false);
   const { itemCount } = useCart();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme, darkPalette, setDarkPalette, lightPalette, setLightPalette } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
 
@@ -140,6 +157,77 @@ export default function Navbar() {
                 </AnimatePresence>
               </motion.button>
 
+              {/* Palette Selector */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setShowPaletteMenu(prev => !prev)}
+                  className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                    scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                  } ${showPaletteMenu ? 'bg-earth-500/20' : ''}`}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label="Customize theme palette"
+                  title="Theme Palette"
+                >
+                  <IoColorPaletteOutline size={20} />
+                </motion.button>
+
+                <AnimatePresence>
+                  {showPaletteMenu && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setShowPaletteMenu(false)} />
+                      
+                      <motion.div
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 mt-3 w-56 rounded-2xl bg-white dark:bg-warm-gray-800 border border-cream-200/60 dark:border-warm-gray-700/60 shadow-glass-lg p-3 z-20"
+                      >
+                        <h4 className="text-xs font-accent tracking-widest text-earth-500 uppercase px-2 mb-2">
+                          {isDark ? 'Dark Palettes' : 'Light Palettes'}
+                        </h4>
+                        <div className="space-y-1">
+                          {(isDark ? darkPalettes : lightPalettes).map((palette) => {
+                            const isActive = isDark ? darkPalette === palette.id : lightPalette === palette.id;
+                            return (
+                              <button
+                                key={palette.id}
+                                onClick={() => {
+                                  if (isDark) {
+                                    setDarkPalette(palette.id);
+                                  } else {
+                                    setLightPalette(palette.id);
+                                  }
+                                  setShowPaletteMenu(false);
+                                }}
+                                className={`w-full flex items-center justify-between p-2 rounded-xl text-left font-body text-xs transition-all ${
+                                  isActive
+                                    ? 'bg-earth-500/10 text-earth-500 font-semibold'
+                                    : 'text-warm-gray-600 dark:text-warm-gray-300 hover:bg-cream-100 dark:hover:bg-warm-gray-700/50'
+                                }`}
+                              >
+                                <span className="truncate">{palette.name}</span>
+                                <div className="flex items-center gap-1">
+                                  <div
+                                    className="w-4 h-4 rounded-full border border-cream-200 dark:border-warm-gray-600 flex items-center justify-center flex-shrink-0"
+                                    style={{ backgroundColor: palette.bg }}
+                                  >
+                                    <div
+                                      className="w-1.5 h-1.5 rounded-full"
+                                      style={{ backgroundColor: palette.accent }}
+                                    />
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
               {/* Cart */}
               <Link
                 to="/cart"
@@ -150,8 +238,10 @@ export default function Navbar() {
                 <IoCartOutline size={22} />
                 {itemCount > 0 && (
                   <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
+                    key={itemCount}
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: [0.6, 1.4, 0.9, 1.1, 1], opacity: 1 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="absolute -top-1 -right-1 w-5 h-5 bg-mithila-red text-white text-xs rounded-full flex items-center justify-center font-bold"
                   >
                     {itemCount}

@@ -178,15 +178,18 @@ export default function CulturePage() {
               { name: 'Bamboo', meaning: 'Lineage, male energy, and rapid growth. Usually paired with the lotus.', icon: '🎋', img: imgBamboo },
               { name: 'Turtle', meaning: 'Stability, longevity, and Lord Vishnu\'s Kurma avatar.', icon: '🐢', img: imgTurtle },
             ].map((symbol, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="bg-cream-50 rounded-2xl overflow-hidden border border-cream-100 group">
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="bg-cream-50 dark:bg-warm-gray-800 rounded-2xl overflow-hidden border border-cream-200/50 dark:border-warm-gray-700/50 group shadow-sm hover:shadow-glass transition-all duration-500">
                 <div className="h-40 overflow-hidden relative">
-                  <img src={symbol.img} alt={symbol.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="w-full h-full transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+                    <img src={symbol.img} alt={symbol.name} className="w-full h-full object-cover" />
+                  </div>
                   <div className="absolute inset-0 bg-warm-black/20" />
-                  <div className="absolute top-4 right-4 text-3xl bg-white/80 backdrop-blur-sm w-12 h-12 flex items-center justify-center rounded-full shadow-md">{symbol.icon}</div>
+                  <div className="absolute inset-3 border border-earth-400/0 group-hover:border-earth-500/30 rounded-lg pointer-events-none transition-all duration-500 z-10" />
+                  <div className="absolute top-4 right-4 text-3xl bg-white/80 dark:bg-warm-gray-700/80 backdrop-blur-sm w-12 h-12 flex items-center justify-center rounded-full shadow-md z-10">{symbol.icon}</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display font-bold text-lg text-charcoal mb-2">{symbol.name}</h3>
-                  <p className="text-warm-gray-600 font-body text-sm leading-relaxed">{symbol.meaning}</p>
+                  <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100 mb-2">{symbol.name}</h3>
+                  <p className="text-warm-gray-600 dark:text-warm-gray-400 font-body text-sm leading-relaxed">{symbol.meaning}</p>
                 </div>
               </motion.div>
             ))}

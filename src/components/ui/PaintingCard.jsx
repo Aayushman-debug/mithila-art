@@ -94,21 +94,26 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
       >
         {/* Image */}
         <div className="relative aspect-[4/5] overflow-hidden">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.img
-              key={currentImg}
-              src={images[currentImg]}
-              alt={`${title} - Image ${currentImg + 1}`}
-              loading="lazy"
-              decoding="async"
-              fetchpriority="auto"
-              className={`w-full h-full object-cover transition-all duration-300 ${isCartDisabled ? 'brightness-75' : ''}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            />
-          </AnimatePresence>
+          <div className="w-full h-full transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.img
+                key={currentImg}
+                src={images[currentImg]}
+                alt={`${title} - Image ${currentImg + 1}`}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="auto"
+                className={`w-full h-full object-cover transition-all duration-300 ${isCartDisabled ? 'brightness-75' : ''}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </AnimatePresence>
+          </div>
+
+          {/* Interior museum-quality frame overlay */}
+          <div className="absolute inset-3 border border-earth-400/0 group-hover:border-earth-500/30 rounded-lg pointer-events-none transition-all duration-500 z-10" />
 
           {/* Image nav arrows — only if multiple images */}
           {images.length > 1 && (

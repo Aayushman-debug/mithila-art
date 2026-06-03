@@ -655,6 +655,43 @@ app.post("/verify-payment", async (req, res) => {
     commission.transactionId = paymentId;
     commission.paidAt = new Date();
     commission.status = 'in-progress';
+
+    // Optional: link to authenticated user if payment verified and user is logged in
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      try {
+        const decoded = verifyToken(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
+        if (decoded && decoded.userId) {
+          const userObj = await User.findById(decoded.userId);
+          if (userObj) {
+            commission.user = userObj._id;
+            // Push to user's commissions if not already present
+            if (!userObj.commissions.includes(commission._id)) {
+              userObj.commissions.push(commission._id);
+              await userObj.save();
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Optional payment auth error:", err);
+      }
+    } else {
+      // Fallback: Check if the email on the commission matches an existing registered user
+      try {
+        const matchingUser = await User.findOne({ email: commission.email });
+        if (matchingUser) {
+          commission.user = matchingUser._id;
+          if (!matchingUser.commissions.includes(commission._id)) {
+            matchingUser.commissions.push(commission._id);
+            await matchingUser.save();
+          }
+        }
+      } catch (err) {
+        console.error("Optional email matching error:", err);
+      }
+    }
+
     await commission.save();
 
     res.json({ success: true, message: 'Payment verified successfully', commission });
