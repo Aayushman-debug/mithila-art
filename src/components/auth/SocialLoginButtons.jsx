@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
-import * as FacebookLoginModule from 'react-facebook-login/dist/facebook-login-render-props';
-import { IoLogoFacebook } from 'react-icons/io5';
-
-const FacebookLogin = FacebookLoginModule.default || FacebookLoginModule;
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function SocialLoginButtons({ onError }) {
   const [loading, setLoading] = useState(false);
-  const { loginWithGoogle, loginWithFacebook } = useAuth();
+  const { loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,22 +24,6 @@ export default function SocialLoginButtons({ onError }) {
       handleSuccess(result.user);
     } else {
       onError(result.message || 'Google login failed');
-    }
-  };
-
-  const handleFacebookResponse = async (response) => {
-    if (response.accessToken) {
-      setLoading(true);
-      const result = await loginWithFacebook(response.accessToken);
-      setLoading(false);
-      
-      if (result.success) {
-        handleSuccess(result.user);
-      } else {
-        onError(result.message || 'Facebook login failed');
-      }
-    } else {
-      onError('Facebook login was cancelled or failed.');
     }
   };
 
@@ -72,23 +52,6 @@ export default function SocialLoginButtons({ onError }) {
             shape="rectangular"
           />
         </div>
-
-        <FacebookLogin
-          appId={import.meta.env.VITE_FACEBOOK_APP_ID || 'dummy-app-id'}
-          autoLoad={false}
-          fields="name,email,picture"
-          callback={handleFacebookResponse}
-          render={renderProps => (
-            <button
-              onClick={renderProps.onClick}
-              disabled={loading || renderProps.isDisabled}
-              className="w-full flex items-center justify-center space-x-2 bg-[#1877F2] text-white px-4 py-2.5 rounded hover:bg-[#166FE5] transition-colors"
-            >
-              <IoLogoFacebook className="w-5 h-5" />
-              <span className="font-medium text-sm">Continue with Facebook</span>
-            </button>
-          )}
-        />
       </div>
     </div>
   );
