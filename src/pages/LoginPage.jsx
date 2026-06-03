@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -35,14 +35,14 @@ export default function LoginPage() {
   const [resendLoading, setResendLoading] = useState(false);
 
   // Check URL query parameters for verification redirects
-  useState(() => {
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('verified') === 'true') {
       setSuccess('Email successfully verified! You can now log in.');
     } else if (params.get('verified') === 'false') {
       setError('Verification link is invalid or has expired. Please log in and request a new link.');
     }
-  });
+  }, [location.search]);
 
 
   const handleChange = (e) => {
