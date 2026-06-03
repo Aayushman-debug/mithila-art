@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
@@ -8,6 +8,7 @@ import FloatingCompareButton from './components/layout/FloatingCompareButton';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 import ScrollProgress from './components/layout/ScrollProgress';
 import { AdminRoute, ProtectedRoute } from './components/ui/ProtectedRoute';
+import GlobalErrorBoundary from './components/ui/GlobalErrorBoundary';
 
 // Lazy load pages for performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -46,17 +47,6 @@ function ScrollToTop() {
 
 export default function App() {
   const location = useLocation();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate initial load
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <LoadingSpinner fullScreen text="Preparing the canvas..." />;
-  }
 
   return (
     <div className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 transition-colors duration-300">
@@ -65,37 +55,39 @@ export default function App() {
       <Navbar />
       
       <main>
-        <Suspense fallback={<LoadingSpinner fullScreen text="Loading..." />}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/shop" element={<ShopPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/compare" element={<ComparePage />} />
-              <Route path="/commission" element={<ProtectedRoute><CommissionPage /></ProtectedRoute>} />
-              <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/testimonials" element={<TestimonialsPage />} />
-              <Route path="/mithila-history" element={<MithilaHistoryPage />} />
-              <Route path="/culture" element={<CulturePage />} />
-              <Route path="/artists" element={<ArtistsPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:slug" element={<BlogPostPage />} />
-              <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
-              <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
-              <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
-              <Route path="/commission-tracking" element={<ProtectedRoute><CommissionTrackingPage /></ProtectedRoute>} />
-              <Route path="/painting/:id" element={<PaintingDetailPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-              <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-            </Routes>
-          </AnimatePresence>
-        </Suspense>
+        <GlobalErrorBoundary>
+          <Suspense fallback={<LoadingSpinner fullScreen text="Loading..." />}>
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/gallery" element={<GalleryPage />} />
+                <Route path="/shop" element={<ShopPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/compare" element={<ComparePage />} />
+                <Route path="/commission" element={<ProtectedRoute><CommissionPage /></ProtectedRoute>} />
+                <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/testimonials" element={<TestimonialsPage />} />
+                <Route path="/mithila-history" element={<MithilaHistoryPage />} />
+                <Route path="/culture" element={<CulturePage />} />
+                <Route path="/artists" element={<ArtistsPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:slug" element={<BlogPostPage />} />
+                <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
+                <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
+                <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+                <Route path="/commission-tracking" element={<ProtectedRoute><CommissionTrackingPage /></ProtectedRoute>} />
+                <Route path="/painting/:id" element={<PaintingDetailPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              </Routes>
+            </AnimatePresence>
+          </Suspense>
+        </GlobalErrorBoundary>
       </main>
 
       <Footer />

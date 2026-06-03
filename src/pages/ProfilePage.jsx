@@ -232,11 +232,13 @@ export default function ProfilePage() {
                       Member Since
                     </p>
                     <p className="text-lg font-semibold text-warm-gray-900 dark:text-cream-100">
-                      {new Date(user.createdAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {user.createdAt
+                        ? new Date(user.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })
+                        : 'Recently'}
                     </p>
                   </div>
                 </div>
@@ -253,12 +255,12 @@ export default function ProfilePage() {
               </h2>
               <div className="text-center py-12">
                 <p className="text-warm-gray-600 dark:text-warm-gray-300 mb-4">
-                  {user?.commissions?.length > 0
+                  {(user?.commissions || []).length > 0
                     ? `You have ${user.commissions.length} commission request${user.commissions.length > 1 ? 's' : ''}.`
                     : 'No commission requests yet.'}
                 </p>
                 <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 mb-6">
-                  {user?.commissions?.length > 0
+                  {(user?.commissions || []).length > 0
                     ? 'Track your commissioning progress and approvals in one place.'
                     : 'Start by creating a custom commission request.'}
                 </p>
@@ -266,7 +268,7 @@ export default function ProfilePage() {
                   onClick={() => navigate('/commission-tracking')}
                   className="px-6 py-3 rounded-xl bg-gradient-gold text-white font-medium hover:shadow-gold transition-all"
                 >
-                  {user?.commissions?.length > 0 ? 'Track Commissions' : 'Create Commission'}
+                  {(user?.commissions || []).length > 0 ? 'Track Commissions' : 'Create Commission'}
                 </button>
               </div>
             </motion.div>
@@ -281,12 +283,12 @@ export default function ProfilePage() {
               </h2>
               <div className="text-center py-12">
                 <p className="text-warm-gray-600 dark:text-warm-gray-300 mb-4">
-                  {user?.orders?.length > 0
+                  {(user?.orders || []).length > 0
                     ? `You have ${user.orders.length} completed order${user.orders.length > 1 ? 's' : ''}.`
                     : 'No orders yet.'}
                 </p>
                 <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 mb-6">
-                  {user?.orders?.length > 0
+                  {(user?.orders || []).length > 0
                     ? 'Review your order history and payment status.'
                     : 'Browse our gallery and shop to make your first purchase.'}
                 </p>
@@ -294,7 +296,7 @@ export default function ProfilePage() {
                   onClick={() => navigate(user?.orders?.length > 0 ? '/orders' : '/shop')}
                   className="px-6 py-3 rounded-xl bg-gradient-gold text-white font-medium hover:shadow-gold transition-all"
                 >
-                  {user?.orders?.length > 0 ? 'View Orders' : 'Explore Shop'}
+                  {(user?.orders || []).length > 0 ? 'View Orders' : 'Explore Shop'}
                 </button>
               </div>
             </motion.div>

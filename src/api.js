@@ -18,6 +18,7 @@ export function buildApiPath(path) {
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 15000, // 15 seconds – prevents infinite loading when Render backend is cold-starting
 });
 
 // Add token to request headers if it exists
@@ -36,6 +37,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // --- Timeout: Render backend cold-starting ---
+    if (error.code === 'ECONNABORTED') {
+      error.message = 'The server is taking longer than expected. It may be waking up — please try again in a moment.';
+      return Promise.reject(error);
+    }
+
+    // --- Network error: server unreachable, CORS, DNS failure ---
+    if (error.code === 'ERR_NETWORK' || !error.response) {
+      error.message = 'Unable to reach the server. Please check your internet connection and try again.';
+      return Promise.reject(error);
+    }
+
+    // --- 401 Unauthorized: token expired or invalid ---
     if (error.response?.status === 401 && !error.config.url.includes('/api/auth/login')) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('authUser');
@@ -43,6 +57,7 @@ api.interceptors.response.use(
       sessionStorage.removeItem('authUser');
       window.location.href = '/login';
     }
+
     return Promise.reject(error);
   }
 );
