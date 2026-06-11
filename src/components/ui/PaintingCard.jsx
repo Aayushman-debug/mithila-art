@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoImagesOutline, IoShareSocialOutline, IoMailOutline } from 'react-icons/io5';
-import { MdCompareArrows } from 'react-icons/md';
+import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoMailOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { useCompare } from '../../context/CompareContext';
-import ShareModal from './ShareModal';
 
 // ── Availability helpers ─────────────────────────────────────────────────────
 
@@ -20,32 +17,39 @@ function resolveStatus(painting) {
 
 const STATUS_CONFIG = {
   only_1_left: {
-    label: 'Only 1 Left!',
-    className: 'bg-orange-500 text-white',
+    label: 'Only 1 Left',
+    dotClass: 'bg-orange-500',
+    textClass: 'text-orange-600 dark:text-orange-400',
   },
   out_of_stock: {
-    label: 'Sold Out',
-    className: 'bg-mithila-red text-white',
+    label: 'Out of Stock',
+    dotClass: 'bg-mithila-red',
+    textClass: 'text-mithila-red dark:text-red-400',
   },
   coming_soon: {
     label: 'Coming Soon',
-    className: 'bg-warm-gray-500 text-white',
+    dotClass: 'bg-warm-gray-400',
+    textClass: 'text-warm-gray-500 dark:text-warm-gray-400',
   },
   commission_available: {
     label: 'Commission Available',
-    className: 'bg-purple-600 text-white',
+    dotClass: 'bg-purple-500',
+    textClass: 'text-purple-600 dark:text-purple-400',
   },
+  available: {
+    label: 'Available',
+    dotClass: 'bg-emerald-500',
+    textClass: 'text-emerald-600 dark:text-emerald-400',
+  }
 };
 
 // ── Component ────────────────────────────────────────────────────────────────
 
 export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted }) {
   const navigate = useNavigate();
-  const { addToCompare, isInCompare, removeFromCompare } = useCompare();
   const { id, title, artist, price, originalPrice, category, size, inStock } = painting;
   const images = painting.images && painting.images.length > 0 ? painting.images : [painting.image];
   const [currentImg, setCurrentImg] = useState(0);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const status = resolveStatus(painting);
   const statusConfig = STATUS_CONFIG[status];
@@ -66,15 +70,6 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
   const prevImg = (e) => {
     e.stopPropagation();
     setCurrentImg((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const handleCompareClick = (e) => {
-    e.stopPropagation();
-    if (isInCompare(painting.id)) {
-      removeFromCompare(painting.id);
-    } else {
-      addToCompare(painting);
-    }
   };
 
   const handleCardAction = (e) => {
@@ -149,64 +144,15 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
           <div className="absolute inset-0 bg-gradient-to-t from-warm-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
 
           {/* Quick Actions */}
-          <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 z-10">
+          <div className="absolute bottom-3 left-3 right-3 flex opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 z-10">
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={() => navigate(`/painting/${painting.id}`)}
-              className="flex-1 py-2 bg-white/90 backdrop-blur-sm text-charcoal font-body font-semibold text-xs rounded-xl flex items-center justify-center gap-1 hover:bg-white transition-colors whitespace-nowrap"
+              onClick={(e) => { e.stopPropagation(); navigate(`/painting/${painting.id}`); }}
+              className="flex-1 py-2.5 bg-white/95 backdrop-blur-md text-charcoal font-display font-semibold text-sm rounded-xl flex items-center justify-center gap-2 hover:bg-white shadow-lg transition-colors whitespace-nowrap"
             >
-              <IoEyeOutline size={16} />
-              View
+              <IoEyeOutline size={18} />
+              View Artwork
             </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={handleCompareClick}
-              className={`w-9 h-9 backdrop-blur-sm rounded-xl flex items-center justify-center transition-colors ${isInCompare(painting.id) ? 'bg-mithila-red text-white' : 'bg-white/90 text-charcoal hover:bg-white'}`}
-              title="Compare"
-            >
-              <MdCompareArrows size={16} />
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => { e.stopPropagation(); setIsShareModalOpen(true); }}
-              className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-white transition-colors"
-              title="Share"
-            >
-              <IoShareSocialOutline size={16} className="text-charcoal" />
-            </motion.button>
-          </div>
-
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
-            {painting.isNew && (
-              <span className="px-3 py-1 bg-mithila-green text-white text-xs font-bold rounded-full uppercase tracking-wider">
-                New
-              </span>
-            )}
-            {originalPrice && (
-              <span className="px-3 py-1 bg-mithila-red text-white text-xs font-bold rounded-full">
-                {Math.round((1 - price / originalPrice) * 100)}% Off
-              </span>
-            )}
-            {/* Availability status badge */}
-            {statusConfig && (
-              <span className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${statusConfig.className}`}>
-                {statusConfig.label}
-              </span>
-            )}
-            {/* Available: small green dot indicator */}
-            {status === 'available' && (
-              <span className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                Available
-              </span>
-            )}
-            {images.length > 1 && (
-              <span className="px-2.5 py-1 bg-black/50 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">
-                <IoImagesOutline size={12} />
-                {images.length}
-              </span>
-            )}
           </div>
 
           {/* Wishlist */}
@@ -231,15 +177,25 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
             {title}
           </h3>
           <p className="text-warm-gray-400 dark:text-warm-gray-500 text-sm font-body mb-3">{size}</p>
-          <div className="flex flex-wrap items-center justify-between gap-2 mt-auto">
-            <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">
-                {formatPrice(price)}
-              </span>
-              {originalPrice && (
-                <span className="text-warm-gray-400 dark:text-warm-gray-500 line-through text-sm">
-                  {formatPrice(originalPrice)}
+          <div className="flex flex-wrap items-end justify-between gap-2 mt-auto">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">
+                  {formatPrice(price)}
                 </span>
+                {originalPrice && (
+                  <span className="text-warm-gray-400 dark:text-warm-gray-500 line-through text-sm">
+                    {formatPrice(originalPrice)}
+                  </span>
+                )}
+              </div>
+              {statusConfig && (
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className={`w-1.5 h-1.5 rounded-full ${statusConfig.dotClass}`}></span>
+                  <span className={`text-[11px] uppercase tracking-wide font-bold ${statusConfig.textClass}`}>
+                    {statusConfig.label}
+                  </span>
+                </div>
               )}
             </div>
 
@@ -272,16 +228,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
         </div>
       </motion.div>
 
-      {/* Render Share Modal */}
-      <AnimatePresence>
-        {isShareModalOpen && (
-          <ShareModal
-            isOpen={isShareModalOpen}
-            onClose={() => setIsShareModalOpen(false)}
-            painting={painting}
-          />
-        )}
-      </AnimatePresence>
+
     </>
   );
 }
