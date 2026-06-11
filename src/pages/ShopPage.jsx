@@ -26,6 +26,7 @@ import {
 
 import SectionHeading from '../components/ui/SectionHeading';
 import PaintingCard from '../components/ui/PaintingCard';
+import PaintingCardSkeleton from '../components/ui/PaintingCardSkeleton';
 
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -342,9 +343,10 @@ export default function ShopPage() {
   const { addItem } = useCart();
   const { isAuthenticated, user } = useAuth();
 
-  const [products, setProducts] = useState(paintings);
+  const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState(null);
+  const [showWakingUpMsg, setShowWakingUpMsg] = useState(false);
   const [wishlistIds, setWishlistIds] = useState(user?.wishlist?.map((item) => item.productId) || []);
 
   /* ─── filter state ──────────────────────────────────────── */
@@ -434,9 +436,16 @@ export default function ShopPage() {
   }, [user]);
 
   useEffect(() => {
+    let timeoutId;
     const loadProducts = async () => {
       setProductsLoading(true);
       setProductsError(null);
+      setShowWakingUpMsg(false);
+      
+      timeoutId = setTimeout(() => {
+        setShowWakingUpMsg(true);
+      }, 5000);
+
       try {
         const response = await productAPI.getProducts();
         if (response.data.success && response.data.products && response.data.products.length > 0) {
@@ -449,17 +458,21 @@ export default function ShopPage() {
           }));
           setProducts(mappedProducts);
         } else {
-          setProducts(paintings);
+          setProducts([]);
         }
       } catch (err) {
         setProductsError(err.response?.data?.message || 'Unable to load products');
-        setProducts(paintings);
+        setProducts([]);
       } finally {
+        clearTimeout(timeoutId);
         setProductsLoading(false);
+        setShowWakingUpMsg(false);
       }
     };
 
     loadProducts();
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
   /* ─── filtered + sorted paintings ───────────────────────── */
@@ -816,7 +829,25 @@ export default function ShopPage() {
                 )}
 
                 {/* ── Product Grid/List ── */}
-                {filteredPaintings.length > 0 ? (
+                {productsLoading ? (
+                  <div className="space-y-6">
+                    {showWakingUpMsg && (
+                      <div className="bg-earth-500/10 border border-earth-500/20 text-earth-700 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse">
+                        <span className="font-display font-semibold mb-1 text-charcoal">Connecting to server...</span>
+                        <span className="text-sm font-body text-warm-gray-600">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
+                      </div>
+                    )}
+                    <div className={
+                      viewMode === 'grid'
+                        ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'
+                        : 'flex flex-col gap-4'
+                    }>
+                      {[...Array(6)].map((_, i) => (
+                        <PaintingCardSkeleton key={i} viewMode={viewMode} />
+                      ))}
+                    </div>
+                  </div>
+                ) : filteredPaintings.length > 0 ? (
                   <motion.div
                     variants={staggerContainer}
                     initial="hidden"

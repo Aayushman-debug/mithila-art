@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { useInView } from 'react-intersection-observer';
@@ -20,6 +20,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 
 import { paintings, categories } from '../data/paintings';
 import { formatPrice, generateWhatsAppLink } from '../utils/helpers';
+import { productAPI } from '../api';
 
 /* ───────── Animation Variants ───────── */
 const staggerGrid = {
@@ -174,6 +175,47 @@ export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [showWakingUpMsg, setShowWakingUpMsg] = useState(false);
+
+  useEffect(() => {
+    let timeoutId;
+    const loadProducts = async () => {
+      setProductsLoading(true);
+      setShowWakingUpMsg(false);
+      
+      timeoutId = setTimeout(() => {
+        setShowWakingUpMsg(true);
+      }, 5000);
+
+      try {
+        const response = await productAPI.getProducts();
+        if (response.data.success && response.data.products) {
+          const mappedProducts = response.data.products.map(p => ({
+            ...p,
+            id: p.productId || p._id,
+            images: p.gallery && p.gallery.length > 0 ? p.gallery : (p.image ? [p.image] : []),
+            inStock: p.stock > 0 && p.available !== false,
+            artist: p.artist || 'Mithila Artist',
+          }));
+          setProducts(mappedProducts);
+        } else {
+          setProducts([]);
+        }
+      } catch (err) {
+        setProducts([]);
+      } finally {
+        clearTimeout(timeoutId);
+        setProductsLoading(false);
+        setShowWakingUpMsg(false);
+      }
+    };
+
+    loadProducts();
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   // All unique categories
   const allCategories = useMemo(() => {
     return ['all', 'kohbar', 'bharni', 'kachni', 'godhana', 'religious'];
@@ -181,7 +223,7 @@ export default function GalleryPage() {
 
   // Filtered paintings
   const filteredPaintings = useMemo(() => {
-    let results = paintings;
+    let results = products;
     if (activeCategory !== 'all') {
       results = results.filter(
         (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
@@ -334,7 +376,25 @@ export default function GalleryPage() {
           <div className="container-custom relative z-10">
             <LayoutGroup>
               <AnimatePresence mode="popLayout">
-                {filteredPaintings.length > 0 ? (
+                {productsLoading ? (
+                  <motion.div layout className="space-y-6">
+                    {showWakingUpMsg && (
+                      <div className="bg-earth-500/10 border border-earth-500/20 text-earth-700 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse">
+                        <span className="font-display font-semibold mb-1 text-charcoal">Connecting to server...</span>
+                        <span className="text-sm font-body text-warm-gray-600">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
+                      </div>
+                    )}
+                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
+                      {[...Array(6)].map((_, index) => {
+                        const heights = ['h-64', 'h-80', 'h-72', 'h-96', 'h-64', 'h-80'];
+                        const heightClass = heights[index % heights.length];
+                        return (
+                          <div key={index} className={`w-full bg-warm-gray-200/60 rounded-2xl animate-pulse ${heightClass} break-inside-avoid inline-block`} />
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                ) : filteredPaintings.length > 0 ? (
                   <motion.div
                     layout
                     className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5"

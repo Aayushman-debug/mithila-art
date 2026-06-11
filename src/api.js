@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 
 const envApiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -18,7 +19,21 @@ export function buildApiPath(path) {
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 45000, // 45 seconds – prevents infinite loading/timeout when Render backend is cold-starting
+  timeout: 60000, // 60 seconds – covers absolute worst-case Render wake times
+});
+
+// Configure automatic retries for cold-start 502/503 and timeouts
+axiosRetry(api, {
+  retries: 2,
+  retryDelay: (retryCount) => {
+    return retryCount * 2000; // Time between retries: 2s, 4s
+  },
+  retryCondition: (error) => {
+    // Retry on network errors, timeouts, or 5xx server errors
+    return axiosRetry.isNetworkOrIdempotentRequestError(error) || 
+           error.code === 'ECONNABORTED' || 
+           (error.response && error.response.status >= 500);
+  },
 });
 
 // Add token to request headers if it exists

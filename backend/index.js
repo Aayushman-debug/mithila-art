@@ -154,8 +154,9 @@ console.log('Rate limiter auth max:', isProd ? 10 : 200);
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mithilaReviews", {
   maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
+  serverSelectionTimeoutMS: 15000,
+  socketTimeoutMS: 60000,
+  autoIndex: false, // Don't build indexes on cold start
 })
   .then(() => console.log("✓ MongoDB Connected"))
   .catch(err => console.error("✗ MongoDB Error:", err));
