@@ -246,7 +246,7 @@ export default function GalleryPage() {
       );
     }
     return results;
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, products]);
 
 
 
