@@ -187,7 +187,7 @@ export default function GalleryPage() {
       
       timeoutId = setTimeout(() => {
         setShowWakingUpMsg(true);
-      }, 5000);
+      }, 3000);
 
       try {
         const response = await productAPI.getProducts();
@@ -199,12 +199,18 @@ export default function GalleryPage() {
             inStock: p.stock > 0 && p.available !== false,
             artist: p.artist || 'Mithila Artist',
           }));
-          setProducts(mappedProducts);
+          const mergedProducts = [...paintings];
+          mappedProducts.forEach(mp => {
+            const index = mergedProducts.findIndex(p => p.id === mp.id);
+            if (index !== -1) mergedProducts[index] = mp;
+            else mergedProducts.push(mp);
+          });
+          setProducts(mergedProducts);
         } else {
-          setProducts([]);
+          setProducts(paintings);
         }
       } catch (err) {
-        setProducts([]);
+        setProducts(paintings);
       } finally {
         clearTimeout(timeoutId);
         setProductsLoading(false);

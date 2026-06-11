@@ -4,8 +4,6 @@ const cors = require("cors");
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const xssLib = require('xss-clean/lib/xss');
 const compression = require('compression');
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
@@ -35,6 +33,7 @@ const requiredEnv = [
   "FRONTEND_URLS",
   "RAZORPAY_KEY_ID",
   "RAZORPAY_KEY_SECRET",
+  "GOOGLE_CLIENT_ID",
 ];
 
 const missingEnv = requiredEnv.filter((name) => !process.env[name] || !String(process.env[name]).trim());
@@ -46,12 +45,22 @@ if (missingEnv.length > 0) {
 
 const app = express();
 
-const allowedFrontendOrigins = [
+const defaultAllowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:5173",
   "https://mithila-art-dhe3.vercel.app",
 ];
+
+const getDynamicOrigins = () => {
+  let origins = [...defaultAllowedOrigins];
+  if (process.env.FRONTEND_URL) origins.push(process.env.FRONTEND_URL.replace(/\/$/, ''));
+  if (process.env.FRONTEND_URLS) {
+    const customOrigins = process.env.FRONTEND_URLS.split(',').map(u => u.trim().replace(/\/$/, ''));
+    origins = origins.concat(customOrigins);
+  }
+  return origins;
+};
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -59,7 +68,8 @@ app.use(cors({
       return callback(null, true);
     }
 
-    if (allowedFrontendOrigins.includes(origin)) {
+    const dynamicOrigins = getDynamicOrigins();
+    if (dynamicOrigins.includes(origin)) {
       return callback(null, true);
     }
 
@@ -112,28 +122,8 @@ app.use((req, res, next) => {
   } catch (e) {}
   next();
 });
-// Replace xss-clean middleware with a safe wrapper to avoid reassigning getter-only properties
-app.use((req, res, next) => {
-  try {
-    if (req.body) req.body = xssLib.clean(req.body);
-  } catch (e) {}
-  try {
-    if (req.params) req.params = xssLib.clean(req.params);
-  } catch (e) {}
-  try {
-    if (req.query) {
-      const cleaned = JSON.parse(JSON.stringify(xssLib.clean(req.query || {})));
-      const desc = Object.getOwnPropertyDescriptor(req, 'query');
-      if (desc && desc.writable) {
-        req.query = cleaned;
-      } else {
-        Object.keys(req.query).forEach((k) => delete req.query[k]);
-        Object.assign(req.query, cleaned);
-      }
-    }
-  } catch (e) {}
-  next();
-});
+// Note: xss-clean middleware has been removed due to prototype pollution vulnerabilities.
+// Relying on express-mongo-sanitize and Mongoose schemas for validation.
 
 // Rate limiting
 app.set('trust proxy', 1); // Required for rate limiting behind a reverse proxy (like Render/Vercel)

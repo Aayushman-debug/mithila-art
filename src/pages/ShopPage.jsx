@@ -444,11 +444,11 @@ export default function ShopPage() {
       
       timeoutId = setTimeout(() => {
         setShowWakingUpMsg(true);
-      }, 5000);
+      }, 3000);
 
       try {
         const response = await productAPI.getProducts();
-        if (response.data.success && response.data.products && response.data.products.length > 0) {
+        if (response.data.success && response.data.products) {
           const mappedProducts = response.data.products.map(p => ({
             ...p,
             id: p.productId || p._id,
@@ -456,13 +456,19 @@ export default function ShopPage() {
             inStock: p.stock > 0 && p.available !== false,
             artist: p.artist || 'Mithila Artist',
           }));
-          setProducts(mappedProducts);
+          const mergedProducts = [...paintings];
+          mappedProducts.forEach(mp => {
+            const index = mergedProducts.findIndex(p => p.id === mp.id);
+            if (index !== -1) mergedProducts[index] = mp;
+            else mergedProducts.push(mp);
+          });
+          setProducts(mergedProducts);
         } else {
-          setProducts([]);
+          setProducts(paintings);
         }
       } catch (err) {
         setProductsError(err.response?.data?.message || 'Unable to load products');
-        setProducts([]);
+        setProducts(paintings);
       } finally {
         clearTimeout(timeoutId);
         setProductsLoading(false);
