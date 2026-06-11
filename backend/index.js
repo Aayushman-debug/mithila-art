@@ -38,9 +38,8 @@ const requiredEnv = [
 
 const missingEnv = requiredEnv.filter((name) => !process.env[name] || !String(process.env[name]).trim());
 if (missingEnv.length > 0) {
-  console.error("✗ Missing required environment variables:", missingEnv.join(", "));
-  console.error("✗ Backend will not start until required environment variables are set.");
-  process.exit(1);
+  console.warn("⚠️ Missing required environment variables:", missingEnv.join(", "));
+  console.warn("⚠️ Backend is starting but some features may not work correctly.");
 }
 
 const app = express();
