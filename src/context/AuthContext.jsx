@@ -4,6 +4,29 @@ import { authAPI } from '../api';
 /* ─── Storage Keys ─────────────────────────────────────────── */
 const TOKEN_KEY = 'authToken';
 const USER_KEY = 'authUser';
+const PENDING_ACTION_KEY = 'pendingAction';
+
+/* ─── requireAuth helper ───────────────────────────────────── */
+/**
+ * Saves an optional pending action to sessionStorage and redirects
+ * the user to /login. Call this from any page that requires auth.
+ *
+ * @param {Function} navigate   - React Router navigate function
+ * @param {object}   location   - React Router location object
+ * @param {object}   [action]   - Optional action to replay after login
+ *                               e.g. { type: 'addToCart', paintingId: 'abc' }
+ * @param {string}   [message]  - Optional message shown on the login page
+ */
+export function requireAuth(navigate, location, action, message = 'Please log in to continue.') {
+  if (action) {
+    try {
+      sessionStorage.setItem(PENDING_ACTION_KEY, JSON.stringify(action));
+    } catch {
+      // sessionStorage unavailable
+    }
+  }
+  navigate('/login', { state: { from: location, message } });
+}
 
 /* ─── Helpers ──────────────────────────────────────────────── */
 function loadAuthFromStorage() {
@@ -126,7 +149,20 @@ export function AuthProvider({ children }) {
           user,
           token,
         });
-        return { success: true, user };
+
+        // Retrieve and clear any pending action saved before redirect
+        let pendingAction = null;
+        try {
+          const raw = sessionStorage.getItem(PENDING_ACTION_KEY);
+          if (raw) {
+            pendingAction = JSON.parse(raw);
+            sessionStorage.removeItem(PENDING_ACTION_KEY);
+          }
+        } catch {
+          // Fail silently
+        }
+
+        return { success: true, user, pendingAction };
       }
 
       return { success: false, error: response.data.message };
@@ -279,10 +315,12 @@ export function AuthProvider({ children }) {
       register,
       login,
       logout,
+      loginWithGoogle,
+      loginWithFacebook,
       getProfile,
       updateProfile,
     }),
-    [authState, loading, error, register, login, logout, getProfile, updateProfile]
+    [authState, loading, error, register, login, logout, loginWithGoogle, loginWithFacebook, getProfile, updateProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

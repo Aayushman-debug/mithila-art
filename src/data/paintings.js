@@ -79,6 +79,7 @@ export const paintings = [
     description:
       ' Hand-painted Radha Krishna Mithila artwork by Lalita Pathak created in traditional Madhubani style.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: false,
   },
@@ -96,6 +97,7 @@ export const paintings = [
     description:
       '',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -114,6 +116,7 @@ export const paintings = [
     description:
       'Traditional Mithila painting depicting Lord Rama, Sita, and Hanuman in devotional composition with intricate Madhubani detailing and sacred symbolism.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: false,
   },
@@ -133,6 +136,7 @@ export const paintings = [
    description:
      'A vibrant Madhubani composition featuring symbolic peacocks, floral borders, and sacred folk motifs rendered in traditional Bharni style with intricate detailing.',
    inStock: true,
+   availabilityStatus: 'available',
    featured: true,
    isNew: false,
   },
@@ -151,6 +155,7 @@ export const paintings = [
    description:
      'Traditional Mithila Kohbar painting depicting a sacred bridal ceremony composition with intricate folk detailing, ceremonial motifs, and symbolic elements celebrating marriage traditions.',
    inStock: true,
+   availabilityStatus: 'available',
    featured: true,
    isNew: false,
   },
@@ -168,6 +173,7 @@ export const paintings = [
    description:
      'Traditional Madhubani painting portraying Lord Shiva and Goddess Parvati in sacred union, symbolising love, devotion, and cosmic harmony through intricate Bharni folk detailing.',
    inStock: true,
+   availabilityStatus: 'available',
    featured: true,
    isNew: true,
    },
@@ -188,6 +194,7 @@ export const paintings = [
     description:
       'Traditional Madhubani artwork portraying a divine Matsya-inspired figure surrounded by sacred waters, lotus motifs, and intricate Mithila patterns symbolising life, spirituality, and devotion.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -206,6 +213,7 @@ export const paintings = [
     description:
       'Pairs of divine fish symbolising fertility, prosperity, and marital love in Mithila culture. Rendered in traditional Madhubani style.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: false,
   },
@@ -223,6 +231,7 @@ export const paintings = [
     description:
       'Lord Krishna and Radha beautifully rendered in the Kachni line-art style with striking black, red, and blue motifs under the Kadamba tree.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -243,6 +252,7 @@ export const paintings = [
     description:
       'Traditional Mithila artwork portraying Lord Shiva and Goddess Parvati in sacred harmony, rendered through intricate monochrome linework reflecting devotion, love, and divine balance.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: true,
   },
@@ -260,6 +270,7 @@ export const paintings = [
     description:
       'A powerful red monochrome depiction of Goddess Durga on her lion mount, wielding weapons in her many hands to defeat evil. Hand-painted in traditional Mithila style.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -277,6 +288,7 @@ export const paintings = [
     description:
       'A colorful and vibrant painting in the Bharni style depicting Lord Krishna playing with a cow. Rendered with rich primary colors and traditional decorative elements.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -297,6 +309,7 @@ export const paintings = [
     description:
       'A radiant Mithila composition centred around a sacred chakra motif symbolising harmony, prosperity, and cosmic balance. Handcrafted using traditional Maithili detailing with intricate symbolic storytelling and vibrant natural colours.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: false,
   },
@@ -315,6 +328,7 @@ export const paintings = [
     description:
       'A dramatic black and red Kachni style painting of Goddess Durga slaying the demon Mahishasura. Shows incredible detail in the linework and shading.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -334,6 +348,7 @@ export const paintings = [
     description:
       'A vibrant and colorful Bharni style painting of Radha and Krishna, filled with intricate patterns, bright natural dyes, and surrounded by nature motifs.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: true,
   },
@@ -351,6 +366,7 @@ export const paintings = [
     description:
       'An intricate portrayal of Lord Ganesha with his vahana (mouse) and a beautifully detailed peacock. Features traditional Mithila geometric borders and bright floral elements.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -368,6 +384,7 @@ export const paintings = [
     description:
       'An exquisite black and white Kachni painting with delicate red and yellow accents. It portrays the eternal love of Radha and Krishna standing gracefully under a Kadamba tree.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },
@@ -387,6 +404,7 @@ export const paintings = [
     description:
       'A striking contemporary take on Lord Ganesha using a unique pink palette. Masterfully detailed in the Kachni line-art style alongside his faithful vahana, Mooshak.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: true,
   },
@@ -404,6 +422,7 @@ export const paintings = [
     description:
       'Authentic, hand-painted wearable art. This stunning silk saree is intricately hand-painted with traditional Mithila motifs, transforming an ancient art form into a breathtaking fashion statement.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: true,
   },
@@ -421,6 +440,7 @@ export const paintings = [
     description:
       'A tranquil lotus pond teeming with fish and turtles. The painting captures the sacred geometry of nature — repeating petal forms, concentric ripples, and interlocking leaf patterns.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: false,
   },
@@ -440,6 +460,7 @@ export const paintings = [
     description:
       'The celestial wedding of Lord Ram and Sita in the court of King Janaka at Janakpur. This grand composition features dozens of figures, ornate architecture, and sacred fire — a crown jewel of Mithila narrative art.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: true,
     isNew: false,
   },
@@ -457,6 +478,7 @@ export const paintings = [
     description:
       'Baby Krishna caught stealing butter, surrounded by adoring gopis. Playful, charming, and richly detailed — a beloved narrative from the Bhagavata Purana.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: false,
   },
@@ -476,6 +498,7 @@ export const paintings = [
     description:
       'Goddess Durga in her ten-armed form, slaying the buffalo demon Mahishasura. A powerful, dynamic composition in the classic Bharni palette of red, yellow, and black.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: false,
   },
@@ -493,6 +516,7 @@ export const paintings = [
     description:
       'Intricate Lord Ganesh Mithila artwork rendered in traditional Kachni style featuring fine line detailing, sacred symbolism, and handcrafted Maithili artistry.',
     inStock: true,
+    availabilityStatus: 'available',
     featured: false,
     isNew: true,
   },

@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { requireAuth } from '../context/AuthContext';
 import { useInView } from 'react-intersection-observer';
 import {
   FaSearch,
@@ -337,6 +338,7 @@ function FilterSidebar({
    ════════════════════════════════════════════════════════════════ */
 export default function ShopPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { addItem } = useCart();
   const { isAuthenticated, user } = useAuth();
 
@@ -378,9 +380,13 @@ export default function ShopPage() {
 
   const handleAddToCart = (painting) => {
     if (!isAuthenticated) {
-      return navigate('/login', {
-        state: { from: { pathname: '/shop' }, message: 'Login to add items to your cart.' },
-      });
+      requireAuth(
+        navigate,
+        location,
+        { type: 'addToCart', paintingId: painting.id },
+        'Please log in to add items to your cart.'
+      );
+      return;
     }
     addItem({
       id: painting.id,
@@ -550,8 +556,19 @@ export default function ShopPage() {
               transition={{ duration: 0.8 }}
               className="text-center"
             >
+              {/* Store badge */}
+              <motion.div
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-earth-500/20 border border-earth-500/30 text-earth-400 text-xs font-body font-semibold tracking-widest uppercase mb-4 backdrop-blur-sm"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <IoCartOutline size={14} />
+                Official Store — Browse &amp; Purchase
+              </motion.div>
+
               <motion.p
-                className="font-accent text-earth-400 tracking-widest text-sm uppercase mb-4"
+                className="font-accent text-earth-400 tracking-widest text-sm uppercase mb-3"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -563,16 +580,22 @@ export default function ShopPage() {
               </h1>
               <p className="text-cream-200/70 font-body text-lg max-w-2xl mx-auto">
                 Each painting is a hand-crafted original, created using traditional techniques passed
-                down through generations of Mithila women artisans.
+                down through generations of Mithila women artisans. Add to cart and own a piece of
+                living heritage.
               </p>
 
-              {/* Breadcrumb */}
-              <div className="flex items-center justify-center gap-2 mt-6 text-sm font-body">
+              {/* Breadcrumb + Gallery link */}
+              <div className="flex items-center justify-center gap-2 mt-6 text-sm font-body flex-wrap">
                 <Link to="/" className="text-cream-300/50 hover:text-earth-400 transition-colors">
                   Home
                 </Link>
                 <span className="text-cream-300/30">/</span>
                 <span className="text-earth-400">Shop</span>
+                <span className="text-cream-300/20 mx-2">·</span>
+                <Link to="/gallery" className="text-cream-300/40 hover:text-earth-300 transition-colors flex items-center gap-1">
+                  <FaArrowRight className="text-[10px]" />
+                  View Gallery (browse only)
+                </Link>
               </div>
             </motion.div>
           </div>

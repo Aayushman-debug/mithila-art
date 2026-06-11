@@ -152,7 +152,11 @@ app.use(generalLimiter);
 console.log('Rate limiter auth max:', isProd ? 10 : 200);
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mithilaReviews")
+mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mithilaReviews", {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
   .then(() => console.log("✓ MongoDB Connected"))
   .catch(err => console.error("✗ MongoDB Error:", err));
 
@@ -764,7 +768,7 @@ app.post("/payment-failed", async (req, res) => {
 // 7. GET ALL COMMISSIONS (for admin dashboard)
 app.get("/admin/commissions", async (req, res) => {
   try {
-    const commissions = await Commission.find().sort({ submittedAt: -1 });
+    const commissions = await Commission.find().sort({ submittedAt: -1 }).lean();
     res.json({
       success: true,
       commissions
@@ -780,7 +784,7 @@ app.get("/admin/commissions", async (req, res) => {
 // Keep old endpoint for compatibility
 app.get("/reviews", async (req, res) => {
   try {
-    const commissions = await Commission.find();
+    const commissions = await Commission.find().lean();
     res.json(commissions);
   } catch (error) {
     res.status(500).json({

@@ -1,10 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
+
+const AVAILABILITY_OPTIONS = [
+  { value: 'available',           label: 'Available' },
+  { value: 'only_1_left',         label: 'Only 1 Left' },
+  { value: 'out_of_stock',        label: 'Out of Stock' },
+  { value: 'coming_soon',         label: 'Coming Soon' },
+  { value: 'commission_available',label: 'Commission Available' },
+];
+
+const availabilityColors = {
+  available:            'bg-mithila-green/10 text-mithila-green',
+  only_1_left:          'bg-mithila-orange/10 text-mithila-orange',
+  out_of_stock:         'bg-warm-gray-100 text-warm-gray-500',
+  coming_soon:          'bg-mithila-blue/10 text-mithila-blue',
+  commission_available: 'bg-purple-100 text-purple-700',
+};
+
+function Toast({ message, type, onClose }) {
+  useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, [onClose]);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }}
+      className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg font-body text-sm font-medium ${
+        type === 'success' ? 'bg-mithila-green text-white' : 'bg-mithila-red text-white'
+      }`}
+    >
+      {type === 'success' ? <IoCheckmarkOutline size={18} /> : <IoCloseOutline size={18} />}
+      {message}
+    </motion.div>
+  );
+}
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: IoGridOutline },
@@ -118,8 +149,10 @@ export default function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(isAuthenticated);
   const [realOrders, setRealOrders] = useState([]);
   const [realCommissions, setRealCommissions] = useState([]);
+  const [realProducts, setRealProducts] = useState([]);
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState('');
+  const [toast, setToast] = useState(null); // { message, type }
   useEffect(() => {
     setLoggedIn(isAuthenticated);
   }, [isAuthenticated]);
@@ -143,14 +176,46 @@ export default function AdminPage() {
       import('../api').then(({ adminAPI }) => {
         adminAPI.getOrders().then(res => {
           if (res.data.success) setRealOrders(res.data.orders);
-        }).catch(err => console.error("Failed to fetch admin orders", err));
+        }).catch(err => console.error('Failed to fetch admin orders', err));
 
         adminAPI.getCommissions().then(res => {
           if (res.data.success) setRealCommissions(res.data.commissions);
-        }).catch(err => console.error("Failed to fetch admin commissions", err));
+        }).catch(err => console.error('Failed to fetch admin commissions', err));
+
+        adminAPI.getProducts().then(res => {
+          if (res.data.success && res.data.products.length > 0) {
+            setRealProducts(res.data.products);
+          } else {
+            // Fallback: enrich local paintings with default availabilityStatus
+            setRealProducts(paintings.map(p => ({ ...p, _id: p.id, availabilityStatus: p.inStock ? 'available' : 'out_of_stock' })));
+          }
+        }).catch(() => {
+          // API unavailable — fall back to local data
+          setRealProducts(paintings.map(p => ({ ...p, _id: p.id, availabilityStatus: p.inStock ? 'available' : 'out_of_stock' })));
+        });
       });
     }
   }, [loggedIn]);
+
+  const showToast = useCallback((message, type = 'success') => {
+    setToast({ message, type });
+  }, []);
+
+  const handleAvailabilityChange = async (productId, newStatus) => {
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.updateProduct(productId, { availabilityStatus: newStatus });
+      if (res.data.success) {
+        setRealProducts(prev => prev.map(p => (p._id === productId ? { ...p, availabilityStatus: newStatus } : p)));
+        showToast('Availability updated successfully');
+      } else {
+        showToast('Update failed: ' + (res.data.message || 'Unknown error'), 'error');
+      }
+    } catch (err) {
+      console.error('Failed to update availability', err);
+      showToast('Failed to update availability', 'error');
+    }
+  };
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
@@ -327,7 +392,7 @@ export default function AdminPage() {
               <motion.div key="products" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="bg-white rounded-2xl shadow-card overflow-hidden">
                   <div className="p-4 flex items-center justify-between border-b border-cream-100">
-                    <p className="font-body text-sm text-warm-gray-500">{paintings.length} paintings</p>
+                    <p className="font-body text-sm text-warm-gray-500">{realProducts.length} paintings</p>
                     <button className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
                       <IoAddOutline size={18} /> Add Painting
                     </button>
@@ -339,13 +404,13 @@ export default function AdminPage() {
                           <th className="px-4 py-3">Painting</th>
                           <th className="px-4 py-3">Category</th>
                           <th className="px-4 py-3">Price</th>
-                          <th className="px-4 py-3">Status</th>
+                          <th className="px-4 py-3">Availability</th>
                           <th className="px-4 py-3">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {paintings.slice(0, 10).map((p) => (
-                          <tr key={p.id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
+                        {realProducts.slice(0, 20).map((p) => (
+                          <tr key={p._id || p.id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-3">
                                 <img src={p.images?.[0] || p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover" />
@@ -360,9 +425,17 @@ export default function AdminPage() {
                             </td>
                             <td className="px-4 py-3 font-display font-semibold text-earth-700">{formatPrice(p.price)}</td>
                             <td className="px-4 py-3">
-                              <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${p.inStock ? 'bg-mithila-green/10 text-mithila-green' : 'bg-warm-gray-100 text-warm-gray-500'}`}>
-                                {p.inStock ? 'In Stock' : 'Sold'}
-                              </span>
+                              <select
+                                value={p.availabilityStatus || 'available'}
+                                onChange={(e) => handleAvailabilityChange(p._id || p.id, e.target.value)}
+                                className={`text-xs px-2 py-1 rounded-full font-body font-medium cursor-pointer border border-transparent hover:border-earth-200 outline-none ${
+                                  availabilityColors[p.availabilityStatus || 'available']
+                                }`}
+                              >
+                                {AVAILABILITY_OPTIONS.map(opt => (
+                                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                ))}
+                              </select>
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex gap-2">
@@ -372,6 +445,11 @@ export default function AdminPage() {
                             </td>
                           </tr>
                         ))}
+                        {realProducts.length === 0 && (
+                          <tr>
+                            <td colSpan="5" className="px-4 py-8 text-center text-warm-gray-500 font-body">No products found.</td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -547,6 +625,13 @@ export default function AdminPage() {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Availability Toast */}
+      <AnimatePresence>
+        {toast && (
+          <Toast key={toast.message + Date.now()} message={toast.message} type={toast.type} onClose={() => setToast(null)} />
         )}
       </AnimatePresence>
     </motion.div>

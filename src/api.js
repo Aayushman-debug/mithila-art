@@ -18,7 +18,7 @@ export function buildApiPath(path) {
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000, // 15 seconds – prevents infinite loading when Render backend is cold-starting
+  timeout: 45000, // 45 seconds – prevents infinite loading/timeout when Render backend is cold-starting
 });
 
 // Add token to request headers if it exists
@@ -123,6 +123,7 @@ export const adminAPI = {
   rejectPayment: (orderId) => api.put(`/api/admin/orders/${orderId}/reject-payment`),
   getCommissions: () => api.get('/api/admin/commissions'),
   getProducts: () => api.get('/api/admin/products'),
+  updateProduct: (productId, data) => api.put(`/api/admin/products/${productId}`, data),
 };
 
 export default api;

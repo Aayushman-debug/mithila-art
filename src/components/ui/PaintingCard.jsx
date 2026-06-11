@@ -1,10 +1,43 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoImagesOutline, IoShareSocialOutline } from 'react-icons/io5';
+import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoImagesOutline, IoShareSocialOutline, IoMailOutline } from 'react-icons/io5';
 import { MdCompareArrows } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useCompare } from '../../context/CompareContext';
 import ShareModal from './ShareModal';
+
+// ── Availability helpers ─────────────────────────────────────────────────────
+
+/**
+ * Resolve availabilityStatus — local paintings.js entries may omit the field,
+ * so we fall back to the legacy `inStock` boolean and default to 'available'.
+ */
+function resolveStatus(painting) {
+  if (painting.availabilityStatus) return painting.availabilityStatus;
+  if (painting.inStock === false) return 'out_of_stock';
+  return 'available';
+}
+
+const STATUS_CONFIG = {
+  only_1_left: {
+    label: 'Only 1 Left!',
+    className: 'bg-orange-500 text-white',
+  },
+  out_of_stock: {
+    label: 'Sold Out',
+    className: 'bg-mithila-red text-white',
+  },
+  coming_soon: {
+    label: 'Coming Soon',
+    className: 'bg-warm-gray-500 text-white',
+  },
+  commission_available: {
+    label: 'Commission Available',
+    className: 'bg-purple-600 text-white',
+  },
+};
+
+// ── Component ────────────────────────────────────────────────────────────────
 
 export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted }) {
   const navigate = useNavigate();
@@ -13,6 +46,13 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
   const images = painting.images && painting.images.length > 0 ? painting.images : [painting.image];
   const [currentImg, setCurrentImg] = useState(0);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const status = resolveStatus(painting);
+  const statusConfig = STATUS_CONFIG[status];
+
+  // Disable cart for these statuses
+  const isCartDisabled = status === 'out_of_stock' || status === 'coming_soon';
+  const isCommission = status === 'commission_available';
 
   const formatPrice = (num) => {
     return '₹' + num.toLocaleString('en-IN');
@@ -37,6 +77,15 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
     }
   };
 
+  const handleCardAction = (e) => {
+    e.stopPropagation();
+    if (isCommission) {
+      navigate(`/commission?painting=${painting.id}&title=${encodeURIComponent(title)}`);
+    } else if (!isCartDisabled) {
+      onAddToCart?.(painting);
+    }
+  };
+
   return (
     <>
       <motion.div
@@ -58,7 +107,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
               loading="lazy"
               decoding="async"
               fetchpriority="auto"
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover transition-all duration-300 ${isCartDisabled ? 'brightness-75' : ''}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -139,9 +188,17 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                 {Math.round((1 - price / originalPrice) * 100)}% Off
               </span>
             )}
-            {!inStock && (
-              <span className="px-3 py-1 bg-warm-gray-700 text-white text-xs font-bold rounded-full uppercase tracking-wider">
-                Sold
+            {/* Availability status badge */}
+            {statusConfig && (
+              <span className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${statusConfig.className}`}>
+                {statusConfig.label}
+              </span>
+            )}
+            {/* Available: small green dot indicator */}
+            {status === 'available' && (
+              <span className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                Available
               </span>
             )}
             {images.length > 1 && (
@@ -185,6 +242,32 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                 </span>
               )}
             </div>
+
+            {/* Action button — shown in card footer */}
+            {isCommission ? (
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleCardAction}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition-colors"
+              >
+                <IoMailOutline size={14} />
+                Commission
+              </motion.button>
+            ) : (
+              <motion.button
+                whileTap={!isCartDisabled ? { scale: 0.95 } : {}}
+                onClick={handleCardAction}
+                disabled={isCartDisabled}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-colors ${
+                  isCartDisabled
+                    ? 'bg-warm-gray-200 dark:bg-warm-gray-700 text-warm-gray-400 cursor-not-allowed'
+                    : 'bg-earth-500 hover:bg-earth-600 text-white'
+                }`}
+              >
+                <IoCartOutline size={14} />
+                {isCartDisabled ? (status === 'out_of_stock' ? 'Sold Out' : 'Coming Soon') : 'Add to Cart'}
+              </motion.button>
+            )}
           </div>
         </div>
       </motion.div>

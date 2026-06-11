@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { useInView } from 'react-intersection-observer';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import {
   FaSearch,
   FaTimes,
@@ -11,6 +11,8 @@ import {
   FaThLarge,
   FaEye,
   FaHeart,
+  FaShoppingBag,
+  FaArrowRight,
 } from 'react-icons/fa';
 import { IoSparkles, IoGridOutline } from 'react-icons/io5';
 
@@ -371,6 +373,59 @@ export default function GalleryPage() {
                 )}
               </AnimatePresence>
             </LayoutGroup>
+          </div>
+        </section>
+
+        {/* ─── Explore Shop CTA ─── */}
+        <section className="py-16 bg-gradient-dark relative overflow-hidden">
+          <div className="absolute inset-0 mithila-pattern opacity-5" />
+          <motion.div
+            className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-earth-500/5 blur-3xl"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+          <div className="container-custom relative z-10 text-center px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="max-w-2xl mx-auto space-y-4"
+            >
+              <p className="font-accent text-earth-400 tracking-widest text-xs uppercase">
+                Ready to own a piece?
+              </p>
+              <h2 className="font-display text-3xl font-bold text-white">
+                Love what you see?{' '}
+                <span className="text-gradient-gold">Shop the Collection</span>
+              </h2>
+              <p className="text-cream-200/60 font-body text-base">
+                Browse our curated store to find pricing, availability, and purchase your
+                favourite Mithila masterpiece — each comes with a certificate of authenticity.
+              </p>
+              <div className="pt-4 flex items-center justify-center gap-4 flex-wrap">
+                <Link to="/shop">
+                  <motion.button
+                    className="btn-primary flex items-center gap-2 group"
+                    whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(139,105,20,0.3)' }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <FaShoppingBag />
+                    Explore Shop
+                    <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </motion.button>
+                </Link>
+                <Link to="/commission">
+                  <motion.button
+                    className="btn-ghost flex items-center gap-2"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Request a Commission
+                  </motion.button>
+                </Link>
+              </div>
+            </motion.div>
           </div>
         </section>
     </motion.div>

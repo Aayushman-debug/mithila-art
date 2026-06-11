@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password -resetPasswordToken -resetPasswordExpires');
+    const users = await User.find().select('-password -resetPasswordToken -resetPasswordExpires').lean();
     res.status(200).json({ success: true, users });
   } catch (error) {
     console.error('Get users error:', error);
@@ -15,7 +15,7 @@ const getUsers = async (req, res) => {
 
 const getOrders = async (req, res) => {
   try {
-    const orders = await CartOrder.find().sort({ createdAt: -1 });
+    const orders = await CartOrder.find().sort({ createdAt: -1 }).lean();
     res.status(200).json({ success: true, orders });
   } catch (error) {
     console.error('Get orders error:', error);
@@ -25,7 +25,7 @@ const getOrders = async (req, res) => {
 
 const getCommissions = async (req, res) => {
   try {
-    const commissions = await Commission.find().sort({ submittedAt: -1 });
+    const commissions = await Commission.find().sort({ submittedAt: -1 }).lean();
     res.status(200).json({ success: true, commissions });
   } catch (error) {
     console.error('Get commissions error:', error);
@@ -35,11 +35,30 @@ const getCommissions = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find().sort({ createdAt: -1 }).lean();
     res.status(200).json({ success: true, products });
   } catch (error) {
     console.error('Get admin products error:', error);
     res.status(500).json({ success: false, message: error.message || 'Could not fetch products' });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const allowedFields = ['availabilityStatus', 'title', 'price', 'inStock', 'category', 'description'];
+    const updates = {};
+    for (const key of allowedFields) {
+      if (req.body[key] !== undefined) updates[key] = req.body[key];
+    }
+    const product = await Product.findByIdAndUpdate(productId, updates, { new: true, runValidators: true });
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    res.status(200).json({ success: true, product });
+  } catch (error) {
+    console.error('Update product error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not update product' });
   }
 };
 
@@ -103,6 +122,7 @@ module.exports = {
   getOrders,
   getCommissions,
   getProducts,
+  updateProduct,
   updateOrderStatus,
   verifyPayment,
   rejectPayment,

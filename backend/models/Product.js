@@ -29,6 +29,12 @@ const ProductSchema = new mongoose.Schema({
     default: true,
     index: true,
   },
+  availabilityStatus: {
+    type: String,
+    enum: ['available', 'only_1_left', 'out_of_stock', 'coming_soon', 'commission_available'],
+    default: 'available',
+    index: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

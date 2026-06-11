@@ -4,11 +4,13 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoEye, IoEyeOff, IoAlertCircle, IoCheckmarkCircle } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { authAPI } from '../api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useToast } from '../context/ToastContext';
 import { validateEmail } from '../utils/helpers';
 import SocialLoginButtons from '../components/auth/SocialLoginButtons';
+import { paintings } from '../data/paintings';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -24,6 +26,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, loading } = useAuth();
+  const { addItem } = useCart();
   const showToast = useToast();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -70,8 +73,27 @@ export default function LoginPage() {
 
     if (result.success) {
       showToast('Logged in successfully', 'success');
-      const from = location.state?.from?.pathname || '/profile';
-      navigate(from);
+
+      // Execute any pending action that was saved before redirect
+      const { pendingAction } = result;
+      let redirectTo = location.state?.from?.pathname || '/profile';
+
+      if (pendingAction) {
+        if (pendingAction.type === 'addToCart' || pendingAction.type === 'buyNow') {
+          const painting = paintings.find((p) => p.id === pendingAction.paintingId);
+          if (painting) {
+            addItem(painting);
+            // For buyNow go straight to cart; for addToCart go back where they came from
+            if (pendingAction.type === 'buyNow') {
+              redirectTo = '/cart';
+            } else {
+              redirectTo = location.state?.from?.pathname || '/shop';
+            }
+          }
+        }
+      }
+
+      navigate(redirectTo);
     } else {
       setError(result.error || 'Login failed');
       showToast(result.error || 'Login failed', 'error');

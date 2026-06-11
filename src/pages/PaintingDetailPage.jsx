@@ -13,12 +13,61 @@ import {
   IoCopyOutline,
   IoCheckmarkOutline,
   IoShareSocialOutline,
+  IoMailOutline,
+  IoTimeOutline,
+  IoAlertCircleOutline,
+  IoFlameOutline,
+  IoBrushOutline,
 } from 'react-icons/io5';
 import { paintings } from '../data/paintings';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 import ShareModal from '../components/ui/ShareModal';
+
+// ── Availability helpers ─────────────────────────────────────────────────────
+
+function resolveStatus(painting) {
+  if (!painting) return 'available';
+  if (painting.availabilityStatus) return painting.availabilityStatus;
+  if (painting.inStock === false) return 'out_of_stock';
+  return 'available';
+}
+
+const STATUS_BADGE = {
+  available: {
+    label: 'In Stock',
+    icon: IoCheckmarkOutline,
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30',
+    dot: 'bg-emerald-500',
+  },
+  only_1_left: {
+    label: 'Only 1 Left — Act Fast!',
+    icon: IoFlameOutline,
+    className: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/30',
+    dot: 'bg-orange-500',
+  },
+  out_of_stock: {
+    label: 'Currently Unavailable',
+    icon: IoAlertCircleOutline,
+    className: 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30',
+    dot: 'bg-red-500',
+  },
+  coming_soon: {
+    label: 'Coming Soon',
+    icon: IoTimeOutline,
+    className: 'bg-warm-gray-200 dark:bg-warm-gray-700 text-warm-gray-600 dark:text-warm-gray-300 border border-warm-gray-300 dark:border-warm-gray-600',
+    dot: 'bg-warm-gray-400',
+  },
+  commission_available: {
+    label: 'Original Sold — Commission Available',
+    icon: IoBrushOutline,
+    className: 'bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30',
+    dot: 'bg-purple-500',
+  },
+};
+
+// ── Component ────────────────────────────────────────────────────────────────
 
 export default function PaintingDetailPage() {
   const { id } = useParams();
@@ -40,6 +89,14 @@ export default function PaintingDetailPage() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  const status = resolveStatus(painting);
+  const badgeCfg = STATUS_BADGE[status] ?? STATUS_BADGE.available;
+  const BadgeIcon = badgeCfg.icon;
+
+  // Derived flags
+  const isCartDisabled = status === 'out_of_stock' || status === 'coming_soon';
+  const isCommission = status === 'commission_available';
+
   const relatedPaintings = useMemo(() => {
     if (!painting) return [];
     return paintings
@@ -56,15 +113,15 @@ export default function PaintingDetailPage() {
   }, [images.length]);
 
   const handleAddToCart = useCallback(() => {
-    if (painting) {
+    if (painting && !isCartDisabled && !isCommission) {
       addItem(painting);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 2000);
     }
-  }, [painting, addItem]);
+  }, [painting, addItem, isCartDisabled, isCommission]);
 
   const handleBuyNow = useCallback(() => {
-    if (painting) {
+    if (painting && !isCartDisabled && !isCommission) {
       if (!isAuthenticated) {
         navigate('/login', { state: { from: '/cart' } });
         return;
@@ -72,8 +129,13 @@ export default function PaintingDetailPage() {
       addItem(painting);
       navigate('/cart');
     }
-  }, [painting, addItem, navigate, isAuthenticated]);
+  }, [painting, addItem, navigate, isAuthenticated, isCartDisabled, isCommission]);
 
+  const handleRequestCommission = useCallback(() => {
+    if (painting) {
+      navigate(`/commission?painting=${painting.id}&title=${encodeURIComponent(painting.title)}`);
+    }
+  }, [painting, navigate]);
 
   /* ── 404 ── */
   if (!painting) {
@@ -132,7 +194,9 @@ export default function PaintingDetailPage() {
                   key={activeIndex}
                   src={images[activeIndex]}
                   alt={`${painting.title} — Image ${activeIndex + 1}`}
-                  className="w-full h-auto max-h-[75vh] object-contain mx-auto"
+                  className={`w-full h-auto max-h-[75vh] object-contain mx-auto transition-all duration-300 ${
+                    isCartDisabled ? 'brightness-75 grayscale-[30%]' : ''
+                  }`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -203,6 +267,18 @@ export default function PaintingDetailPage() {
               by <span className="text-charcoal dark:text-cream-200 font-semibold">{painting.artist}</span>
             </p>
 
+            {/* ── Prominent Availability Badge ── */}
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-body font-semibold text-sm ${badgeCfg.className}`}
+            >
+              <span className={`w-2 h-2 rounded-full flex-shrink-0 ${badgeCfg.dot}`} />
+              <BadgeIcon size={16} className="flex-shrink-0" />
+              {badgeCfg.label}
+            </motion.div>
+
             {/* Price */}
             <div className="flex items-baseline gap-3">
               <span className="font-display text-3xl font-bold text-earth-700 dark:text-earth-400">
@@ -249,33 +325,76 @@ export default function PaintingDetailPage() {
               )}
             </div>
 
-            {/* Add to Cart */}
-            <motion.button
-              onClick={handleAddToCart}
-              disabled={!painting.inStock}
-              className="w-full py-4 rounded-xl bg-gradient-gold text-white font-display font-semibold text-lg flex items-center justify-center gap-3 shadow-gold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              whileHover={painting.inStock ? { scale: 1.02 } : {}}
-              whileTap={painting.inStock ? { scale: 0.98 } : {}}
-            >
-              {addedToCart ? (
-                <><IoCheckmarkOutline size={22} /> Added to Cart!</>
-              ) : !painting.inStock ? (
-                'Sold Out'
-              ) : (
-                <><IoCartOutline size={22} /> Add to Cart — {formatPrice(painting.price)}</>
-              )}
-            </motion.button>
+            {/* ── CTA Buttons based on status ── */}
 
-            {/* ── Buy Now Section ── */}
-            <motion.button
-              onClick={handleBuyNow}
-              disabled={!painting.inStock}
-              className="w-full py-4 rounded-xl bg-charcoal text-white font-display font-semibold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
-              whileHover={painting.inStock ? { scale: 1.02 } : {}}
-              whileTap={painting.inStock ? { scale: 0.98 } : {}}
-            >
-              Buy Now
-            </motion.button>
+            {/* COMMISSION AVAILABLE — hide buy/cart, show commission CTA */}
+            {isCommission ? (
+              <div className="space-y-3">
+                <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-body text-sm leading-relaxed">
+                  The original painting has been sold. You can request a custom commission based on this design.
+                </div>
+                <motion.button
+                  onClick={handleRequestCommission}
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-display font-semibold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <IoBrushOutline size={22} />
+                  Original Sold — Request Commission
+                </motion.button>
+              </div>
+            ) : (
+              <>
+                {/* OUT OF STOCK / COMING SOON — disabled with message */}
+                {isCartDisabled && (
+                  <div className={`p-4 rounded-xl font-body text-sm leading-relaxed ${
+                    status === 'out_of_stock'
+                      ? 'bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300'
+                      : 'bg-warm-gray-200/60 dark:bg-warm-gray-700/60 border border-warm-gray-300 dark:border-warm-gray-600 text-warm-gray-600 dark:text-warm-gray-300'
+                   }`}>
+                    {status === 'out_of_stock'
+                      ? 'This artwork is currently unavailable. Please check back later or contact us for a commission.'
+                      : <>This artwork is coming soon. Stay tuned or reach out to be notified when it&apos;s available.</>}
+                  </div>
+                )}
+
+                {/* ONLY 1 LEFT — urgency message */}
+                {status === 'only_1_left' && (
+                  <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-700 dark:text-orange-300 font-body text-sm flex items-center gap-2">
+                    <IoFlameOutline size={18} className="flex-shrink-0" />
+                    This is the last original available. Don't miss out!
+                  </div>
+                )}
+
+                {/* Add to Cart */}
+                <motion.button
+                  onClick={handleAddToCart}
+                  disabled={isCartDisabled}
+                  className="w-full py-4 rounded-xl bg-gradient-gold text-white font-display font-semibold text-lg flex items-center justify-center gap-3 shadow-gold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={!isCartDisabled ? { scale: 1.02 } : {}}
+                  whileTap={!isCartDisabled ? { scale: 0.98 } : {}}
+                >
+                  {addedToCart ? (
+                    <><IoCheckmarkOutline size={22} /> Added to Cart!</>
+                  ) : isCartDisabled ? (
+                    status === 'out_of_stock' ? 'Currently Unavailable' : 'Coming Soon'
+                  ) : (
+                    <><IoCartOutline size={22} /> Add to Cart — {formatPrice(painting.price)}</>
+                  )}
+                </motion.button>
+
+                {/* Buy Now */}
+                <motion.button
+                  onClick={handleBuyNow}
+                  disabled={isCartDisabled}
+                  className="w-full py-4 rounded-xl bg-charcoal text-white font-display font-semibold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
+                  whileHover={!isCartDisabled ? { scale: 1.02 } : {}}
+                  whileTap={!isCartDisabled ? { scale: 0.98 } : {}}
+                >
+                  Buy Now
+                </motion.button>
+              </>
+            )}
 
             {/* ── Secondary Actions ── */}
             <div className="mt-3">
