@@ -145,25 +145,25 @@ export default function CommissionPage() {
     }
   };
 
-  const inputClasses = "w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all";
+  const inputClasses = "w-full px-4 py-3 bg-cream-50/50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 font-body transition-all";
 
   // After submission - waiting for admin approval
   if (submittedData && (!commissionStatus || commissionStatus.status === "submitted")) {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen bg-cream-50 pt-24">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-24">
         <Helmet><title>Commission Submitted — Lalita Pathak Mithila Art</title></Helmet>
         <div className="container-custom section-padding text-center max-w-2xl mx-auto">
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200 }}>
             <IoTimeOutline className="text-earth-500 mx-auto mb-6" size={80} />
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="heading-lg text-charcoal mb-4">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="heading-lg text-warm-gray-900 dark:text-cream-100 mb-4">
             Commission Request Received! 🎨
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-body max-w-lg mx-auto mb-8">
             Thank you, {submittedData.name}! Your commission request has been received and is under review by Lalita Pathak.
           </motion.p>
           
-          <div className="bg-white rounded-2xl p-6 mb-8 border border-cream-200">
+          <div className="bg-white/95 dark:bg-warm-gray-800/95 rounded-2xl p-6 mb-8 border border-cream-200 dark:border-warm-gray-700">
             <p className="text-earth-500 font-display font-bold text-lg mb-2">Reference: #{commissionStatus?.referenceId || 'Loading...'}</p>
             <p className="text-warm-gray-600 font-body text-sm mb-4">We'll review your vision and send you a detailed quote and timeline within 2-3 business days.</p>
             
@@ -184,17 +184,17 @@ export default function CommissionPage() {
   // After approval - ready for payment
   if (submittedData && commissionStatus?.status === "approved") {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen bg-cream-50 pt-24">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-24">
         <Helmet><title>Payment — Lalita Pathak Mithila Art</title></Helmet>
         <div className="container-custom section-padding text-center max-w-2xl mx-auto">
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200 }}>
             <IoCheckmarkCircle className="text-mithila-green mx-auto mb-6" size={80} />
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="heading-lg text-charcoal mb-4">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="heading-lg text-warm-gray-900 dark:text-cream-100 mb-4">
             Commission Approved! 🎉
           </motion.h1>
           
-          <div className="bg-gradient-to-br from-earth-50 to-cream-50 rounded-2xl p-8 mb-8 border-2 border-earth-300">
+          <div className="bg-gradient-to-br from-earth-50 to-cream-50 dark:from-warm-gray-800 dark:to-warm-gray-900 rounded-2xl p-8 mb-8 border-2 border-earth-300 dark:border-earth-700">
             <p className="text-warm-gray-600 font-body mb-6">{commissionStatus?.approvalMessage}</p>
             
             <div className="mb-8">
@@ -220,7 +220,7 @@ export default function CommissionPage() {
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className="min-h-screen bg-cream-50 pt-24">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-24">
       <Helmet>
         <title>Commission a Painting — Lalita Pathak Mithila Art</title>
         <meta name="description" content="Commission a custom Mithila painting. Share your vision and Lalita Pathak will create a unique handcrafted masterpiece." />
@@ -253,7 +253,7 @@ export default function CommissionPage() {
                 }`}>
                   {i < currentStep ? <IoCheckmarkCircle size={20} /> : i + 1}
                 </div>
-                <span className={`hidden sm:block text-xs font-body ${i <= currentStep ? 'text-earth-700 font-semibold' : 'text-warm-gray-400'}`}>
+                <span className={`hidden sm:block text-xs font-body ${i <= currentStep ? 'text-earth-700 dark:text-cream-200 font-semibold' : 'text-warm-gray-400'}`}>
                   {s}
                 </span>
               </div>
@@ -265,39 +265,39 @@ export default function CommissionPage() {
         {/* Form Steps */}
         <AnimatePresence mode="wait">
           {currentStep === 0 && (
-            <motion.div key="step0" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white rounded-2xl p-6 sm:p-8 shadow-card">
+            <motion.div key="step0" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white/90 dark:bg-warm-gray-800/90 rounded-2xl p-6 sm:p-8 shadow-card border border-cream-200/50 dark:border-warm-gray-700/50">
               {!isAuthenticated && (
-                <div className="mb-6 p-4 bg-earth-50/50 border border-earth-200/40 rounded-xl text-center">
-                  <p className="text-sm text-earth-800 font-body">
+                <div className="mb-6 p-4 bg-earth-50/50 dark:bg-earth-900/20 border border-earth-200/40 dark:border-earth-700/40 rounded-xl text-center">
+                  <p className="text-sm text-earth-800 dark:text-cream-200 font-body">
                     Have an account?{' '}
-                    <Link to="/login" className="text-earth-650 font-bold hover:text-earth-700 transition-colors underline decoration-2 underline-offset-4">
+                    <Link to="/login" className="text-earth-500 dark:text-earth-400 font-bold hover:text-earth-700 dark:hover:text-earth-300 transition-colors underline decoration-2 underline-offset-4">
                       Log in
                     </Link>{' '}
                     to save and track your custom commission requests in your dashboard.
                   </p>
                 </div>
               )}
-              <h2 className="heading-sm text-charcoal mb-6">Personal Details</h2>
+              <h2 className="heading-sm text-warm-gray-900 dark:text-cream-100 mb-6">Personal Details</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Full Name *</label>
+                  <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Full Name *</label>
                   <input type="text" name="name" value={formData.name} onChange={handleChange} className={inputClasses} placeholder="Your name" />
                   {errors.name && <p className="text-mithila-red text-xs mt-1">{errors.name}</p>}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Email *</label>
+                    <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Email *</label>
                     <input type="email" name="email" value={formData.email} onChange={handleChange} className={inputClasses} placeholder="email@example.com" />
                     {errors.email && <p className="text-mithila-red text-xs mt-1">{errors.email}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Phone *</label>
+                    <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Phone *</label>
                     <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={inputClasses} placeholder="9876543210" inputMode="numeric" autoComplete="off" pattern="[6-9][0-9]{9}" />
                     {errors.phone && <p className="text-mithila-red text-xs mt-1">{errors.phone}</p>}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Location</label>
+                  <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Location</label>
                   <input type="text" name="location" value={formData.location} onChange={handleChange} className={inputClasses} placeholder="City, Country" />
                 </div>
               </div>
@@ -305,39 +305,39 @@ export default function CommissionPage() {
           )}
 
           {currentStep === 1 && (
-            <motion.div key="step1" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white rounded-2xl p-6 sm:p-8 shadow-card">
-              <h2 className="heading-sm text-charcoal mb-6">Artwork Preferences</h2>
+            <motion.div key="step1" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white/90 dark:bg-warm-gray-800/90 rounded-2xl p-6 sm:p-8 shadow-card border border-cream-200/50 dark:border-warm-gray-700/50">
+              <h2 className="heading-sm text-warm-gray-900 dark:text-cream-100 mb-6">Artwork Preferences</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Painting Style *</label>
+                  <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Painting Style *</label>
                   <select name="style" value={formData.style} onChange={handleChange} className={inputClasses}>
-                    <option value="">Select a style...</option>
-                    {categories.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+                    <option value="" className="dark:bg-warm-gray-800 dark:text-cream-100">Select a style...</option>
+                    {categories.map((c) => <option key={c.id} value={c.name} className="dark:bg-warm-gray-800 dark:text-cream-100">{c.name}</option>)}
                   </select>
                   {errors.style && <p className="text-mithila-red text-xs mt-1">{errors.style}</p>}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Preferred Size</label>
+                    <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Preferred Size</label>
                     <select name="size" value={formData.size} onChange={handleChange} className={inputClasses}>
-                      <option value="">Select size...</option>
-                      {sizeOptions.map((s) => <option key={s} value={s}>{s}</option>)}
+                      <option value="" className="dark:bg-warm-gray-800 dark:text-cream-100">Select size...</option>
+                      {sizeOptions.map((s) => <option key={s} value={s} className="dark:bg-warm-gray-800 dark:text-cream-100">{s}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Budget Range</label>
+                    <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Budget Range</label>
                     <select name="budget" value={formData.budget} onChange={handleChange} className={inputClasses}>
-                      <option value="">Select budget...</option>
-                      {budgetRanges.map((b) => <option key={b} value={b}>{b}</option>)}
+                      <option value="" className="dark:bg-warm-gray-800 dark:text-cream-100">Select budget...</option>
+                      {budgetRanges.map((b) => <option key={b} value={b} className="dark:bg-warm-gray-800 dark:text-cream-100">{b}</option>)}
                     </select>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Color Preferences</label>
+                  <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Color Preferences</label>
                   <input type="text" name="colors" value={formData.colors} onChange={handleChange} className={inputClasses} placeholder="e.g., warm tones, traditional red and black..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Describe Your Vision *</label>
+                  <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-warm-gray-300 mb-1">Describe Your Vision *</label>
                   <textarea name="description" value={formData.description} onChange={handleChange} rows={4} className={`${inputClasses} resize-none`} placeholder="Tell us about the artwork you envision. Include themes, subjects, motifs, or any reference images you'd like to share..." />
                   {errors.description && <p className="text-mithila-red text-xs mt-1">{errors.description}</p>}
                 </div>
@@ -346,8 +346,8 @@ export default function CommissionPage() {
           )}
 
           {currentStep === 2 && (
-            <motion.div key="step2" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white rounded-2xl p-6 sm:p-8 shadow-card">
-              <h2 className="heading-sm text-charcoal mb-6">Review Your Request</h2>
+            <motion.div key="step2" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="bg-white/90 dark:bg-warm-gray-800/90 rounded-2xl p-6 sm:p-8 shadow-card border border-cream-200/50 dark:border-warm-gray-700/50">
+              <h2 className="heading-sm text-warm-gray-900 dark:text-cream-100 mb-6">Review Your Request</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
@@ -360,15 +360,15 @@ export default function CommissionPage() {
                     { label: 'Budget', value: formData.budget || 'Not specified' },
                     { label: 'Colors', value: formData.colors || 'Not specified' },
                   ].map((item) => (
-                    <div key={item.label} className="bg-cream-50 p-4 rounded-xl">
+                    <div key={item.label} className="bg-cream-50/50 dark:bg-warm-gray-700/50 p-4 rounded-xl border border-cream-200/30 dark:border-warm-gray-600/30">
                       <p className="text-xs font-body font-semibold text-earth-500 uppercase tracking-wider mb-1">{item.label}</p>
-                      <p className="font-body text-charcoal">{item.value}</p>
+                      <p className="font-body text-warm-gray-900 dark:text-cream-100">{item.value}</p>
                     </div>
                   ))}
                 </div>
-                <div className="bg-cream-50 p-4 rounded-xl">
+                <div className="bg-cream-50/50 dark:bg-warm-gray-700/50 p-4 rounded-xl border border-cream-200/30 dark:border-warm-gray-600/30">
                   <p className="text-xs font-body font-semibold text-earth-500 uppercase tracking-wider mb-1">Description</p>
-                  <p className="font-body text-charcoal whitespace-pre-wrap">{formData.description}</p>
+                  <p className="font-body text-warm-gray-900 dark:text-cream-100 whitespace-pre-wrap">{formData.description}</p>
                 </div>
               </div>
             </motion.div>

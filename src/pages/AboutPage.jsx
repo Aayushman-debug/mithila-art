@@ -130,7 +130,7 @@ function AboutHero() {
             Lalita <span className="text-gradient-gold">Pathak</span>
           </motion.h1>
 
-          <motion.p variants={fadeUp} className="text-cream-200/70 font-body text-lg md:text-xl max-w-xl mx-auto">
+          <motion.p variants={fadeUp} className="text-warm-gray-200/80 font-body text-lg md:text-xl max-w-xl mx-auto">
             Master Mithila artist with over 25 years of experience, preserving and evolving the sacred painting traditions of Madhubani, Bihar
           </motion.p>
         </motion.div>
@@ -234,10 +234,10 @@ function ArtistTimeline() {
                       <span className="inline-block font-accent text-earth-500 text-sm tracking-wider mb-2">
                         {event.year}
                       </span>
-                      <h3 className="font-display text-xl md:text-2xl font-bold text-charcoal mb-3">
+                      <h3 className="font-display text-xl md:text-2xl font-bold text-charcoal dark:text-warm-gray-100 mb-3">
                         {event.title}
                       </h3>
-                      <p className="text-warm-gray-500 font-body leading-relaxed text-sm md:text-base">
+                      <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body leading-relaxed text-sm md:text-base">
                         {event.description}
                       </p>
                     </GlassCard>
@@ -312,7 +312,7 @@ function PhilosophySection() {
 
           <motion.div variants={fadeUp} className="relative">
             <FaQuoteLeft className="text-earth-500/15 text-6xl absolute -top-4 -left-4" />
-            <blockquote className="text-cream-200/80 font-body text-lg md:text-xl leading-relaxed italic pl-8 md:pl-12 space-y-6">
+            <blockquote className="text-warm-gray-200/90 font-body text-lg md:text-xl leading-relaxed italic pl-8 md:pl-12 space-y-6">
               <p>
                 In Mithila painting, every line is a prayer, every colour is an offering. We do not merely decorate walls —
                 we invoke the divine. The fish symbolises fertility, the lotus represents creation, the peacock brings beauty,
@@ -333,7 +333,7 @@ function PhilosophySection() {
 
           <motion.div variants={fadeUp} className="text-right">
             <p className="font-display text-earth-400 font-semibold text-lg">— Lalita Pathak</p>
-            <p className="text-cream-300/40 text-sm font-body">Artist & Cultural Ambassador</p>
+            <p className="text-warm-gray-300/60 text-sm font-body">Artist & Cultural Ambassador</p>
           </motion.div>
 
           {/* Mithila border bottom */}
@@ -526,7 +526,7 @@ function CTASection() {
           <motion.h2 variants={fadeUp} className="heading-lg text-white">
             Commission a <span className="text-gradient-gold">Custom Painting</span>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-cream-200/60 font-body text-lg">
+          <motion.p variants={fadeUp} className="text-warm-gray-200/80 font-body text-lg">
             Have a special vision in mind? Lalita Pathak accepts personal commissions for weddings,
             festivals, home blessings, and corporate art installations.
           </motion.p>

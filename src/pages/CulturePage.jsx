@@ -64,7 +64,7 @@ export default function CulturePage() {
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="font-display text-5xl md:text-7xl font-bold text-white mb-6">
             The Heart of <span className="text-mithila-red">Mithila</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-xl text-cream-200 font-body leading-relaxed">
+          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-xl text-warm-gray-200 font-body leading-relaxed">
             A journey into the traditions, festivals, symbolism, and lifestyle of one of India's most vibrant cultural landscapes.
           </motion.p>
         </motion.div>
@@ -188,8 +188,8 @@ export default function CulturePage() {
                   <div className="absolute top-4 right-4 text-3xl bg-white/80 dark:bg-warm-gray-700/80 backdrop-blur-sm w-12 h-12 flex items-center justify-center rounded-full shadow-md z-10">{symbol.icon}</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100 mb-2">{symbol.name}</h3>
-                  <p className="text-warm-gray-600 dark:text-warm-gray-400 font-body text-sm leading-relaxed">{symbol.meaning}</p>
+                  <h3 className="font-display font-bold text-lg text-charcoal dark:text-warm-gray-100 mb-2">{symbol.name}</h3>
+                  <p className="text-warm-gray-600 dark:text-warm-gray-300 font-body text-sm leading-relaxed">{symbol.meaning}</p>
                 </div>
               </motion.div>
             ))}
@@ -210,13 +210,13 @@ export default function CulturePage() {
               { name: 'Kohbar', desc: 'Highly symbolic art painted specifically on the walls of the nuptial chamber to bless newlyweds. It is deeply esoteric, featuring the central lingam/yoni motif formed by a bamboo shaft piercing a lotus flower.', img: imgKohbar },
               { name: 'Tantrik', desc: 'Reserved exclusively for depicting religious texts and Tantric symbolism, these paintings involve geometric shapes, yantras, and specific deities associated with tantric worship (like Kali or Chhinnamasta).', img: imgTantrik },
             ].map((style, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className={`flex flex-col md:flex-row gap-6 bg-white rounded-2xl overflow-hidden shadow-sm border border-cream-100 ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className={`flex flex-col md:flex-row gap-6 bg-white dark:bg-warm-gray-800 rounded-2xl overflow-hidden shadow-sm border border-cream-100 dark:border-warm-gray-700 ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
                 <div className="md:w-1/2 h-64 md:h-auto relative">
                   <img src={style.img} alt={style.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="md:w-1/2 p-8 flex flex-col justify-center">
-                  <h3 className="font-display text-3xl font-bold text-charcoal mb-4">{style.name}</h3>
-                  <p className="text-warm-gray-600 font-body leading-relaxed">{style.desc}</p>
+                  <h3 className="font-display text-3xl font-bold text-charcoal dark:text-warm-gray-100 mb-4">{style.name}</h3>
+                  <p className="text-warm-gray-600 dark:text-warm-gray-300 font-body leading-relaxed">{style.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -230,7 +230,7 @@ export default function CulturePage() {
         <div className="container-custom relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-4xl font-bold text-white mb-6">The Colors of the Earth</h2>
-            <p className="text-cream-300 font-body text-lg leading-relaxed">
+            <p className="text-warm-gray-300 font-body text-lg leading-relaxed">
               True Mithila paintings derive their vibrant palette directly from nature. Artists traditionally extracted pigments from leaves, flowers, and household spices, mixing them with gum arabic or goat's milk to ensure longevity.
             </p>
           </div>

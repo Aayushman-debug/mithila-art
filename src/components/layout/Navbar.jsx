@@ -31,9 +31,9 @@ const darkPalettes = [
 
 const lightPalettes = [
   { id: 'classic', name: 'Classic Cream', bg: '#FFF8F0', accent: '#8B6914' },
-  { id: 'parchment', name: 'Ancient Parchment', bg: '#F8F1E7', accent: '#8B6B3F' },
-  { id: 'ivory', name: 'Ivory Luxury', bg: '#FAF9F6', accent: '#C8A951' },
-  { id: 'sandstone', name: 'Sandstone', bg: '#EFE4D2', accent: '#A67C52' },
+  { id: 'parchment', name: 'Terracotta Parchment', bg: '#F5EAD4', accent: '#B22222' },
+  { id: 'ivory', name: 'Ivory Indigo', bg: '#FAF9F6', accent: '#1565C0' },
+  { id: 'sandstone', name: 'Sandstone Green', bg: '#EAD8C0', accent: '#1E5E2F' },
 ];
 
 export default function Navbar() {
@@ -45,6 +45,8 @@ export default function Navbar() {
   const { isDark, toggleTheme, darkPalette, setDarkPalette, lightPalette, setLightPalette } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
+  const isHeroPage = ['/', '/about', '/culture', '/mithila-history'].includes(location.pathname);
+  const isNavbarScrolled = !isHeroPage || scrolled;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -81,7 +83,7 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
+          isNavbarScrolled
             ? 'bg-cream-50/90 dark:bg-warm-gray-900/90 backdrop-blur-xl shadow-warm dark:shadow-none border-b border-cream-200/50 dark:border-warm-gray-700/50'
             : 'bg-transparent'
         }`}
@@ -95,12 +97,12 @@ export default function Navbar() {
               </div>
               <div className="hidden sm:block">
                 <h1 className={`whitespace-nowrap font-display font-bold text-base md:text-lg leading-none transition-colors duration-300 ${
-                  scrolled ? 'text-earth-700 dark:text-cream-200' : 'text-white'
+                  isNavbarScrolled ? 'text-earth-700 dark:text-cream-200' : 'text-white'
                 }`}>
                   Lalita Pathak
                 </h1>
-                <p className={`hidden lg:block whitespace-nowrap text-[10px] xl:text-xs font-body tracking-[0.1em] xl:tracking-[0.2em] uppercase transition-colors duration-300 mt-1 ${
-                  scrolled ? 'text-earth-500 dark:text-earth-400' : 'text-cream-200'
+                <p className={`hidden xl:block whitespace-nowrap text-[10px] xl:text-xs font-body tracking-[0.1em] xl:tracking-[0.2em] uppercase transition-colors duration-300 mt-1 ${
+                  isNavbarScrolled ? 'text-earth-500 dark:text-earth-400' : 'text-cream-200'
                 }`}>
                   Mithila Art Studio
                 </p>
@@ -108,15 +110,15 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center max-w-5xl">
+            <div className="hidden xl:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center max-w-5xl">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   className={`whitespace-nowrap relative px-2 xl:px-3 py-2 font-body text-xs xl:text-sm font-medium transition-colors duration-300 rounded-full hover:bg-earth-500/10 ${
                     location.pathname === link.path
-                      ? scrolled ? 'text-earth-500' : 'text-cream-100'
-                      : scrolled ? 'text-warm-gray-600 dark:text-warm-gray-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                      ? isNavbarScrolled ? 'text-earth-500' : 'text-cream-100'
+                      : isNavbarScrolled ? 'text-warm-gray-600 dark:text-warm-gray-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                   }`}
                 >
                   {link.name}
@@ -138,8 +140,8 @@ export default function Navbar() {
               {/* Theme toggle */}
               <motion.button
                 onClick={toggleTheme}
-                className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                  scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                className={`hidden md:block p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                  isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                 }`}
                 whileTap={{ scale: 0.9, rotate: 180 }}
                 aria-label="Toggle theme"
@@ -158,11 +160,11 @@ export default function Navbar() {
               </motion.button>
 
               {/* Palette Selector */}
-              <div className="relative">
+              <div className="relative hidden md:block">
                 <motion.button
                   onClick={() => setShowPaletteMenu(prev => !prev)}
                   className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                    scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                    isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                   } ${showPaletteMenu ? 'bg-earth-500/20' : ''}`}
                   whileTap={{ scale: 0.9 }}
                   aria-label="Customize theme palette"
@@ -232,7 +234,7 @@ export default function Navbar() {
               <Link
                 to="/cart"
                 className={`relative p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                  scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                  isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                 }`}
               >
                 <IoCartOutline size={22} />
@@ -255,7 +257,7 @@ export default function Navbar() {
                   <Link
                     to="/wishlist"
                     className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                      scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                      isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                     }`}
                     title="Wishlist"
                   >
@@ -264,7 +266,7 @@ export default function Navbar() {
                   <Link
                     to="/profile"
                     className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                      scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                      isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                     }`}
                     title="Profile"
                   >
@@ -274,7 +276,7 @@ export default function Navbar() {
                     <Link
                       to="/admin"
                       className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                        scrolled ? 'text-earth-500 hover:bg-earth-500/10' : 'text-cream-200 hover:bg-white/10'
+                        isNavbarScrolled ? 'text-earth-500 hover:bg-earth-500/10' : 'text-cream-200 hover:bg-white/10'
                       }`}
                     >
                       Admin
@@ -283,7 +285,7 @@ export default function Navbar() {
                   <button
                     onClick={handleLogout}
                     className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                      scrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
+                      isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                     }`}
                     title="Sign out"
                   >
@@ -295,7 +297,7 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                      scrolled
+                      isNavbarScrolled
                         ? 'text-earth-500 hover:bg-earth-500/10'
                         : 'text-cream-200 hover:bg-white/10'
                     }`}
@@ -314,8 +316,8 @@ export default function Navbar() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`lg:hidden p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
-                  scrolled ? 'text-warm-gray-600 dark:text-cream-300' : 'text-cream-200'
+                className={`xl:hidden p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                  isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300' : 'text-cream-200'
                 }`}
                 aria-label="Toggle menu"
               >
@@ -334,7 +336,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-warm-black/60 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-warm-black/60 backdrop-blur-sm z-40 xl:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -342,7 +344,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 w-80 h-full bg-cream-50 shadow-2xl z-50 lg:hidden overflow-y-auto"
+              className="fixed top-0 right-0 w-80 h-full bg-cream-50 shadow-2xl z-50 xl:hidden overflow-y-auto"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-8">
@@ -379,6 +381,65 @@ export default function Navbar() {
                     </motion.div>
                   ))}
                 </nav>
+
+                {/* Appearance section (Mobile only) */}
+                <div className="mt-6 pt-6 border-t border-cream-200">
+                  <h3 className="text-xs font-accent tracking-widest text-earth-500 uppercase mb-4">
+                    Appearance
+                  </h3>
+                  
+                  {/* Theme Switcher Toggle */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-cream-100/50 dark:bg-warm-gray-800/50 mb-4">
+                    <span className="font-body text-sm font-medium text-warm-gray-600 dark:text-warm-gray-300">
+                      {isDark ? 'Dark Mode' : 'Light Mode'}
+                    </span>
+                    <button
+                      onClick={toggleTheme}
+                      className="p-2 rounded-full bg-white dark:bg-warm-gray-700 border border-cream-200 dark:border-warm-gray-600 text-earth-500 shadow-sm"
+                      aria-label="Toggle Mode"
+                    >
+                      {isDark ? <IoSunnyOutline size={18} /> : <IoMoonOutline size={18} />}
+                    </button>
+                  </div>
+
+                  {/* Palette Selector */}
+                  <div className="space-y-2">
+                    <p className="font-body text-xs text-warm-gray-400 mb-2">Color Palette</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(isDark ? darkPalettes : lightPalettes).map((palette) => {
+                        const isActive = isDark ? darkPalette === palette.id : lightPalette === palette.id;
+                        return (
+                          <button
+                            key={palette.id}
+                            onClick={() => {
+                              if (isDark) {
+                                setDarkPalette(palette.id);
+                              } else {
+                                setLightPalette(palette.id);
+                              }
+                            }}
+                            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-body transition-all border ${
+                              isActive
+                                ? 'bg-earth-500/10 border-earth-500 text-earth-500 font-semibold'
+                                : 'bg-white dark:bg-warm-gray-700 border-cream-200 dark:border-warm-gray-600 text-warm-gray-600 dark:text-warm-gray-300'
+                            }`}
+                          >
+                            <div
+                              className="w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0"
+                              style={{ backgroundColor: palette.bg }}
+                            >
+                              <div
+                                className="w-1 h-1 rounded-full"
+                                style={{ backgroundColor: palette.accent }}
+                              />
+                            </div>
+                            <span>{palette.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
 
                 {/* Auth Links (Mobile) */}
                 {isAuthenticated ? (

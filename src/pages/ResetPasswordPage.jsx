@@ -115,14 +115,14 @@ export default function ResetPasswordPage() {
                 value={password} 
                 onChange={handlePasswordChange}
                 placeholder="New password (min 8 characters)" 
-                className="w-full px-4 py-3 rounded-xl border border-cream-200 bg-cream-50/50 text-warm-gray-900 focus:outline-none focus:ring-2 focus:ring-earth-500" 
+                className="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-warm-gray-600 bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all" 
               />
               {password && (
                 <div className="mt-2 flex gap-1">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className={`h-1 flex-1 rounded-full ${i <= passwordStrength ? 'bg-earth-500' : 'bg-cream-200'}`}
+                      className={`h-1 flex-1 rounded-full ${i <= passwordStrength ? 'bg-earth-500' : 'bg-cream-200 dark:bg-warm-gray-700'}`}
                     />
                   ))}
                 </div>
@@ -136,7 +136,7 @@ export default function ResetPasswordPage() {
                 value={confirmPassword} 
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm password" 
-                className="w-full px-4 py-3 rounded-xl border border-cream-200 bg-cream-50/50 text-warm-gray-900 focus:outline-none focus:ring-2 focus:ring-earth-500" 
+                className="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-warm-gray-600 bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all" 
               />
             </div>
 

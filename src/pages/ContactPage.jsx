@@ -186,10 +186,10 @@ function ContactForm() {
   };
 
   const inputClasses = (field) =>
-    `w-full px-5 py-3.5 rounded-xl bg-white border font-body text-charcoal placeholder-warm-gray-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-earth-500/30 ${
+    `w-full px-5 py-3.5 rounded-xl bg-cream-50/50 dark:bg-warm-gray-700/50 border font-body text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-earth-500/30 ${
       errors[field] && touched[field]
         ? 'border-mithila-red/50 focus:border-mithila-red'
-        : 'border-cream-200 focus:border-earth-500'
+        : 'border-cream-200 dark:border-warm-gray-600 focus:border-earth-500'
     }`;
 
   return (
@@ -210,7 +210,7 @@ function ContactForm() {
           >
             <FaCheckCircle className="text-mithila-green text-4xl" />
           </motion.div>
-          <h3 className="font-display text-2xl font-bold text-charcoal mb-3">Message Sent!</h3>
+          <h3 className="font-display text-2xl font-bold text-warm-gray-900 dark:text-cream-100 mb-3">Message Sent!</h3>
           <p className="text-warm-gray-500 font-body max-w-sm mx-auto mb-8">
             Thank you for reaching out. We typically respond within 24 hours.
             Namaste! 🙏
@@ -236,7 +236,7 @@ function ContactForm() {
           {/* Name & Email */}
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-sm font-body font-medium text-charcoal mb-1.5">
+              <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-cream-200 mb-1.5">
                 Full Name <span className="text-mithila-red">*</span>
               </label>
               <input
@@ -258,7 +258,7 @@ function ContactForm() {
               )}
             </div>
             <div>
-              <label className="block text-sm font-body font-medium text-charcoal mb-1.5">
+              <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-cream-200 mb-1.5">
                 Email Address <span className="text-mithila-red">*</span>
               </label>
               <input
@@ -284,7 +284,7 @@ function ContactForm() {
           {/* Phone & Subject */}
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-sm font-body font-medium text-charcoal mb-1.5">
+              <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-cream-200 mb-1.5">
                 Phone Number
               </label>
               <input
@@ -306,7 +306,7 @@ function ContactForm() {
               )}
             </div>
             <div>
-              <label className="block text-sm font-body font-medium text-charcoal mb-1.5">
+              <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-cream-200 mb-1.5">
                 Subject <span className="text-mithila-red">*</span>
               </label>
               <select
@@ -315,9 +315,9 @@ function ContactForm() {
                 onBlur={() => handleBlur('subject')}
                 className={`${inputClasses('subject')} appearance-none cursor-pointer`}
               >
-                <option value="">Select a subject</option>
+                <option value="" className="dark:bg-warm-gray-800 dark:text-cream-100">Select a subject</option>
                 {subjects.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s} className="dark:bg-warm-gray-800 dark:text-cream-100">{s}</option>
                 ))}
               </select>
               {errors.subject && touched.subject && (
@@ -334,7 +334,7 @@ function ContactForm() {
 
           {/* Message */}
           <div>
-            <label className="block text-sm font-body font-medium text-charcoal mb-1.5">
+            <label className="block text-sm font-body font-medium text-warm-gray-700 dark:text-cream-200 mb-1.5">
               Message <span className="text-mithila-red">*</span>
             </label>
             <textarea
@@ -474,9 +474,9 @@ export default function ContactPage() {
                     >
                       <card.icon className="text-white text-xl" />
                     </motion.div>
-                    <h3 className="font-display font-semibold text-charcoal text-lg mb-2">{card.title}</h3>
-                    <p className="text-warm-gray-600 font-body text-sm">{card.primary}</p>
-                    <p className="text-warm-gray-400 font-body text-sm">{card.secondary}</p>
+                    <h3 className="font-display font-semibold text-warm-gray-900 dark:text-cream-100 text-lg mb-2">{card.title}</h3>
+                    <p className="text-warm-gray-700 dark:text-cream-200 font-body text-sm">{card.primary}</p>
+                    <p className="text-warm-gray-500 dark:text-warm-gray-400 font-body text-sm">{card.secondary}</p>
                   </GlassCard>
                 </motion.a>
               ))}
@@ -500,8 +500,8 @@ export default function ContactPage() {
               >
                 <GlassCard className="p-6 md:p-10">
                   <div className="mb-8">
-                    <h2 className="heading-md text-charcoal mb-2">Send a Message</h2>
-                    <p className="text-warm-gray-400 font-body">
+                    <h2 className="heading-md text-warm-gray-900 dark:text-cream-100 mb-2">Send a Message</h2>
+                    <p className="text-warm-gray-500 dark:text-warm-gray-400 font-body">
                       Fill in the details below and we&rsquo;ll get back to you within 24 hours.
                     </p>
                   </div>
@@ -523,7 +523,7 @@ export default function ContactPage() {
                     <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold">
                       <FaClock className="text-white" />
                     </div>
-                    <h3 className="font-display font-semibold text-charcoal text-lg">Working Hours</h3>
+                    <h3 className="font-display font-semibold text-warm-gray-900 dark:text-cream-200 text-lg">Working Hours</h3>
                   </div>
                   <div className="space-y-3">
                     {workingHours.map((wh) => (
@@ -533,8 +533,8 @@ export default function ContactPage() {
                           !wh.active ? 'opacity-50' : ''
                         }`}
                       >
-                        <span className="font-body text-sm text-charcoal font-medium">{wh.day}</span>
-                        <span className={`font-body text-sm ${wh.active ? 'text-mithila-green' : 'text-warm-gray-400'}`}>
+                        <span className="font-body text-sm text-warm-gray-800 dark:text-cream-200 font-medium">{wh.day}</span>
+                        <span className={`font-body text-sm ${wh.active ? 'text-mithila-green' : 'text-warm-gray-500 dark:text-warm-gray-400'}`}>
                           {wh.hours}
                         </span>
                       </div>
@@ -544,7 +544,7 @@ export default function ContactPage() {
 
                 {/* Social Media */}
                 <GlassCard hover className="p-6">
-                  <h3 className="font-display font-semibold text-charcoal text-lg mb-5">Follow Us</h3>
+                  <h3 className="font-display font-semibold text-warm-gray-900 dark:text-cream-200 text-lg mb-5">Follow Us</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {socialLinks.map((social) => (
                       <motion.a
@@ -552,7 +552,7 @@ export default function ContactPage() {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-2 p-3 rounded-xl bg-cream-50 border border-cream-200/50 text-warm-gray-500 ${social.color} hover:text-white transition-all duration-300 group`}
+                        className={`flex flex-col items-center gap-2 p-3 rounded-xl bg-cream-50 border border-cream-200/50 text-warm-gray-600 dark:text-cream-200 ${social.color} hover:text-white transition-all duration-300 group`}
                         whileHover={{ y: -4, scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -626,7 +626,7 @@ export default function ContactPage() {
                       <FaMapMarkerAlt className="text-white" />
                     </div>
                     <div>
-                      <h4 className="font-display font-semibold text-charcoal">Lalita Pathak Mithila Art Studio</h4>
+                      <h4 className="font-display font-semibold text-warm-gray-900 dark:text-cream-100">Lalita Pathak Mithila Art Studio</h4>
                       <p className="text-warm-gray-500 text-sm font-body leading-relaxed">
                         Satlakha Pathak Tola, Rahika, Madhubani, Bihar 847238, India
                       </p>

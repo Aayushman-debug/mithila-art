@@ -92,61 +92,103 @@
   }
 
   /* ─── Light Theme Overrides ─── */
+  :root.theme-light-classic {
+    --warm-gray-100: 245 240 235;
+    --warm-gray-200: 222 210 190;
+    --warm-gray-300: 178 160 135;
+    --warm-gray-400: 120 102 78;
+    --warm-gray-500: 98 82 62;
+    --warm-gray-600: 80 66 50;
+    --warm-gray-700: 60 50 38;
+    --warm-gray-800: 42 34 26;
+    --warm-gray-900: 24 20 15;
+  }
+
   :root.theme-light-parchment {
-    --cream-50: 248 241 231; /* #F8F1E7 */
-    --cream-100: 238 227 212; /* #EEE3D4 */
-    --cream-200: 223 207 186; /* #DFCFBA */
-    --cream-300: 204 186 161;
-    --cream-400: 166 137 99;  /* #A68963 */
-    --cream-500: 139 107 63;  /* #8B6B3F */
+    --cream-50: 245 234 212; /* Rich parchment cream #F5EAD4 */
+    --cream-100: 235 220 190;
+    --cream-200: 220 200 165;
+    --cream-300: 195 170 130;
+    --cream-400: 178 34 34;
+    --cream-500: 139 0 0;
 
-    --earth-400: 166 137 99;  /* #A68963 */
-    --earth-500: 139 107 63;  /* #8B6B3F */
-    --earth-600: 112 83 46;   /* #70532E */
-    --earth-700: 89 64 32;
-    --earth-800: 64 45 20;
+    --earth-400: 220 50 50;
+    --earth-500: 178 34 34;  /* Terracotta Red accent #B22222 */
+    --earth-600: 139 0 0;
+    --earth-700: 100 0 0;
+    --earth-800: 70 0 0;
 
-    --gradient-gold-start: #8B6B3F;
-    --gradient-gold-middle: #DFCFBA;
-    --gradient-gold-end: #8B6B3F;
+    --warm-gray-100: 240 220 212;
+    --warm-gray-200: 222 195 185;
+    --warm-gray-300: 195 160 145;
+    --warm-gray-400: 148 100 82;
+    --warm-gray-500: 125 80 65;
+    --warm-gray-600: 102 65 52;
+    --warm-gray-700: 77 48 38;
+    --warm-gray-800: 54 34 27;
+    --warm-gray-900: 31 19 15;
+
+    --gradient-gold-start: #B22222;
+    --gradient-gold-middle: #E9967A;
+    --gradient-gold-end: #8B0000;
   }
 
   :root.theme-light-ivory {
-    --cream-50: 250 249 246; /* #FAF9F6 */
-    --cream-100: 245 242 235; /* #F5F2EB */
-    --cream-200: 230 222 208; /* #E6DED0 */
-    --cream-300: 215 205 188;
-    --cream-400: 212 189 123; /* #D4BD7B */
-    --cream-500: 200 169 81;  /* #C8A951 */
+    --cream-50: 250 249 246; /* Crisp museum white/ivory #FAF9F6 */
+    --cream-100: 242 241 236;
+    --cream-200: 228 226 218;
+    --cream-300: 208 205 195;
+    --cream-400: 96 165 250;
+    --cream-500: 37 99 235;
 
-    --earth-400: 212 189 123; /* #D4BD7B */
-    --earth-500: 200 169 81;  /* #C8A951 */
-    --earth-600: 166 137 58;  /* #A6893A */
-    --earth-700: 133 107 38;
-    --earth-800: 99 78 23;
+    --earth-400: 59 130 246;
+    --earth-500: 21 101 192;  /* Royal Indigo/Sapphire Blue accent #1565C0 */
+    --earth-600: 29 78 216;
+    --earth-700: 30 58 138;
+    --earth-800: 30 41 59;
 
-    --gradient-gold-start: #C8A951;
-    --gradient-gold-middle: #FAF9F6;
-    --gradient-gold-end: #C8A951;
+    --warm-gray-100: 240 244 248;
+    --warm-gray-200: 218 224 230;
+    --warm-gray-300: 178 190 205;
+    --warm-gray-400: 100 116 139;
+    --warm-gray-500: 80 96 115;
+    --warm-gray-600: 64 78 95;
+    --warm-gray-700: 45 55 68;
+    --warm-gray-800: 30 38 48;
+    --warm-gray-900: 15 20 28;
+
+    --gradient-gold-start: #1E40AF;
+    --gradient-gold-middle: #60A5FA;
+    --gradient-gold-end: #1565C0;
   }
 
   :root.theme-light-sandstone {
-    --cream-50: 239 228 210; /* #EFE4D2 */
-    --cream-100: 226 211 189; /* #E2D3BD */
-    --cream-200: 209 190 163; /* #D1BEA3 */
-    --cream-300: 194 172 142;
-    --cream-400: 194 153 112; /* #C29970 */
-    --cream-500: 166 124 82;  /* #A67C52 */
+    --cream-50: 234 216 192; /* Sandstone clay tone #EAD8C0 */
+    --cream-100: 222 201 174;
+    --cream-200: 206 181 150;
+    --cream-300: 182 154 119;
+    --cream-400: 52 168 83;
+    --cream-500: 30 94 47;
 
-    --earth-400: 194 153 112; /* #C29970 */
-    --earth-500: 166 124 82;  /* #A67C52 */
-    --earth-600: 133 96 58;   /* #85603A */
-    --earth-700: 102 71 39;
-    --earth-800: 71 47 23;
+    --earth-400: 46 125 50;
+    --earth-500: 30 94 47;   /* Forest Green accent #1E5E2F */
+    --earth-600: 27 94 32;
+    --earth-700: 17 60 21;
+    --earth-800: 10 37 13;
 
-    --gradient-gold-start: #A67C52;
-    --gradient-gold-middle: #E2D3BD;
-    --gradient-gold-end: #A67C52;
+    --warm-gray-100: 220 226 220;
+    --warm-gray-200: 195 205 195;
+    --warm-gray-300: 150 165 150;
+    --warm-gray-400: 85 100 85;
+    --warm-gray-500: 70 82 70;
+    --warm-gray-600: 58 68 58;
+    --warm-gray-700: 45 52 45;
+    --warm-gray-800: 30 35 30;
+    --warm-gray-900: 18 22 18;
+
+    --gradient-gold-start: #1B5E20;
+    --gradient-gold-middle: #81C784;
+    --gradient-gold-end: #2E7D32;
   }
 
   /* ─── Dark Theme Overrides ─── */
@@ -319,45 +361,197 @@
   .dark body,
   :root.dark body {
     background-color: rgb(var(--warm-gray-900));
-    color: rgb(var(--cream-200));
+    color: rgb(var(--warm-gray-200));
     transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   ::selection {
-    background-color: rgba(139, 105, 20, 0.3);
-    color: #2D2416;
+    background-color: rgba(var(--earth-500) / 0.25);
+    color: rgb(var(--warm-gray-900));
   }
 
   .dark ::selection {
-    background-color: rgba(196, 167, 109, 0.35);
-    color: #FFF8F0;
+    background-color: rgba(var(--earth-400) / 0.35);
+    color: rgb(var(--cream-50));
   }
 
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #F5EBD9;
+    background: rgb(var(--cream-100));
   }
 
   .dark ::-webkit-scrollbar-track {
-    background: #352E23;
+    background: rgb(var(--warm-gray-850, var(--warm-gray-800)));
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #8B6914 0%, #C4A76D 100%);
+    background: linear-gradient(180deg, rgb(var(--earth-500)) 0%, rgb(var(--earth-400)) 100%);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #6F5410 0%, #8B6914 100%);
+    background: linear-gradient(180deg, rgb(var(--earth-600)) 0%, rgb(var(--earth-500)) 100%);
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', Georgia, serif;
     line-height: 1.2;
     letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  /* ─── Theme-Specific Component Customizations ─── */
+  
+  /* 1. Classic Cream */
+  .theme-light-classic .glass-card {
+    border-radius: 1rem;
+    border: 1px solid rgba(139, 105, 20, 0.15) !important;
+    background: rgba(255, 252, 248, 0.92) !important;
+    box-shadow: 0 4px 15px rgba(139, 105, 20, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
+  }
+  .theme-light-classic .glass-card-hover:hover {
+    box-shadow: 0 12px 30px rgba(139, 105, 20, 0.12) !important;
+    border-color: rgba(139, 105, 20, 0.35) !important;
+  }
+  .theme-light-classic .hover-lift:hover {
+    box-shadow: 0 12px 30px rgba(139, 105, 20, 0.12) !important;
+    border-color: rgba(139, 105, 20, 0.35) !important;
+  }
+  .theme-light-classic .btn-primary {
+    border-radius: 9999px !important;
+    box-shadow: 0 4px 14px rgba(139, 105, 20, 0.25) !important;
+  }
+  .theme-light-classic .btn-secondary {
+    border-radius: 9999px !important;
+    border: 2px solid rgba(139, 105, 20, 1) !important;
+    color: rgba(139, 105, 20, 1) !important;
+  }
+  .theme-light-classic .btn-secondary:hover {
+    background-color: rgba(139, 105, 20, 1) !important;
+    color: #fff !important;
+  }
+
+  /* 2. Ancient Parchment */
+  .theme-light-parchment .glass-card {
+    border-radius: 0px !important; /* Historic manuscript style - sharp square edges */
+    border: 1.5px solid rgba(178, 34, 34, 0.28) !important;
+    background: rgba(253, 250, 243, 0.96) !important;
+    box-shadow: 3px 3px 0px rgba(178, 34, 34, 0.08) !important;
+  }
+  .theme-light-parchment .glass-card-hover:hover {
+    box-shadow: 6px 6px 0px rgba(178, 34, 34, 0.2) !important;
+    border-color: rgba(178, 34, 34, 0.6) !important;
+    transform: translateY(-2px) !important;
+  }
+  .theme-light-parchment .hover-lift:hover {
+    border-color: rgba(178, 34, 34, 0.6) !important;
+    box-shadow: 6px 6px 0px rgba(178, 34, 34, 0.2) !important;
+    transform: translateY(-2px) !important;
+  }
+  .theme-light-parchment .btn-primary {
+    border-radius: 0px !important; /* Square button */
+    box-shadow: 3px 3px 0px rgba(178, 34, 34, 0.25) !important;
+    border: 1px solid rgba(178, 34, 34, 0.8) !important;
+  }
+  .theme-light-parchment .btn-primary:hover {
+    box-shadow: 1px 1px 0px rgba(178, 34, 34, 0.25) !important;
+    transform: translate(2px, 2px) !important;
+  }
+  .theme-light-parchment .btn-secondary {
+    border-radius: 0px !important;
+    border: 2px solid rgba(178, 34, 34, 1) !important;
+    color: rgba(178, 34, 34, 1) !important;
+    background: transparent !important;
+  }
+  .theme-light-parchment .btn-secondary:hover {
+    background-color: rgba(178, 34, 34, 1) !important;
+    color: #fff !important;
+  }
+  .theme-light-parchment .btn-ghost {
+    border-radius: 0px !important;
+    border: 1px solid rgba(178, 34, 34, 0.3) !important;
+  }
+
+  /* 3. Ivory Luxury */
+  .theme-light-ivory .glass-card {
+    border-radius: 0.5rem !important; /* Crisp gallery frame look */
+    border: 1px solid rgba(21, 101, 192, 0.18) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+  }
+  .theme-light-ivory .glass-card-hover:hover {
+    box-shadow: 0 10px 25px rgba(21, 101, 192, 0.14) !important;
+    border-color: rgba(21, 101, 192, 0.45) !important;
+  }
+  .theme-light-ivory .hover-lift:hover {
+    box-shadow: 0 10px 25px rgba(21, 101, 192, 0.14) !important;
+    border-color: rgba(21, 101, 192, 0.45) !important;
+  }
+  .theme-light-ivory .btn-primary {
+    border-radius: 0.25rem !important; /* Sleek square radius */
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    font-size: 0.75rem !important;
+    padding: 0.75rem 1.75rem !important;
+    box-shadow: 0 4px 14px rgba(21, 101, 192, 0.22) !important;
+  }
+  .theme-light-ivory .btn-secondary {
+    border-radius: 0.25rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    font-size: 0.75rem !important;
+    padding: 0.75rem 1.75rem !important;
+    border: 1px solid rgba(21, 101, 192, 1) !important;
+    color: rgba(21, 101, 192, 1) !important;
+  }
+  .theme-light-ivory .btn-secondary:hover {
+    background-color: rgba(21, 101, 192, 1) !important;
+    color: #fff !important;
+  }
+  .theme-light-ivory .btn-ghost {
+    border-radius: 0.25rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* 4. Sandstone Heritage */
+  .theme-light-sandstone .glass-card {
+    border-radius: 1.75rem !important; /* Very round, organic shape */
+    border: 1.5px solid rgba(30, 94, 47, 0.16) !important;
+    background: rgba(246, 241, 232, 0.95) !important;
+    box-shadow: 0 6px 18px rgba(30, 94, 47, 0.04) !important;
+  }
+  .theme-light-sandstone .glass-card-hover:hover {
+    box-shadow: 0 12px 28px rgba(30, 94, 47, 0.15) !important;
+    border-color: rgba(30, 94, 47, 0.5) !important;
+    transform: translateY(-3px) scale(1.01) !important;
+  }
+  .theme-light-sandstone .hover-lift:hover {
+    box-shadow: 0 12px 28px rgba(30, 94, 47, 0.15) !important;
+    border-color: rgba(30, 94, 47, 0.5) !important;
+    transform: translateY(-3px) scale(1.01) !important;
+  }
+  .theme-light-sandstone .btn-primary {
+    border-radius: 9999px !important;
+    box-shadow: 0 6px 18px rgba(30, 94, 47, 0.25) !important;
+  }
+  .theme-light-sandstone .btn-secondary {
+    border-radius: 9999px !important;
+    border: 2px solid rgba(30, 94, 47, 1) !important;
+    color: rgba(30, 94, 47, 1) !important;
+  }
+  .theme-light-sandstone .btn-secondary:hover {
+    background-color: rgba(30, 94, 47, 1) !important;
+    color: #fff !important;
+  }
+  .theme-light-sandstone .btn-ghost {
+    border-radius: 9999px !important;
   }
 }
 

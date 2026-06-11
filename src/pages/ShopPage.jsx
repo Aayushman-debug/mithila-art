@@ -108,7 +108,7 @@ function FilterSidebar({
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="font-display font-semibold text-lg text-charcoal flex items-center gap-2">
+        <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-200 flex items-center gap-2">
           <IoFilterOutline className="text-earth-500" />
           Filters
           {activeFilterCount > 0 && (
@@ -134,7 +134,7 @@ function FilterSidebar({
           onClick={() => toggleSection('category')}
           className="flex items-center justify-between w-full text-left group"
         >
-          <span className="font-display font-semibold text-charcoal">Category</span>
+          <span className="font-display font-semibold text-charcoal dark:text-cream-200">Category</span>
           {openSections.category ? (
             <FaChevronUp className="text-warm-gray-400 text-xs" />
           ) : (
@@ -177,10 +177,10 @@ function FilterSidebar({
                         </motion.svg>
                       )}
                     </div>
-                    <span className="font-body text-sm text-warm-gray-600 group-hover:text-charcoal transition-colors">
+                    <span className="font-body text-sm text-warm-gray-600 dark:text-warm-gray-300 group-hover:text-charcoal dark:group-hover:text-cream-100 transition-colors">
                       {cat.name}
                     </span>
-                    <span className="ml-auto font-accent text-xs text-warm-gray-400">
+                    <span className="ml-auto font-accent text-xs text-warm-gray-400 dark:text-warm-gray-500">
                       {cat.nameHindi}
                     </span>
                     <input
@@ -203,7 +203,7 @@ function FilterSidebar({
           onClick={() => toggleSection('price')}
           className="flex items-center justify-between w-full text-left"
         >
-          <span className="font-display font-semibold text-charcoal">Price Range</span>
+          <span className="font-display font-semibold text-charcoal dark:text-cream-200">Price Range</span>
           {openSections.price ? (
             <FaChevronUp className="text-warm-gray-400 text-xs" />
           ) : (
@@ -222,23 +222,23 @@ function FilterSidebar({
               <div className="mt-3 space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex-1">
-                    <label className="text-xs text-warm-gray-400 font-body mb-1 block">Min (₹)</label>
+                    <label className="text-xs text-warm-gray-400 dark:text-warm-gray-500 font-body mb-1 block">Min (₹)</label>
                     <input
                       type="number"
                       value={priceRange[0]}
                       onChange={(e) => onPriceChange([parseInt(e.target.value) || 0, priceRange[1]])}
-                      className="w-full px-3 py-2 rounded-lg border border-cream-200 bg-cream-50 font-body text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
+                      className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                       placeholder="0"
                     />
                   </div>
                   <span className="text-warm-gray-300 mt-5">—</span>
                   <div className="flex-1">
-                    <label className="text-xs text-warm-gray-400 font-body mb-1 block">Max (₹)</label>
+                    <label className="text-xs text-warm-gray-400 dark:text-warm-gray-500 font-body mb-1 block">Max (₹)</label>
                     <input
                       type="number"
                       value={priceRange[1]}
                       onChange={(e) => onPriceChange([priceRange[0], parseInt(e.target.value) || 100000])}
-                      className="w-full px-3 py-2 rounded-lg border border-cream-200 bg-cream-50 font-body text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
+                      className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                       placeholder="100000"
                     />
                   </div>
@@ -271,7 +271,7 @@ function FilterSidebar({
           onClick={() => toggleSection('size')}
           className="flex items-center justify-between w-full text-left"
         >
-          <span className="font-display font-semibold text-charcoal">Size</span>
+          <span className="font-display font-semibold text-charcoal dark:text-cream-200">Size</span>
           {openSections.size ? (
             <FaChevronUp className="text-warm-gray-400 text-xs" />
           ) : (
@@ -297,7 +297,7 @@ function FilterSidebar({
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
                         selectedSizes.includes(size.value)
                           ? 'bg-earth-500 border-earth-500'
-                          : 'border-warm-gray-300 group-hover:border-earth-400'
+                          : 'border-warm-gray-300 dark:border-warm-gray-650 group-hover:border-earth-400'
                       }`}
                     >
                       {selectedSizes.includes(size.value) && (
@@ -314,7 +314,7 @@ function FilterSidebar({
                         </motion.svg>
                       )}
                     </div>
-                    <span className="font-body text-sm text-warm-gray-600 group-hover:text-charcoal transition-colors">
+                    <span className="font-body text-sm text-warm-gray-600 dark:text-warm-gray-300 group-hover:text-charcoal dark:group-hover:text-cream-100 transition-colors">
                       {size.label}
                     </span>
                     <input
@@ -648,7 +648,7 @@ export default function ShopPage() {
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-400 hover:text-charcoal transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-400 hover:text-charcoal dark:hover:text-cream-200 transition-colors"
                   >
                     <IoCloseOutline size={18} />
                   </button>
@@ -659,7 +659,7 @@ export default function ShopPage() {
                 {/* Mobile filter button */}
                 <motion.button
                   onClick={() => setMobileFiltersOpen(true)}
-                  className="lg:hidden flex items-center gap-2 px-4 py-3 bg-white border border-cream-200 rounded-xl font-body text-sm text-charcoal shadow-sm hover:shadow-card transition-all"
+                  className="xl:hidden flex items-center gap-2 px-4 py-3 bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 rounded-xl font-body text-sm text-charcoal dark:text-cream-200 shadow-sm hover:shadow-card transition-all"
                   whileTap={{ scale: 0.95 }}
                 >
                   <FaSlidersH className="text-earth-500" />
@@ -675,7 +675,7 @@ export default function ShopPage() {
                 <div className="relative">
                   <motion.button
                     onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
-                    className="flex items-center gap-2 px-4 py-3 bg-white border border-cream-200 rounded-xl font-body text-sm text-charcoal shadow-sm hover:shadow-card transition-all"
+                    className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 rounded-xl font-body text-sm text-charcoal dark:text-cream-200 shadow-sm hover:shadow-card transition-all"
                     whileTap={{ scale: 0.95 }}
                   >
                     Sort: {sortOptions.find((s) => s.value === sortBy)?.label}
@@ -691,7 +691,7 @@ export default function ShopPage() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-card-hover border border-cream-200 overflow-hidden z-30"
+                        className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-warm-gray-800 rounded-xl shadow-card-hover dark:shadow-none border border-cream-200 dark:border-warm-gray-700 overflow-hidden z-30"
                       >
                         {sortOptions.map((opt) => (
                           <button
@@ -700,10 +700,10 @@ export default function ShopPage() {
                               setSortBy(opt.value);
                               setSortDropdownOpen(false);
                             }}
-                            className={`w-full text-left px-4 py-3 text-sm font-body hover:bg-cream-50 transition-colors ${
+                            className={`w-full text-left px-4 py-3 text-sm font-body hover:bg-cream-50 dark:hover:bg-warm-gray-700 transition-colors ${
                               sortBy === opt.value
-                                ? 'text-earth-500 font-semibold bg-cream-50'
-                                : 'text-warm-gray-600'
+                                ? 'text-earth-500 font-semibold bg-cream-50 dark:bg-warm-gray-700'
+                                : 'text-warm-gray-600 dark:text-warm-gray-300'
                             }`}
                           >
                             {opt.label}
@@ -715,13 +715,13 @@ export default function ShopPage() {
                 </div>
 
                 {/* View mode */}
-                <div className="hidden sm:flex items-center bg-white border border-cream-200 rounded-xl overflow-hidden shadow-sm">
+                <div className="hidden sm:flex items-center bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 rounded-xl overflow-hidden shadow-sm">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-3 transition-all ${
                       viewMode === 'grid'
                         ? 'bg-earth-500 text-white'
-                        : 'text-warm-gray-400 hover:text-charcoal'
+                        : 'text-warm-gray-400 hover:text-charcoal dark:hover:text-cream-200'
                     }`}
                   >
                     <IoGridOutline size={18} />
@@ -731,7 +731,7 @@ export default function ShopPage() {
                     className={`p-3 transition-all ${
                       viewMode === 'list'
                         ? 'bg-earth-500 text-white'
-                        : 'text-warm-gray-400 hover:text-charcoal'
+                        : 'text-warm-gray-400 hover:text-charcoal dark:hover:text-cream-200'
                     }`}
                   >
                     <IoListOutline size={18} />
@@ -740,8 +740,8 @@ export default function ShopPage() {
 
                 {/* Results count */}
                 <div className="hidden md:block ml-2">
-                  <p className="text-sm text-warm-gray-500 font-body">
-                    <span className="font-semibold text-charcoal">{filteredPaintings.length}</span>{' '}
+                  <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 font-body">
+                    <span className="font-semibold text-charcoal dark:text-cream-200">{filteredPaintings.length}</span>{' '}
                     {filteredPaintings.length === 1 ? 'painting' : 'paintings'}
                   </p>
                 </div>
@@ -757,7 +757,7 @@ export default function ShopPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
               >
-                <div className="sticky top-28 glass-card p-6 rounded-2xl">
+                <div className="sticky top-28 glass-card p-6 rounded-2xl dark:bg-warm-gray-800 dark:border-warm-gray-700">
                   <FilterSidebar
                     selectedCategories={selectedCategories}
                     onCategoryToggle={handleCategoryToggle}
@@ -775,8 +775,8 @@ export default function ShopPage() {
               <div className="flex-1 min-w-0">
                 {/* Mobile results count */}
                 <div className="md:hidden mb-4">
-                  <p className="text-sm text-warm-gray-500 font-body">
-                    Showing <span className="font-semibold text-charcoal">{filteredPaintings.length}</span>{' '}
+                  <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 font-body">
+                    Showing <span className="font-semibold text-charcoal dark:text-cream-200">{filteredPaintings.length}</span>{' '}
                     {filteredPaintings.length === 1 ? 'painting' : 'paintings'}
                   </p>
                 </div>
@@ -838,9 +838,9 @@ export default function ShopPage() {
                 {productsLoading ? (
                   <div className="space-y-6">
                     {showWakingUpMsg && (
-                      <div className="bg-earth-500/10 border border-earth-500/20 text-earth-700 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse">
-                        <span className="font-display font-semibold mb-1 text-charcoal">Connecting to server...</span>
-                        <span className="text-sm font-body text-warm-gray-600">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
+                      <div className="bg-earth-500/10 border border-earth-500/20 text-earth-700 dark:text-earth-300 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse">
+                        <span className="font-display font-semibold mb-1 text-charcoal dark:text-cream-100">Connecting to server...</span>
+                        <span className="text-sm font-body text-warm-gray-600 dark:text-warm-gray-400">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
                       </div>
                     )}
                     <div className={
@@ -1005,7 +1005,7 @@ export default function ShopPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-50 lg:hidden"
+                className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-50 xl:hidden"
                 onClick={() => setMobileFiltersOpen(false)}
               />
               {/* Drawer */}
@@ -1014,17 +1014,17 @@ export default function ShopPage() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="fixed left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 lg:hidden overflow-y-auto shadow-2xl"
+                className="fixed left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white dark:bg-warm-gray-800 z-50 xl:hidden overflow-y-auto shadow-2xl border-r border-cream-200/50 dark:border-warm-gray-700/50"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-display font-bold text-xl text-charcoal">Filters</h3>
+                    <h3 className="font-display font-bold text-xl text-charcoal dark:text-cream-100">Filters</h3>
                     <motion.button
                       onClick={() => setMobileFiltersOpen(false)}
-                      className="w-10 h-10 rounded-full bg-cream-50 flex items-center justify-center hover:bg-cream-100 transition-colors"
+                      className="w-10 h-10 rounded-full bg-cream-50 dark:bg-warm-gray-700 flex items-center justify-center hover:bg-cream-100 dark:hover:bg-warm-gray-600 transition-colors"
                       whileTap={{ scale: 0.9 }}
                     >
-                      <IoCloseOutline size={22} className="text-charcoal" />
+                      <IoCloseOutline size={22} className="text-charcoal dark:text-cream-200" />
                     </motion.button>
                   </div>
                   <FilterSidebar

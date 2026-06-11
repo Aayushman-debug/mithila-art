@@ -178,26 +178,31 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
           <p className="text-earth-500 dark:text-earth-400 text-xs font-body font-semibold tracking-widest uppercase mb-1.5">
             {category}
           </p>
-          <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-100 leading-snug line-clamp-2 mb-1.5">
+          <h3 className="font-display font-semibold text-lg text-charcoal dark:text-warm-gray-100 leading-snug line-clamp-2 mb-1.5">
             {title}
           </h3>
-          <p className="text-warm-gray-400 dark:text-warm-gray-500 text-sm font-body mb-3">{size}</p>
-          <div className="flex flex-wrap items-end justify-between gap-2 mt-auto">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2">
-                <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">
+          <p className="text-warm-gray-500 dark:text-warm-gray-300 text-sm font-body mb-3">{size}</p>
+          <div className="flex flex-row items-center justify-between gap-2 mt-4 pt-3.5 border-t border-cream-200/50 dark:border-warm-gray-700/50">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="font-display font-bold text-lg md:text-xl text-earth-700 dark:text-earth-400">
                   {formatPrice(price)}
                 </span>
                 {originalPrice && (
-                  <span className="text-warm-gray-400 dark:text-warm-gray-500 line-through text-sm">
+                  <span className="text-warm-gray-400 dark:text-warm-gray-500 line-through text-xs">
                     {formatPrice(originalPrice)}
                   </span>
                 )}
               </div>
               {statusConfig && (
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${statusConfig.dotClass}`}></span>
-                  <span className={`text-[11px] uppercase tracking-wide font-bold ${statusConfig.textClass}`}>
+                <div className="mt-1">
+                  <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${
+                    status === 'available' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-800 dark:text-emerald-400' :
+                    status === 'only_1_left' ? 'bg-orange-500/10 border-orange-500/20 text-orange-800 dark:text-orange-400' :
+                    status === 'out_of_stock' ? 'bg-mithila-red/10 border-mithila-red/20 text-mithila-red dark:text-red-400' :
+                    status === 'commission_available' ? 'bg-purple-500/10 border-purple-500/20 text-purple-800 dark:text-purple-400' :
+                    'bg-warm-gray-500/10 border-warm-gray-500/20 text-warm-gray-700 dark:text-warm-gray-300'
+                  }`}>
                     {statusConfig.label}
                   </span>
                 </div>
@@ -209,9 +214,9 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleCardAction}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold rounded-xl transition-colors whitespace-nowrap"
               >
-                <IoMailOutline size={14} />
+                <IoMailOutline size={13} />
                 Commission
               </motion.button>
             ) : (
@@ -219,14 +224,14 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                 whileTap={!isCartDisabled ? { scale: 0.95 } : {}}
                 onClick={handleCardAction}
                 disabled={isCartDisabled}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-colors ${
+                className={`flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold rounded-xl transition-colors whitespace-nowrap ${
                   isCartDisabled
                     ? 'bg-warm-gray-200 dark:bg-warm-gray-700 text-warm-gray-400 cursor-not-allowed'
                     : 'bg-earth-500 hover:bg-earth-600 text-white'
                 }`}
               >
-                <IoCartOutline size={14} />
-                {isCartDisabled ? (status === 'out_of_stock' ? 'Sold Out' : 'Coming Soon') : 'Add to Cart'}
+                <IoCartOutline size={13} />
+                {isCartDisabled ? (status === 'out_of_stock' ? 'Sold Out' : 'Soon') : 'Add'}
               </motion.button>
             )}
           </div>

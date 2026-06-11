@@ -156,7 +156,7 @@ export default function SignupPage() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Your full name"
-                  className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
                     errors.name
                       ? 'border-mithila-red/50'
                       : 'border-cream-200 dark:border-warm-gray-600'
@@ -180,7 +180,7 @@ export default function SignupPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="your@email.com"
-                  className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
                     errors.email
                       ? 'border-mithila-red/50'
                       : 'border-cream-200 dark:border-warm-gray-600'
@@ -207,7 +207,7 @@ export default function SignupPage() {
                   inputMode="numeric"
                   autoComplete="off"
                   pattern="[6-9][0-9]{9}"
-                  className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
                     errors.phone
                       ? 'border-mithila-red/50'
                       : 'border-cream-200 dark:border-warm-gray-600'
@@ -232,7 +232,7 @@ export default function SignupPage() {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Minimum 8 characters"
-                    className={`w-full px-4 py-3 pr-12 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
+                    className={`w-full px-4 py-3 pr-12 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
                       errors.password
                         ? 'border-mithila-red/50'
                         : 'border-cream-200 dark:border-warm-gray-600'
@@ -265,7 +265,7 @@ export default function SignupPage() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Re-enter your password"
-                    className={`w-full px-4 py-3 pr-12 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
+                    className={`w-full px-4 py-3 pr-12 rounded-xl border bg-cream-50/50 dark:bg-warm-gray-700/50 text-warm-gray-900 dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500 transition-all ${
                       errors.confirmPassword
                         ? 'border-mithila-red/50'
                         : 'border-cream-200 dark:border-warm-gray-600'

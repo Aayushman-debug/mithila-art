@@ -69,7 +69,7 @@ export default function Footer() {
                 <p className="text-xs tracking-[0.2em] uppercase text-earth-400">Lalita Pathak Mithila Art Studio</p>
               </div>
             </Link>
-            <p className="text-body-sm text-cream-300/70 mb-6 leading-relaxed">
+            <p className="text-body-sm text-warm-gray-300/70 mb-6 leading-relaxed">
               Preserving the sacred 2,500-year-old tradition of Mithila painting through authentic, handcrafted masterpieces that bridge ancient wisdom and contemporary aesthetics.
             </p>
 
@@ -82,7 +82,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-cream-300 hover:bg-earth-500 hover:text-white hover:border-earth-500 transition-all duration-300 hover:scale-110"
+                  className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-warm-gray-300 hover:bg-earth-500 hover:text-white hover:border-earth-500 transition-all duration-300 hover:scale-110"
                 >
                   <Icon size={16} />
                 </a>
@@ -101,7 +101,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-cream-300/70 hover:text-earth-400 transition-colors duration-300 font-body text-sm flex items-center gap-2 group"
+                    className="text-warm-gray-300/70 hover:text-earth-400 transition-colors duration-300 font-body text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-earth-500/40 group-hover:bg-earth-400 transition-colors" />
                     {link.name}
@@ -122,7 +122,7 @@ export default function Footer() {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-cream-300/70 hover:text-earth-400 transition-colors duration-300 font-body text-sm flex items-center gap-2 group"
+                    className="text-warm-gray-300/70 hover:text-earth-400 transition-colors duration-300 font-body text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-earth-500/40 group-hover:bg-earth-400 transition-colors" />
                     {link.name}
@@ -141,25 +141,25 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <IoLocationOutline className="text-earth-400 mt-1 flex-shrink-0" size={18} />
-                <span className="text-cream-300/70 text-sm">
+                <span className="text-warm-gray-300/70 text-sm">
                   Satlakha Pathak Tola, Rahika,<br />Madhubani, Bihar 847238, India
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <IoCallOutline className="text-earth-400 flex-shrink-0" size={18} />
-                <a href="tel:+917488337792" className="text-cream-300/70 hover:text-earth-400 text-sm transition-colors">
+                <a href="tel:+917488337792" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
                   +91 74883 37792
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <IoMailOutline className="text-earth-400 flex-shrink-0" size={18} />
-                <a href="mailto:pathaklalita129@gmail.com" className="text-cream-300/70 hover:text-earth-400 text-sm transition-colors">
+                <a href="mailto:pathaklalita129@gmail.com" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
                   pathaklalita129@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-earth-400 flex-shrink-0" size={18} />
-                <a href="https://wa.me/917488337792" className="text-cream-300/70 hover:text-earth-400 text-sm transition-colors">
+                <a href="https://wa.me/917488337792" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
                   WhatsApp Us
                 </a>
               </li>
@@ -169,10 +169,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-cream-300/50 text-sm font-body">
+          <p className="text-warm-gray-300/50 text-sm font-body">
             © {new Date().getFullYear()} Lalita Pathak Mithila Art Studio. All rights reserved.
           </p>
-          <div className="flex items-center gap-1 text-cream-300/50 text-sm">
+          <div className="flex items-center gap-1 text-warm-gray-300/50 text-sm">
             <span>Crafted with</span>
             <motion.span
               animate={{ scale: [1, 1.2, 1] }}
