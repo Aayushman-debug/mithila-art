@@ -270,10 +270,10 @@ function OriginStory() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 });
 
   return (
-    <section ref={sectionRef} className="section-padding bg-cream-50 relative overflow-hidden">
+    <section ref={sectionRef} className="section-padding bg-cream-50 dark:bg-warm-gray-900 relative overflow-hidden">
       {/* Background Texture */}
       <div className="absolute inset-0 mithila-pattern opacity-20" />
-      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-cream-50 to-transparent z-10" />
+      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-cream-50 dark:from-warm-gray-900 to-transparent z-10" />
 
       <div className="container-custom relative z-10" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -300,13 +300,13 @@ function OriginStory() {
 
               {/* Floating accent */}
               <motion.div
-                className="absolute -bottom-6 -right-6 bg-white rounded-xl p-5 shadow-card"
+                className="absolute -bottom-6 -right-6 bg-white dark:bg-warm-gray-800 border border-cream-100/30 dark:border-warm-gray-700/50 rounded-xl p-5 shadow-card"
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
               >
                 <p className="font-accent text-earth-500 text-sm">सीता विवाह</p>
-                <p className="font-display text-3xl font-bold text-charcoal">2,500+</p>
-                <p className="text-warm-gray-500 text-sm font-body">Years of Tradition</p>
+                <p className="font-display text-3xl font-bold text-charcoal dark:text-white">2,500+</p>
+                <p className="text-warm-gray-500 dark:text-warm-gray-400 text-sm font-body">Years of Tradition</p>
               </motion.div>
 
               {/* Decorative corner */}
@@ -326,27 +326,27 @@ function OriginStory() {
               Where It All Began
             </motion.p>
 
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-charcoal leading-tight">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-charcoal dark:text-white leading-tight">
               Born from the{' '}
-              <span className="bg-gradient-to-r from-earth-500 to-mithila-red bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-earth-50 to-mithila-red bg-clip-text text-transparent">
                 Walls of Ancient Bihar
               </span>
             </h2>
 
             <div className="space-y-4">
-              <p className="text-warm-gray-600 font-body text-lg leading-relaxed">
-                More than <strong className="text-charcoal">2,500 years ago</strong>, in the ancient kingdom of Videha — present-day{' '}
-                <strong className="text-charcoal">Madhubani district, Bihar</strong> — women began adorning the freshly plastered mud walls and
+              <p className="text-warm-gray-600 dark:text-warm-gray-200 font-body text-lg leading-relaxed">
+                More than <strong className="text-charcoal dark:text-white">2,500 years ago</strong>, in the ancient kingdom of Videha — present-day{' '}
+                <strong className="text-charcoal dark:text-white">Madhubani district, Bihar</strong> — women began adorning the freshly plastered mud walls and
                 floors of their homes with intricate paintings using natural pigments.
               </p>
-              <p className="text-warm-gray-500 font-body leading-relaxed">
-                Legend traces the art form to the <em className="text-mithila-red font-medium">Ramayana</em> itself: when King Janaka
+              <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body leading-relaxed">
+                Legend traces the art form to the <em className="text-mithila-red dark:text-red-450 font-medium">Ramayana</em> itself: when King Janaka
                 commissioned the finest artists to decorate the city of Janakpur for the grand wedding of his daughter{' '}
-                <strong className="text-charcoal">Sita</strong> to Lord <strong className="text-charcoal">Ram</strong>. The women of Mithila
+                <strong className="text-charcoal dark:text-white">Sita</strong> to Lord <strong className="text-charcoal dark:text-white">Ram</strong>. The women of Mithila
                 painted the walls with images of gods, sacred symbols, and scenes from nature — a tradition they would carry forward,
                 mother to daughter, for millennia.
               </p>
-              <p className="text-warm-gray-500 font-body leading-relaxed">
+              <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body leading-relaxed">
                 These were not merely decorative works. Each painting was a <em>prayer made visible</em> — marking weddings, births,
                 festivals, and harvests. The fish symbolised fertility, the lotus purity, the bamboo grove masculine strength, and the
                 peacock the promise of rain. The walls of a Maithil home were a living text, encoding an entire worldview in colour and line.
@@ -361,9 +361,9 @@ function OriginStory() {
                 { label: 'Primary Artists', value: 'Women of Mithila' },
                 { label: 'Sacred Connection', value: 'Ramayana legend' },
               ].map((fact) => (
-                <div key={fact.label} className="bg-cream-100 rounded-xl p-4">
+                <div key={fact.label} className="bg-cream-100 dark:bg-warm-gray-800 border border-transparent dark:border-warm-gray-700/50 rounded-xl p-4">
                   <p className="text-xs text-earth-500 font-body uppercase tracking-wider">{fact.label}</p>
-                  <p className="font-display font-semibold text-charcoal mt-1">{fact.value}</p>
+                  <p className="font-display font-semibold text-charcoal dark:text-white mt-1">{fact.value}</p>
                 </div>
               ))}
             </div>
@@ -460,7 +460,7 @@ function TimelineItem({ event, index, inView }) {
           </div>
 
           <h3 className="font-display text-2xl font-bold text-white mb-3">{event.title}</h3>
-          <p className="text-cream-200/60 font-body leading-relaxed">{event.description}</p>
+          <p className="text-white/60 font-body leading-relaxed">{event.description}</p>
 
           {/* Decorative line */}
           <div className="mt-6 h-px bg-gradient-to-r from-earth-500/30 to-transparent" />
@@ -477,7 +477,7 @@ function ArtStylesSection() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section className="section-padding bg-cream-50 relative overflow-hidden">
+    <section className="section-padding bg-cream-50 dark:bg-warm-gray-900 relative overflow-hidden">
       <div className="absolute inset-0 mithila-pattern opacity-15" />
 
       <div className="container-custom relative z-10">
@@ -549,12 +549,12 @@ function ArtStyleCard({ style, index }) {
             <style.icon className="text-white text-lg" />
           </div>
           <div>
-            <h3 className="font-display text-2xl font-bold text-charcoal">{style.name}</h3>
+            <h3 className="font-display text-2xl font-bold text-charcoal dark:text-white">{style.name}</h3>
             <p className="text-earth-500 font-body text-sm">{style.subtitle}</p>
           </div>
         </div>
 
-        <p className="text-warm-gray-600 font-body leading-relaxed text-lg">{style.description}</p>
+        <p className="text-warm-gray-600 dark:text-warm-gray-300 font-body leading-relaxed text-lg">{style.description}</p>
 
         <div className={`h-1 w-16 rounded-full bg-gradient-to-r ${style.color === 'bg-charcoal' ? 'from-charcoal to-warm-gray-400' : style.color.replace('bg-', 'from-') + ' to-transparent'}`} />
       </div>
@@ -623,7 +623,7 @@ function CulturalSignificance() {
   ];
 
   return (
-    <section ref={sectionRef} className="section-padding relative overflow-hidden bg-white">
+    <section ref={sectionRef} className="section-padding relative overflow-hidden bg-white dark:bg-warm-gray-900">
       {/* Parallax pattern background */}
       <motion.div className="absolute inset-0 mithila-pattern opacity-10" style={{ y: bgY }} />
 
@@ -645,14 +645,14 @@ function CulturalSignificance() {
           {rituals.map((ritual) => (
             <motion.div key={ritual.title} variants={fadeUp}>
               <motion.div
-                className={`${ritual.bg} border border-warm-gray-100 rounded-2xl p-6 h-full hover:shadow-card-hover transition-all duration-500 group`}
+                className={`${ritual.bg} border border-warm-gray-100 dark:border-warm-gray-800 rounded-2xl p-6 h-full hover:shadow-card-hover transition-all duration-500 group`}
                 whileHover={{ y: -6 }}
               >
                 <div className={`w-14 h-14 rounded-xl ${ritual.bg} border border-current/10 flex items-center justify-center mb-4 ${ritual.color} group-hover:scale-110 transition-transform duration-300`}>
                   <ritual.icon className="text-2xl" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-charcoal mb-3">{ritual.title}</h3>
-                <p className="text-warm-gray-500 font-body leading-relaxed text-sm">{ritual.description}</p>
+                <h3 className="font-display text-xl font-bold text-charcoal dark:text-white mb-3">{ritual.title}</h3>
+                <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body leading-relaxed text-sm">{ritual.description}</p>
               </motion.div>
             </motion.div>
           ))}
@@ -731,7 +731,7 @@ function MaterialsSection() {
                   <div className={`w-8 h-8 rounded-lg ${pigment.color} flex-shrink-0 mt-1 shadow-sm group-hover:scale-110 transition-transform`} />
                   <div>
                     <p className="text-white font-display font-semibold">{pigment.name}</p>
-                    <p className="text-cream-200/50 font-body text-sm">{pigment.source}</p>
+                    <p className="text-white/50 font-body text-sm">{pigment.source}</p>
                   </div>
                 </motion.div>
               ))}
@@ -760,7 +760,7 @@ function MaterialsSection() {
                   whileHover={{ x: 4 }}
                 >
                   <p className="text-earth-400 font-display font-semibold mb-1">{tool.name}</p>
-                  <p className="text-cream-200/50 font-body text-sm leading-relaxed">{tool.description}</p>
+                  <p className="text-white/50 font-body text-sm leading-relaxed">{tool.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -776,7 +776,7 @@ function MaterialsSection() {
                   'Canvas cloth (kapda)',
                   'Papier-mâché objects',
                 ].map((surface) => (
-                  <li key={surface} className="text-cream-200/50 font-body text-sm flex items-center gap-2">
+                  <li key={surface} className="text-white/50 font-body text-sm flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-earth-500 flex-shrink-0" />
                     {surface}
                   </li>
@@ -797,7 +797,7 @@ function ClosingCTA() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
 
   return (
-    <section className="relative py-24 overflow-hidden bg-cream-50">
+    <section className="relative py-24 overflow-hidden bg-cream-50 dark:bg-warm-gray-900">
       <div className="absolute inset-0 mithila-pattern opacity-20" />
 
       <motion.div
@@ -810,11 +810,11 @@ function ClosingCTA() {
         <motion.p variants={fadeUp} className="font-accent text-earth-500 tracking-widest text-sm mb-4">
           कला संग्रह
         </motion.p>
-        <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-5xl font-bold text-charcoal mb-6">
+        <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-5xl font-bold text-charcoal dark:text-white mb-6">
           Own a Piece of{' '}
-          <span className="bg-gradient-to-r from-earth-500 to-mithila-red bg-clip-text text-transparent">Living Heritage</span>
+          <span className="bg-gradient-to-r from-earth-50 to-mithila-red bg-clip-text text-transparent">Living Heritage</span>
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-warm-gray-500 font-body text-lg mb-10 leading-relaxed">
+        <motion.p variants={fadeUp} className="text-warm-gray-500 dark:text-warm-gray-300 font-body text-lg mb-10 leading-relaxed">
           Every Mithila painting in our collection is hand-created by master artists from Madhubani, Bihar — using techniques passed down through generations. When you bring one home, you become part of this 2,500-year story.
         </motion.p>
         <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-4">
@@ -829,7 +829,7 @@ function ClosingCTA() {
           </motion.a>
           <motion.a
             href="/commission"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-charcoal text-charcoal font-display font-semibold hover:bg-charcoal hover:text-white transition-all duration-300"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-charcoal dark:border-white text-charcoal dark:text-white font-display font-semibold hover:bg-charcoal hover:text-white dark:hover:bg-white dark:hover:text-charcoal transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

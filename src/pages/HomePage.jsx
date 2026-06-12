@@ -473,8 +473,8 @@ function AboutPreview() {
                 transition={{ duration: 4, repeat: Infinity }}
               >
                 <p className="font-accent text-earth-500 text-sm">५०० से अधिक पेंटिंग</p>
-                <p className="font-display text-2xl font-bold text-charcoal">500+</p>
-                <p className="text-warm-gray-500 text-sm">Original Artworks</p>
+                <p className="font-display text-2xl font-bold text-charcoal dark:text-white">500+</p>
+                <p className="text-warm-gray-500 dark:text-warm-gray-300 text-sm">Original Artworks</p>
               </motion.div>
 
               {/* Decorative border */}
@@ -499,11 +499,11 @@ function AboutPreview() {
             </h2>
 
             <div className="space-y-4">
-              <p className="text-cream-200/80 font-body text-lg leading-relaxed">
+              <p className="text-white/80 font-body text-lg leading-relaxed">
                 From Satlakha Pathak Tola, Rahika, Madhubani, artist <strong className="text-earth-400">Lalita Kumari Pathak</strong> carries
                 forward a sacred tradition — trained under the guidance of Hira Devi and Rani Jha, with over 25 years of mastery.
               </p>
-              <p className="text-cream-200/60 font-body leading-relaxed">
+              <p className="text-white/60 font-body leading-relaxed">
                 Each brushstroke is a prayer, each motif a meditation. From the fish of fertility to the lotus of
                 creation, her paintings breathe life into walls and canvases, connecting the modern world with
                 ancient Maithil wisdom.
@@ -519,7 +519,7 @@ function AboutPreview() {
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="font-display text-3xl font-bold text-gradient-gold">{stat.number}</p>
-                  <p className="text-cream-300/60 text-sm font-body mt-1">{stat.label}</p>
+                  <p className="text-white/60 text-sm font-body mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -794,7 +794,7 @@ function NewsletterSection() {
             Stay Connected with <span className="text-gradient-gold">Mithila Art</span>
           </motion.h2>
 
-          <motion.p variants={fadeUp} className="text-cream-200/60 font-body text-lg mb-10">
+          <motion.p variants={fadeUp} className="text-white/70 font-body text-lg mb-10">
             Receive updates on new paintings, exhibition announcements, and stories from the ancient art tradition of Madhubani.
           </motion.p>
 
@@ -813,7 +813,7 @@ function NewsletterSection() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
                     required
-                    className="flex-1 px-6 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-cream-300/40 font-body focus:outline-none focus:ring-2 focus:ring-earth-500 focus:border-transparent transition-all duration-300"
+                    className="flex-1 px-6 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 font-body focus:outline-none focus:ring-2 focus:ring-earth-500 focus:border-transparent transition-all duration-300"
                   />
                   <motion.button
                     type="submit"
@@ -839,7 +839,7 @@ function NewsletterSection() {
               )}
             </AnimatePresence>
 
-            <p className="text-cream-300/30 text-xs mt-4 font-body">
+            <p className="text-white/30 text-xs mt-4 font-body">
               We respect your privacy. Unsubscribe anytime.
             </p>
           </motion.form>
