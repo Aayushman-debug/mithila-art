@@ -9,6 +9,7 @@ import LoadingSpinner from './components/ui/LoadingSpinner';
 import ScrollProgress from './components/layout/ScrollProgress';
 import { AdminRoute, ProtectedRoute } from './components/ui/ProtectedRoute';
 import GlobalErrorBoundary from './components/ui/GlobalErrorBoundary';
+import { prefetchProducts } from './api';
 
 // Lazy load pages for performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -47,6 +48,11 @@ function ScrollToTop() {
 
 export default function App() {
   const location = useLocation();
+
+  // Warm the product cache on app mount — wakes the backend and pre-fetches products
+  useEffect(() => {
+    prefetchProducts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 transition-colors duration-300">

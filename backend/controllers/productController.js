@@ -3,6 +3,8 @@ const Product = require('../models/Product');
 const getProducts = async (req, res) => {
   try {
     const products = await Product.find({ available: true }).sort({ createdAt: -1 }).lean();
+    // Allow browser/CDN caching for 60s to reduce redundant DB queries
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=120');
     res.status(200).json({ success: true, products });
   } catch (error) {
     console.error('Get products error:', error);

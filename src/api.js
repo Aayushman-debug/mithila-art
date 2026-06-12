@@ -110,14 +110,63 @@ export const userAPI = {
   removeAddress: (addressId) => api.delete(`/api/user/addresses/${addressId}`),
 };
 
+// ─── Product cache (2-minute TTL) ─────────────────────────────────────────
+// Prevents redundant fetches when users navigate Gallery → Profile → Gallery etc.
+const _productCache = {
+  data: null,
+  timestamp: 0,
+  TTL_MS: 2 * 60 * 1000, // 2 minutes
+  isValid() {
+    return this.data !== null && (Date.now() - this.timestamp) < this.TTL_MS;
+  },
+  set(data) {
+    this.data = data;
+    this.timestamp = Date.now();
+  },
+  clear() {
+    this.data = null;
+    this.timestamp = 0;
+  },
+};
+
 // Product API calls
 export const productAPI = {
-  getProducts: () => api.get('/api/products'),
+  getProducts: async () => {
+    if (_productCache.isValid()) {
+      // Return cached response wrapped to match axios response shape
+      return { data: _productCache.data };
+    }
+    const response = await api.get('/api/products');
+    if (response.data?.success) {
+      _productCache.set(response.data);
+    }
+    return response;
+  },
   getProductById: (productId) => api.get(`/api/products/${productId}`),
-  createProduct: (data) => api.post('/api/products', data),
-  updateProduct: (productId, data) => api.put(`/api/products/${productId}`, data),
-  deleteProduct: (productId) => api.delete(`/api/products/${productId}`),
+  createProduct: (data) => {
+    _productCache.clear(); // Invalidate cache on write
+    return api.post('/api/products', data);
+  },
+  updateProduct: (productId, data) => {
+    _productCache.clear(); // Invalidate cache on write
+    return api.put(`/api/products/${productId}`, data);
+  },
+  deleteProduct: (productId) => {
+    _productCache.clear(); // Invalidate cache on write
+    return api.delete(`/api/products/${productId}`);
+  },
 };
+
+/**
+ * Fire-and-forget product prefetch — call this on app mount so the backend
+ * is already awake and the cache is warm before the user navigates to Gallery/Shop.
+ */
+export function prefetchProducts() {
+  productAPI.getProducts().catch(() => {
+    // Silently ignore prefetch errors — it's a best-effort warm-up
+  });
+}
+
 
 // Payment API calls
 export const paymentAPI = {

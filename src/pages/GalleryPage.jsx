@@ -180,7 +180,7 @@ export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(paintings);
   const [productsLoading, setProductsLoading] = useState(true);
   const [showWakingUpMsg, setShowWakingUpMsg] = useState(false);
 
@@ -192,7 +192,7 @@ export default function GalleryPage() {
       
       timeoutId = setTimeout(() => {
         setShowWakingUpMsg(true);
-      }, 3000);
+      }, 5000);
 
       try {
         const response = await productAPI.getProducts();
@@ -349,7 +349,7 @@ export default function GalleryPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search paintings..."
-                  className="w-full pl-10 pr-10 py-2.5 rounded-full bg-white border border-cream-200 text-charcoal font-body text-sm focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-full bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-600 text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 font-body text-sm focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                 />
                 {searchQuery && (
                   <button
@@ -386,26 +386,16 @@ export default function GalleryPage() {
 
           <div className="container-custom relative z-10">
             <LayoutGroup>
+              {/* Waking-up banner — shown above the grid, not instead of it */}
+              {productsLoading && showWakingUpMsg && (
+                <div className="bg-earth-500/10 dark:bg-earth-500/5 border border-earth-500/20 text-earth-700 dark:text-earth-400 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse mb-6">
+                  <span className="font-display font-semibold mb-1 text-charcoal dark:text-cream-200">Connecting to server...</span>
+                  <span className="text-sm font-body text-warm-gray-600 dark:text-warm-gray-300">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
+                </div>
+              )}
+
               <AnimatePresence mode="popLayout">
-                {productsLoading ? (
-                  <motion.div layout className="space-y-6">
-                    {showWakingUpMsg && (
-                      <div className="bg-earth-500/10 border border-earth-500/20 text-earth-700 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse">
-                        <span className="font-display font-semibold mb-1 text-charcoal">Connecting to server...</span>
-                        <span className="text-sm font-body text-warm-gray-600">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
-                      </div>
-                    )}
-                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
-                      {[...Array(6)].map((_, index) => {
-                        const heights = ['h-64', 'h-80', 'h-72', 'h-96', 'h-64', 'h-80'];
-                        const heightClass = heights[index % heights.length];
-                        return (
-                          <div key={index} className={`w-full bg-warm-gray-200/60 rounded-2xl animate-pulse ${heightClass} break-inside-avoid inline-block`} />
-                        );
-                      })}
-                    </div>
-                  </motion.div>
-                ) : filteredPaintings.length > 0 ? (
+                {filteredPaintings.length > 0 ? (
                   <motion.div
                     layout
                     className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5"
@@ -424,9 +414,9 @@ export default function GalleryPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center py-20"
                   >
-                    <IoGridOutline className="text-6xl text-warm-gray-300 mx-auto mb-4" />
-                    <h3 className="font-display text-2xl text-charcoal mb-2">No artworks found</h3>
-                    <p className="text-warm-gray-400 font-body">
+                    <IoGridOutline className="text-6xl text-warm-gray-300 dark:text-warm-gray-600 mx-auto mb-4" />
+                    <h3 className="font-display text-2xl text-charcoal dark:text-cream-200 mb-2">No artworks found</h3>
+                    <p className="text-warm-gray-400 dark:text-warm-gray-300 font-body">
                       Try adjusting your filters or search query
                     </p>
                     <motion.button

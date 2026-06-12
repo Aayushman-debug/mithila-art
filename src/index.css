@@ -361,7 +361,8 @@
   .dark body,
   :root.dark body {
     background-color: rgb(var(--warm-gray-900));
-    color: rgb(var(--warm-gray-200));
+    /* Bumped from warm-gray-200 (229,221,211) to a brighter off-white for WCAG AA compliance */
+    color: #EDE8DF;
     transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -684,7 +685,8 @@
   }
 
   .dark .text-body {
-    @apply text-warm-gray-300;
+    /* Upgraded from text-warm-gray-300 for better WCAG AA contrast on dark backgrounds */
+    @apply text-warm-gray-200;
   }
 
   .text-body-sm {
@@ -692,7 +694,8 @@
   }
 
   .dark .text-body-sm {
-    @apply text-warm-gray-400;
+    /* Upgraded from text-warm-gray-400 for better readability */
+    @apply text-warm-gray-300;
   }
 
   /* ═══ BACKGROUNDS ═══ */

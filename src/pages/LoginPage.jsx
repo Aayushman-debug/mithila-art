@@ -258,6 +258,12 @@ export default function LoginPage() {
                 {loading ? 'Signing in...' : 'Sign In'}
               </motion.button>
             </form>
+
+            {/* Google Sign-In — same OAuth flow as Register page */}
+            <SocialLoginButtons onError={(msg) => {
+              setError(msg);
+              showToast(msg, 'error');
+            }} />
           </motion.div>
 
           {/* Sign Up Link */}

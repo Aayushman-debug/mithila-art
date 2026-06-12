@@ -535,16 +535,14 @@ const googleLogin = async (req, res) => {
 
     const jwtToken = generateToken(user);
 
+    // Return full user document (same as email/password login)
+    const userData = user.toObject();
+    delete userData.password;
+
     res.status(200).json({
       success: true,
       token: jwtToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role || 'user',
-        isVerified: user.isVerified
-      }
+      user: userData
     });
   } catch (error) {
     console.error('Google login error:', error);
@@ -588,16 +586,14 @@ const facebookLogin = async (req, res) => {
 
     const jwtToken = generateToken(user);
 
+    // Return full user document (same as email/password login)
+    const userData = user.toObject();
+    delete userData.password;
+
     res.status(200).json({
       success: true,
       token: jwtToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role || 'user',
-        isVerified: user.isVerified
-      }
+      user: userData
     });
   } catch (error) {
     console.error('Facebook login error:', error);

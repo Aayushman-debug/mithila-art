@@ -329,13 +329,13 @@ export default function CartPage() {
 
   if (step === 'success') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen bg-cream-50 pt-24">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-24">
         <Helmet><title>Order Submitted — Lalita Pathak Mithila Art</title></Helmet>
         <div className="container-custom section-padding text-center">
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}>
             <IoCheckmarkCircle className="text-mithila-green mx-auto mb-6" size={100} />
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="heading-lg text-charcoal mb-4">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="heading-lg text-charcoal dark:text-cream-200 mb-4">
             {upiOrderId ? 'Order Submitted! 🎉' : 'Order Confirmed! 🎉'}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-body max-w-md mx-auto mb-4">
@@ -366,7 +366,7 @@ export default function CartPage() {
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className="min-h-screen bg-cream-50 pt-24">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-24 pb-28 lg:pb-0">
       <Helmet>
         <title>Shopping Cart — Lalita Pathak Mithila Art</title>
         <meta name="description" content="Review your selected Mithila paintings and proceed to checkout." />
@@ -421,11 +421,11 @@ export default function CartPage() {
             const isActive = i <= currentStepIndex;
             return (
               <div key={s} className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-sm transition-all duration-300 ${isActive ? 'bg-earth-500 text-white shadow-gold' : 'bg-cream-200 text-warm-gray-400'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-sm transition-all duration-300 ${isActive ? 'bg-earth-500 text-white shadow-gold' : 'bg-cream-200 dark:bg-warm-gray-700 text-warm-gray-400 dark:text-warm-gray-500'}`}>
                   {i + 1}
                 </div>
-                <span className={`hidden sm:block font-body text-sm ${isActive ? 'text-earth-700 font-semibold' : 'text-warm-gray-400'}`}>{s}</span>
-                {i < 2 && <div className={`w-12 h-0.5 ${isActive ? 'bg-earth-500' : 'bg-cream-200'}`} />}
+                <span className={`hidden sm:block font-body text-sm ${isActive ? 'text-earth-700 dark:text-earth-400 font-semibold' : 'text-warm-gray-400 dark:text-warm-gray-500'}`}>{s}</span>
+                {i < 2 && <div className={`w-12 h-0.5 ${isActive ? 'bg-earth-500' : 'bg-cream-200 dark:bg-warm-gray-700'}`} />}
               </div>
             );
           })}
@@ -434,8 +434,8 @@ export default function CartPage() {
         {items.length === 0 && step === 'cart' ? (
           /* Empty Cart */
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20">
-            <IoCartOutline className="text-cream-300 mx-auto mb-6" size={80} />
-            <h2 className="heading-md text-charcoal mb-4">Your Cart is Empty</h2>
+            <IoCartOutline className="text-cream-300 dark:text-warm-gray-600 mx-auto mb-6" size={80} />
+            <h2 className="heading-md text-charcoal dark:text-cream-200 mb-4">Your Cart is Empty</h2>
             <p className="text-body mb-8 max-w-md mx-auto">Explore our collection of authentic Mithila paintings and add your favorites to cart.</p>
             <Link to="/shop" className="btn-primary">Browse Collection</Link>
           </motion.div>
@@ -447,22 +447,22 @@ export default function CartPage() {
                 {step === 'cart' && (
                   <motion.div key="cart" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                     <div className="flex items-center justify-between mb-6">
-                      <h1 className="heading-md text-charcoal">Your Cart ({itemCount})</h1>
+                      <h1 className="heading-md text-charcoal dark:text-cream-200">Your Cart ({itemCount})</h1>
                       <button onClick={clearCart} className="text-sm text-mithila-red hover:underline font-body">Clear All</button>
                     </div>
 
                     <div className="space-y-4">
                       {items.map((item) => (
                         <motion.div key={item.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }}
-                          className="bg-white rounded-2xl p-4 shadow-card flex gap-4"
+                          className="bg-white dark:bg-warm-gray-800 rounded-2xl p-4 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 flex gap-4"
                         >
                           <img src={item.images?.[0] || item.image} alt={item.title} className="w-24 h-28 sm:w-32 sm:h-36 object-cover rounded-xl" />
                           <div className="flex-1 min-w-0">
                             <p className="text-earth-500 text-xs font-semibold tracking-wider uppercase">{item.category}</p>
-                            <h3 className="font-display font-semibold text-lg text-charcoal leading-snug truncate">{item.title}</h3>
+                            <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-200 leading-snug truncate">{item.title}</h3>
                             <p className="text-body-sm text-warm-gray-400 mb-3">{item.size}</p>
                             <div className="flex items-center justify-between flex-wrap gap-2">
-                              <span className="font-display font-bold text-xl text-earth-700">{formatPrice(item.price)}</span>
+                              <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">{formatPrice(item.price)}</span>
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center bg-mithila-orange/10 rounded-xl overflow-hidden px-3 py-1.5">
                                   <span className="font-body font-semibold text-xs text-mithila-orange tracking-wider">ORIGINAL 1 OF 1</span>
@@ -481,16 +481,16 @@ export default function CartPage() {
 
                 {step === 'auth' && (
                   <motion.div key="auth" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h2 className="heading-md text-charcoal mb-6">Authentication Required</h2>
-                    <div className="bg-white rounded-2xl p-8 shadow-card flex flex-col md:flex-row gap-8">
+                    <h2 className="heading-md text-charcoal dark:text-cream-200 mb-6">Authentication Required</h2>
+                    <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-8 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 flex flex-col md:flex-row gap-8">
                       <div className="flex-1 flex flex-col justify-center space-y-4">
-                        <h3 className="font-display font-semibold text-xl text-charcoal">Already have an account?</h3>
+                        <h3 className="font-display font-semibold text-xl text-charcoal dark:text-cream-200">Already have an account?</h3>
                         <p className="text-body-sm text-warm-gray-500 mb-4">Login to checkout, view your order history, and save artworks to your wishlist.</p>
                         <Link to="/login" state={{ from: location }} className="btn-primary w-full text-center block">Login</Link>
                       </div>
-                      <div className="hidden md:block w-px bg-cream-200" />
+                      <div className="hidden md:block w-px bg-cream-200 dark:bg-warm-gray-700" />
                       <div className="flex-1 flex flex-col justify-center space-y-4">
-                        <h3 className="font-display font-semibold text-xl text-charcoal">New Customer?</h3>
+                        <h3 className="font-display font-semibold text-xl text-charcoal dark:text-cream-200">New Customer?</h3>
                         <p className="text-body-sm text-warm-gray-500 mb-4">Create an account to securely purchase original Mithila artworks and manage your collection.</p>
                         <Link to="/signup" state={{ from: location }} className="btn-secondary w-full text-center block">Create Account</Link>
                       </div>
@@ -500,38 +500,38 @@ export default function CartPage() {
 
                 {step === 'checkout' && (
                   <motion.div key="checkout" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h2 className="heading-md text-charcoal mb-6">Shipping Details</h2>
-                    <div className="bg-white rounded-2xl p-6 shadow-card space-y-4">
+                    <h2 className="heading-md text-charcoal dark:text-cream-200 mb-6">Shipping Details</h2>
+                    <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-6 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Full Name *</label>
-                          <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="Enter your name" />
+                          <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-1">Full Name *</label>
+                          <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="Enter your name" />
                         </div>
                         <div>
-                          <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Email *</label>
-                          <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="email@example.com" />
+                          <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-1">Email *</label>
+                          <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="email@example.com" />
                         </div>
                       </div>
                       <div>
                         <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Phone *</label>
-                        <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="+91 74883 37792" />
+                        <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="+91 74883 37792" />
                       </div>
                       <div>
                         <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Address *</label>
-                        <textarea name="address" value={formData.address} onChange={handleInputChange} rows={2} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all resize-none" placeholder="House/Flat No., Street, Landmark" />
+                        <textarea name="address" value={formData.address} onChange={handleInputChange} rows={2} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all resize-none" placeholder="House/Flat No., Street, Landmark" />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                          <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">City *</label>
-                          <input type="text" name="city" value={formData.city} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="City" />
+                          <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-1">City *</label>
+                          <input type="text" name="city" value={formData.city} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="City" />
                         </div>
                         <div>
-                          <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">State *</label>
-                          <input type="text" name="state" value={formData.state} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="State" />
+                          <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-1">State *</label>
+                          <input type="text" name="state" value={formData.state} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="State" />
                         </div>
                         <div>
-                          <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Pincode *</label>
-                          <input type="text" name="pincode" value={formData.pincode} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="110001" />
+                          <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-1">Pincode *</label>
+                          <input type="text" name="pincode" value={formData.pincode} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="110001" />
                         </div>
                       </div>
                     </div>
@@ -540,14 +540,14 @@ export default function CartPage() {
 
                 {step === 'payment' && (
                   <motion.div key="payment" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h2 className="heading-md text-charcoal mb-6">Pay via UPI</h2>
-                    <div className="bg-white rounded-2xl p-6 shadow-card space-y-6">
+                    <h2 className="heading-md text-charcoal dark:text-cream-200 mb-6">Pay via UPI</h2>
+                    <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-6 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 space-y-6">
 
                       {/* Amount Display */}
-                      <div className="bg-cream-50 rounded-xl p-4 border border-cream-200">
+                      <div className="bg-cream-50 dark:bg-warm-gray-700/50 rounded-xl p-4 border border-cream-200 dark:border-warm-gray-600">
                         <div className="flex items-center justify-between">
-                          <span className="text-warm-gray-600 font-body text-sm">Amount to pay</span>
-                          <span className="font-display font-bold text-2xl text-earth-700">{formatPrice(finalTotal)}</span>
+                          <span className="text-warm-gray-600 dark:text-warm-gray-300 font-body text-sm">Amount to pay</span>
+                          <span className="font-display font-bold text-2xl text-earth-700 dark:text-earth-400">{formatPrice(finalTotal)}</span>
                         </div>
                         {discountAmount > 0 && (
                           <p className="text-mithila-green text-xs font-body mt-1">Coupon discount of {formatPrice(discountAmount)} applied!</p>
@@ -577,15 +577,15 @@ export default function CartPage() {
 
                       {/* Divider */}
                       <div className="flex items-center gap-3">
-                        <div className="flex-1 h-px bg-cream-200" />
-                        <span className="text-warm-gray-400 text-xs font-body uppercase tracking-wider">or</span>
+                        <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
+                        <span className="text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body uppercase tracking-wider">or</span>
                         <div className="flex-1 h-px bg-cream-200" />
                       </div>
 
                       {/* Show QR Code Button */}
                       <button
                         onClick={() => setShowQrModal(true)}
-                        className="w-full py-3.5 bg-cream-50 hover:bg-cream-100 text-earth-700 rounded-2xl font-body font-semibold text-sm transition-all duration-300 border border-cream-200 flex items-center justify-center gap-2"
+                        className="w-full py-3.5 bg-cream-50 dark:bg-warm-gray-700/50 hover:bg-cream-100 dark:hover:bg-warm-gray-700 text-earth-700 dark:text-cream-200 rounded-2xl font-body font-semibold text-sm transition-all duration-300 border border-cream-200 dark:border-warm-gray-600 flex items-center justify-center gap-2"
                       >
                         <IoQrCodeOutline size={20} />
                         Show QR Code to Scan
@@ -600,7 +600,7 @@ export default function CartPage() {
 
                       {/* Upload Screenshot Section */}
                       <div className="space-y-3">
-                        <p className="font-display font-semibold text-base text-charcoal">Already paid? Upload your payment screenshot</p>
+                        <p className="font-display font-semibold text-base text-charcoal dark:text-cream-200">Already paid? Upload your payment screenshot</p>
                         <p className="text-body-sm text-warm-gray-500">Upload a screenshot of your successful UPI payment so we can verify and process your order.</p>
 
                         <div className="relative">
@@ -613,10 +613,10 @@ export default function CartPage() {
                           />
                           <label
                             htmlFor="screenshot-upload"
-                            className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-cream-300 rounded-2xl bg-cream-50/50 hover:bg-cream-100/50 transition-colors cursor-pointer"
+                            className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-cream-300 dark:border-warm-gray-600 rounded-2xl bg-cream-50/50 dark:bg-warm-gray-700/30 hover:bg-cream-100/50 dark:hover:bg-warm-gray-700/50 transition-colors cursor-pointer"
                           >
                             <IoCloudUploadOutline size={32} className="text-earth-500 mb-2" />
-                            <span className="text-sm font-body font-medium text-earth-700">
+                            <span className="text-sm font-body font-medium text-earth-700 dark:text-cream-200">
                               {screenshotFile ? screenshotFile.name : 'Click to upload screenshot'}
                             </span>
                             <span className="text-xs text-warm-gray-400 mt-1">JPG, PNG or WEBP • Max 5MB</span>
@@ -648,7 +648,7 @@ export default function CartPage() {
 
                       {/* Payment Error */}
                       {paymentError && (
-                        <div className="rounded-2xl bg-red-50 border border-red-200 p-4 text-red-700 text-sm">
+                        <div className="rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 p-4 text-red-700 dark:text-red-400 text-sm">
                           {paymentError}
                         </div>
                       )}
@@ -660,19 +660,19 @@ export default function CartPage() {
 
             {/* Order Summary Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl p-6 shadow-card sticky top-28">
-                <h3 className="font-display font-semibold text-lg text-charcoal mb-4 pb-4 border-b border-cream-200">Order Summary</h3>
+              <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-6 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 sticky top-28">
+                <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-200 mb-4 pb-4 border-b border-cream-200 dark:border-warm-gray-700">Order Summary</h3>
                 
                 {step !== 'cart' && (
-                  <div className="space-y-3 mb-4 pb-4 border-b border-cream-100 max-h-40 overflow-y-auto">
+                  <div className="space-y-3 mb-4 pb-4 border-b border-cream-100 dark:border-warm-gray-700 max-h-40 overflow-y-auto">
                     {items.map((item) => (
                       <div key={item.id} className="flex items-center gap-3">
                         <img src={item.images?.[0] || item.image} alt={item.title} className="w-12 h-12 object-cover rounded-lg" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-body font-medium text-charcoal truncate">{item.title}</p>
+                          <p className="text-sm font-body font-medium text-charcoal dark:text-cream-200 truncate">{item.title}</p>
                           <p className="text-xs text-warm-gray-400">Qty: {item.quantity}</p>
                         </div>
-                        <p className="text-sm font-semibold text-earth-700">{formatPrice(item.price * item.quantity)}</p>
+                        <p className="text-sm font-semibold text-earth-700 dark:text-earth-400">{formatPrice(item.price * item.quantity)}</p>
                       </div>
                     ))}
                   </div>
@@ -681,20 +681,20 @@ export default function CartPage() {
                 <div className="space-y-3 mb-4">
                   {/* Coupon input */}
                   <div>
-                    <label className="block text-sm font-body font-medium text-warm-gray-600 mb-2">Coupon Code:</label>
+                    <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-2">Coupon Code:</label>
                     <div className="flex gap-2">
-                      <input value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="ENTER CODE" className="flex-1 px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500" />
+                      <input value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="ENTER CODE" className="flex-1 px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500" />
                       <button onClick={handleApplyCoupon} className="btn-primary px-4">Apply</button>
                     </div>
                     {couponError && <p className="text-xs text-red-600 mt-2">{couponError}</p>}
                     {appliedCoupon && (
-                      <div className="mt-3 rounded-lg bg-cream-50 border border-cream-200 p-3 text-sm flex items-center justify-between">
+                      <div className="mt-3 rounded-lg bg-cream-50 dark:bg-warm-gray-700/30 border border-cream-200 dark:border-warm-gray-600 p-3 text-sm flex items-center justify-between">
                         <div>
-                          <div className="font-medium text-charcoal">{appliedCoupon.code} • {appliedCoupon.desc}</div>
+                          <div className="font-medium text-charcoal dark:text-cream-200">{appliedCoupon.code} • {appliedCoupon.desc}</div>
                           <div className="text-xs text-warm-gray-500">Discount applied</div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="font-semibold text-earth-700">-{formatPrice(discountAmount)}</div>
+                          <div className="font-semibold text-earth-700 dark:text-earth-400">-{formatPrice(discountAmount)}</div>
                           <button onClick={handleRemoveCoupon} className="text-xs text-warm-gray-400 hover:text-mithila-red">Remove</button>
                         </div>
                       </div>
@@ -715,9 +715,9 @@ export default function CartPage() {
                   )}
                 </div>
 
-                <div className="flex justify-between pt-4 border-t border-cream-200 mb-6">
-                  <span className="font-display font-bold text-lg text-charcoal">Total</span>
-                  <span className="font-display font-bold text-xl text-earth-700">{formatPrice(finalTotal)}</span>
+                <div className="flex justify-between pt-4 border-t border-cream-200 dark:border-warm-gray-700 mb-6">
+                  <span className="font-display font-bold text-lg text-charcoal dark:text-cream-200">Total</span>
+                  <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">{formatPrice(finalTotal)}</span>
                 </div>
 
                 {step === 'cart' && (
@@ -751,6 +751,43 @@ export default function CartPage() {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Sticky Bottom Action Bar */}
+        {step !== 'success' && items.length > 0 && (
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-warm-gray-800/95 backdrop-blur-md border-t border-cream-200 dark:border-warm-gray-700 px-6 py-4 shadow-[0_-8px_30px_rgba(0,0,0,0.06)] z-40 flex items-center justify-between safe-bottom">
+            <div className="flex flex-col">
+              <span className="text-xs text-warm-gray-400 font-body">Total Amount</span>
+              <span className="font-display font-bold text-lg text-earth-700 dark:text-earth-400">{formatPrice(finalTotal)}</span>
+            </div>
+            <div className="w-1/2">
+              {step === 'cart' && (
+                <button
+                  onClick={() => isAuthenticated ? setStep('checkout') : setStep('auth')}
+                  className="btn-primary w-full py-2.5 text-sm"
+                >
+                  Checkout
+                </button>
+              )}
+              {step === 'checkout' && (
+                <button
+                  onClick={handleCheckout}
+                  className="btn-primary w-full py-2.5 text-sm"
+                >
+                  Continue
+                </button>
+              )}
+              {step === 'payment' && (
+                <button
+                  onClick={handleUpiOrder}
+                  disabled={paymentLoading || !screenshotPreview}
+                  className="btn-primary w-full py-2.5 text-sm disabled:opacity-50"
+                >
+                  {paymentLoading ? 'Submitting...' : 'Confirm'}
+                </button>
+              )}
             </div>
           </div>
         )}

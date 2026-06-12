@@ -90,7 +90,8 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
         exit={{ opacity: 0, y: 20 }}
         whileHover={{ y: -6 }}
         transition={{ duration: 0.4 }}
-        className="group relative bg-white dark:bg-warm-gray-800 rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover dark:shadow-none dark:hover:shadow-[0_10px_30px_-5px_rgba(139,105,20,0.15)] transition-all duration-500 border border-transparent dark:border-warm-gray-700/50 flex flex-col h-full"
+        onClick={() => navigate(`/painting/${painting.id}`)}
+        className="group relative bg-white dark:bg-warm-gray-800 rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover dark:shadow-none dark:hover:shadow-[0_10px_30px_-5px_rgba(139,105,20,0.15)] transition-all duration-500 border border-transparent dark:border-warm-gray-700/50 flex flex-col h-full cursor-pointer"
       >
         {/* Image */}
         <div className="relative aspect-[4/5] overflow-hidden">
@@ -167,7 +168,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
               e.stopPropagation();
               onToggleWishlist?.(painting);
             }}
-            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:text-mithila-red z-10"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:text-mithila-red z-10"
           >
             {isWishlisted ? <IoHeart size={18} className="text-mithila-red" /> : <IoHeartOutline size={18} />}
           </button>

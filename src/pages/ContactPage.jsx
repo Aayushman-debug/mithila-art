@@ -485,7 +485,7 @@ export default function ContactPage() {
         </section>
 
         {/* ─── Form & Sidebar ─── */}
-        <section className="section-padding bg-cream-50 relative overflow-hidden">
+        <section className="section-padding bg-cream-50 dark:bg-warm-gray-900/40 relative overflow-hidden">
           <div className="absolute inset-0 mithila-pattern opacity-15" />
 
           <div className="container-custom relative z-10">
@@ -529,7 +529,7 @@ export default function ContactPage() {
                     {workingHours.map((wh) => (
                       <div
                         key={wh.day}
-                        className={`flex justify-between items-center py-2 border-b border-cream-200/50 last:border-0 ${
+                        className={`flex justify-between items-center py-2 border-b border-cream-200/50 dark:border-warm-gray-700/50 last:border-0 ${
                           !wh.active ? 'opacity-50' : ''
                         }`}
                       >
@@ -552,7 +552,7 @@ export default function ContactPage() {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-2 p-3 rounded-xl bg-cream-50 border border-cream-200/50 text-warm-gray-600 dark:text-cream-200 ${social.color} hover:text-white transition-all duration-300 group`}
+                        className={`flex flex-col items-center gap-2 p-3 rounded-xl bg-cream-50 dark:bg-warm-gray-800 border border-cream-200/50 dark:border-warm-gray-700/50 text-warm-gray-600 dark:text-cream-200 ${social.color} hover:text-white transition-all duration-300 group`}
                         whileHover={{ y: -4, scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -620,7 +620,7 @@ export default function ContactPage() {
                 animate={mapInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.5 }}
               >
-                <GlassCard className="p-5 max-w-xs backdrop-blur-xl bg-white/90">
+                <GlassCard className="p-5 max-w-xs backdrop-blur-xl bg-white/90 dark:bg-warm-gray-800/90">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-xl bg-mithila-red flex items-center justify-center flex-shrink-0 shadow-lg">
                       <FaMapMarkerAlt className="text-white" />

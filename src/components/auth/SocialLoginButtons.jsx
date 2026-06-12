@@ -31,10 +31,10 @@ export default function SocialLoginButtons({ onError }) {
     <div className="flex flex-col space-y-4 mt-6">
       <div className="relative mb-2">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-warm-gray-200"></div>
+          <div className="w-full border-t border-warm-gray-200 dark:border-warm-gray-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-warm-gray-500">Or continue with</span>
+          <span className="px-2 bg-white dark:bg-warm-gray-800 text-warm-gray-500 dark:text-warm-gray-400">Or continue with</span>
         </div>
       </div>
       

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -129,7 +129,7 @@ function FilterSidebar({
       </div>
 
       {/* ── Category Filter ── */}
-      <div className="border-t border-cream-200/60 pt-4">
+      <div className="border-t border-cream-200/60 dark:border-warm-gray-700/60 pt-4">
         <button
           onClick={() => toggleSection('category')}
           className="flex items-center justify-between w-full text-left group"
@@ -160,7 +160,7 @@ function FilterSidebar({
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
                         selectedCategories.includes(cat.id)
                           ? 'bg-earth-500 border-earth-500'
-                          : 'border-warm-gray-300 group-hover:border-earth-400'
+                          : 'border-warm-gray-300 dark:border-warm-gray-600 group-hover:border-earth-400'
                       }`}
                     >
                       {selectedCategories.includes(cat.id) && (
@@ -198,7 +198,7 @@ function FilterSidebar({
       </div>
 
       {/* ── Price Range ── */}
-      <div className="border-t border-cream-200/60 pt-4">
+      <div className="border-t border-cream-200/60 dark:border-warm-gray-700/60 pt-4">
         <button
           onClick={() => toggleSection('price')}
           className="flex items-center justify-between w-full text-left"
@@ -244,7 +244,7 @@ function FilterSidebar({
                   </div>
                 </div>
                 {/* Range visual */}
-                <div className="relative h-1.5 bg-cream-200 rounded-full overflow-hidden">
+                <div className="relative h-1.5 bg-cream-200 dark:bg-warm-gray-700 rounded-full overflow-hidden">
                   <motion.div
                     className="absolute h-full bg-gradient-gold rounded-full"
                     style={{
@@ -266,7 +266,7 @@ function FilterSidebar({
       </div>
 
       {/* ── Size Filter ── */}
-      <div className="border-t border-cream-200/60 pt-4">
+      <div className="border-t border-cream-200/60 dark:border-warm-gray-700/60 pt-4">
         <button
           onClick={() => toggleSection('size')}
           className="flex items-center justify-between w-full text-left"
@@ -297,7 +297,7 @@ function FilterSidebar({
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
                         selectedSizes.includes(size.value)
                           ? 'bg-earth-500 border-earth-500'
-                          : 'border-warm-gray-300 dark:border-warm-gray-650 group-hover:border-earth-400'
+                          : 'border-warm-gray-300 dark:border-warm-gray-600 group-hover:border-earth-400'
                       }`}
                     >
                       {selectedSizes.includes(size.value) && (
@@ -343,7 +343,7 @@ export default function ShopPage() {
   const { addItem } = useCart();
   const { isAuthenticated, user } = useAuth();
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(paintings);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState(null);
   const [showWakingUpMsg, setShowWakingUpMsg] = useState(false);
@@ -358,6 +358,8 @@ export default function ShopPage() {
   const [viewMode, setViewMode] = useState('grid');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+
+  const sortRef = useRef(null);
 
   /* ─── scroll to top on mount ────────────────────────────── */
   /* ─── filter handlers ───────────────────────────────────── */
@@ -436,6 +438,18 @@ export default function ShopPage() {
   }, [user]);
 
   useEffect(() => {
+    function handleClickOutside(event) {
+      if (sortRef.current && !sortRef.current.contains(event.target)) {
+        setSortDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     let timeoutId;
     const loadProducts = async () => {
       setProductsLoading(true);
@@ -444,7 +458,7 @@ export default function ShopPage() {
       
       timeoutId = setTimeout(() => {
         setShowWakingUpMsg(true);
-      }, 3000);
+      }, 5000);
 
       try {
         const response = await productAPI.getProducts();
@@ -672,7 +686,7 @@ export default function ShopPage() {
                 </motion.button>
 
                 {/* Sort dropdown */}
-                <div className="relative">
+                <div className="relative" ref={sortRef}>
                   <motion.button
                     onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
                     className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 rounded-xl font-body text-sm text-charcoal dark:text-cream-200 shadow-sm hover:shadow-card transition-all"
@@ -835,25 +849,15 @@ export default function ShopPage() {
                 )}
 
                 {/* ── Product Grid/List ── */}
-                {productsLoading ? (
-                  <div className="space-y-6">
-                    {showWakingUpMsg && (
-                      <div className="bg-earth-500/10 border border-earth-500/20 text-earth-700 dark:text-earth-300 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse">
-                        <span className="font-display font-semibold mb-1 text-charcoal dark:text-cream-100">Connecting to server...</span>
-                        <span className="text-sm font-body text-warm-gray-600 dark:text-warm-gray-400">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
-                      </div>
-                    )}
-                    <div className={
-                      viewMode === 'grid'
-                        ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'
-                        : 'flex flex-col gap-4'
-                    }>
-                      {[...Array(6)].map((_, i) => (
-                        <PaintingCardSkeleton key={i} viewMode={viewMode} />
-                      ))}
-                    </div>
+                {/* Waking-up banner — above the grid, not instead of it */}
+                {productsLoading && showWakingUpMsg && (
+                  <div className="bg-earth-500/10 dark:bg-earth-500/5 border border-earth-500/20 text-earth-700 dark:text-earth-400 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse mb-6">
+                    <span className="font-display font-semibold mb-1 text-charcoal dark:text-cream-200">Connecting to server...</span>
+                    <span className="text-sm font-body text-warm-gray-600 dark:text-warm-gray-300">The server is waking up from standby. This usually takes around 30 seconds, please wait...</span>
                   </div>
-                ) : filteredPaintings.length > 0 ? (
+                )}
+
+                {filteredPaintings.length > 0 ? (
                   <motion.div
                     variants={staggerContainer}
                     initial="hidden"
