@@ -126,7 +126,7 @@ const register = async (req, res) => {
       console.error('Registration email send error [sendMail failure]:', mailErr);
     }
 
-    // Return response indicating verification required
+    // Return response indicating registration success
     const userData = user.toObject();
     delete userData.password;
     delete userData.verificationToken;
@@ -273,10 +273,12 @@ const login = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid password' });
     }
 
-    // TEMPORARILY DISABLED FOR SMTP DEBUGGING
-    // Check email verification
+    // Check email verification (Bypassed for Option A)
     // if (!user.isVerified) {
-    //   return res.status(403).json({ success: false, message: 'Please verify your email before logging in.' });
+    //   return res.status(403).json({ 
+    //     success: false, 
+    //     message: 'Please verify your email address before logging in. Check your inbox for the verification link.' 
+    //   });
     // }
 
     // Generate token
@@ -434,12 +436,9 @@ const forgotPassword = async (req, res) => {
       return res.status(200).json(responsePayload);
     } catch (mailErr) {
       console.error('❌ Email send failed:', mailErr.message);
-      // TEMPORARY WORKAROUND FOR SMTP FAILURES: 
-      // Return 200 success and provide the reset URL directly to the frontend
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Email failed to send, but a temporary reset link is provided below.',
-        resetUrl: resetUrl 
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Failed to send password reset email. Please try again later.' 
       });
     }
   } catch (error) {
@@ -529,6 +528,7 @@ const googleLogin = async (req, res) => {
     } else {
       if (!user.isVerified) {
         user.isVerified = true;
+        user.password = cryptoRandom(16) + 'A1!'; // Invalidate old unverified password
         await user.save();
       }
     }
@@ -580,6 +580,7 @@ const facebookLogin = async (req, res) => {
     } else {
       if (!user.isVerified) {
         user.isVerified = true;
+        user.password = cryptoRandom(16) + 'A1!'; // Invalidate old unverified password
         await user.save();
       }
     }

@@ -16,7 +16,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-const { verifyToken, authenticate } = require('./middleware/authMiddleware');
+const { verifyToken, authenticate, authorizeAdmin } = require('./middleware/authMiddleware');
 const User = require('./models/User');
 const Commission = require('./models/Commission');
 const CartOrder = require('./models/CartOrder');
@@ -288,7 +288,7 @@ app.get("/commission/:commissionId", async (req, res) => {
 });
 
 // 3. ADMIN: APPROVE COMMISSION & SET PRICE
-app.post("/admin/approve-commission", async (req, res) => {
+app.post("/admin/approve-commission", authenticate, authorizeAdmin, async (req, res) => {
   try {
     const { commissionId, quotedBudget, approvalMessage } = req.body;
 
@@ -784,35 +784,6 @@ app.post("/payment-failed", async (req, res) => {
       message: "Payment marked as failed",
       commission
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// 7. GET ALL COMMISSIONS (for admin dashboard)
-app.get("/admin/commissions", async (req, res) => {
-  try {
-    const commissions = await Commission.find().sort({ submittedAt: -1 }).lean();
-    res.json({
-      success: true,
-      commissions
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// Keep old endpoint for compatibility
-app.get("/reviews", async (req, res) => {
-  try {
-    const commissions = await Commission.find().lean();
-    res.json(commissions);
   } catch (error) {
     res.status(500).json({
       success: false,
