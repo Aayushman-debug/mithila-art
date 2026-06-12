@@ -6,11 +6,11 @@ import { IoTrashOutline, IoAddOutline, IoRemoveOutline, IoCartOutline, IoArrowBa
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { paymentAPI, buildApiPath } from '../api';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, validateIndianPhone, normalizePhone } from '../utils/helpers';
 
 export default function CartPage() {
   const { items, removeItem, clearCart, total, itemCount } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const location = useLocation();
   const [step, setStep] = useState('cart'); // cart, auth, checkout, payment, success
   const [checkoutError, setCheckoutError] = useState(null);
@@ -20,6 +20,21 @@ export default function CartPage() {
   const [cartOrderId, setCartOrderId] = useState(null);
   const [paymentError, setPaymentError] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || user.name || '',
+        email: prev.email || user.email || '',
+        phone: prev.phone || user.phone || '',
+        address: prev.address || (user.addresses && user.addresses[0]?.line1) || '',
+        city: prev.city || (user.addresses && user.addresses[0]?.city) || '',
+        state: prev.state || (user.addresses && user.addresses[0]?.state) || '',
+        pincode: prev.pincode || (user.addresses && user.addresses[0]?.pincode) || '',
+      }));
+    }
+  }, [isAuthenticated, user]);
 
   // UPI payment state
   const [showQrModal, setShowQrModal] = useState(false);
@@ -113,6 +128,12 @@ export default function CartPage() {
       setCheckoutError('Your cart is empty.');
       return;
     }
+    if (!validateIndianPhone(formData.phone)) {
+      setCheckoutError('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+    // Update formData with normalized phone number
+    setFormData((prev) => ({ ...prev, phone: normalizePhone(prev.phone) }));
     setStep('payment');
   };
 

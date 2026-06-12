@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
 const { createTransporter, getPreviewUrl } = require('../utils/emailService');
-const { validateEmail, isDisposableEmail, validateIndianPhone } = require('../utils/validation');
+const { validateEmail, isDisposableEmail, validateIndianPhone, normalizePhone } = require('../utils/validation');
 const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios');
 
@@ -89,7 +89,7 @@ const register = async (req, res) => {
     const user = new User({
       name,
       email: email.toLowerCase(),
-      phone,
+      phone: normalizePhone(phone),
       password,
       isVerified: false,
       verificationToken,
@@ -336,7 +336,12 @@ const updateProfile = async (req, res) => {
 
     const updateData = {};
     if (name) updateData.name = name;
-    if (phone) updateData.phone = phone;
+    if (phone) {
+      if (!validateIndianPhone(phone)) {
+        return res.status(400).json({ success: false, message: 'Please enter a valid Indian mobile number' });
+      }
+      updateData.phone = normalizePhone(phone);
+    }
     if (profilePicture) updateData.profilePicture = profilePicture;
 
     const user = await User.findByIdAndUpdate(userId, updateData, {

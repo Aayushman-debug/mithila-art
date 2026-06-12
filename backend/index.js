@@ -9,7 +9,8 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
 const { createTransporter } = require('./utils/emailService');
-const { validateEmail, isDisposableEmail, validateIndianPhone } = require('./utils/validation');
+const { validateEmail, isDisposableEmail, validateIndianPhone, normalizePhone } = require('./utils/validation');
+const seedProducts = require('./utils/seeder');
 
 // Auth routes
 const authRoutes = require("./routes/authRoutes");
@@ -39,6 +40,9 @@ const requiredEnv = [
 const missingEnv = requiredEnv.filter((name) => !process.env[name] || !String(process.env[name]).trim());
 if (missingEnv.length > 0) {
   console.warn("⚠️ Missing required environment variables:", missingEnv.join(", "));
+  if (missingEnv.includes("JWT_SECRET")) {
+    throw new Error("❌ CRITICAL: JWT_SECRET is required to start the server.");
+  }
   console.warn("⚠️ Backend is starting but some features may not work correctly.");
 }
 
@@ -152,7 +156,10 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mithilaRe
   socketTimeoutMS: 60000,
   autoIndex: false, // Don't build indexes on cold start
 })
-  .then(() => console.log("✓ MongoDB Connected"))
+  .then(async () => {
+    console.log("✓ MongoDB Connected");
+    await seedProducts();
+  })
   .catch(err => console.error("✗ MongoDB Error:", err));
 
 // Razorpay Instance
@@ -199,6 +206,8 @@ app.post("/commissions", async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid Indian phone number' });
     }
 
+    const normalizedPhone = normalizePhone(phone);
+
     if (description && email) {
       const recent = await Commission.findOne({ email: email.toLowerCase(), description }).sort({ submittedAt: -1 });
       if (recent && recent.submittedAt && (Date.now() - new Date(recent.submittedAt)) < 2 * 60 * 1000) {
@@ -212,7 +221,7 @@ app.post("/commissions", async (req, res) => {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
       try {
-        const decoded = verifyToken(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
+        const decoded = verifyToken(token, process.env.JWT_SECRET);
         if (decoded && decoded.userId) {
           attachedUser = await User.findById(decoded.userId).select('name email phone');
         }
@@ -226,7 +235,7 @@ app.post("/commissions", async (req, res) => {
       user: attachedUser?._id || null,
       name: attachedUser?.name || name,
       email: attachedUser?.email || email,
-      phone: attachedUser?.phone || phone,
+      phone: attachedUser?.phone || normalizedPhone,
       location: location || null,
       style: style || null,
       size: size || null,
@@ -254,7 +263,7 @@ app.post("/commissions", async (req, res) => {
 
 
 // 2. GET COMMISSION DETAILS (Customer checks status)
-app.get("/commission/:commissionId", async (req, res) => {
+app.get("/commission/:commissionId", authenticate, async (req, res) => {
   try {
     const commission = await Commission.findById(req.params.commissionId);
     
@@ -262,6 +271,25 @@ app.get("/commission/:commissionId", async (req, res) => {
       return res.status(404).json({
         success: false,
         error: "Commission not found"
+      });
+    }
+
+    // Verify ownership: matches userId, email matches logged in user, or user is admin
+    let isOwner = false;
+    if (commission.user) {
+      isOwner = commission.user.toString() === req.user.userId;
+    } else {
+      const user = await User.findById(req.user.userId);
+      if (user && user.email.toLowerCase() === commission.email.toLowerCase()) {
+        isOwner = true;
+      }
+    }
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({
+        success: false,
+        error: "You are not authorized to view this commission"
       });
     }
 
@@ -337,7 +365,7 @@ app.post("/admin/approve-commission", authenticate, authorizeAdmin, async (req, 
 });
 
 // 4. CREATE RAZORPAY ORDER (when customer ready to pay)
-app.post("/create-order", async (req, res) => {
+app.post("/create-order", authenticate, async (req, res) => {
   try {
     console.log("/create-order request body:", req.body);
     const { commissionId, amount } = req.body;
@@ -356,6 +384,22 @@ app.post("/create-order", async (req, res) => {
         success: false,
         error: "Commission not found"
       });
+    }
+
+    // Verify ownership
+    let isOwner = false;
+    if (commission.user) {
+      isOwner = commission.user.toString() === req.user.userId;
+    } else {
+      const user = await User.findById(req.user.userId);
+      if (user && user.email.toLowerCase() === commission.email.toLowerCase()) {
+        isOwner = true;
+      }
+    }
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ success: false, error: "Access denied" });
     }
 
     if (commission.status !== "approved") {
@@ -449,6 +493,8 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid Indian phone number' });
     }
 
+    const normalizedPhone = normalizePhone(phone);
+
     const pinCodeValue = String(pincode).trim();
     if (!/^[0-9]{6}$/.test(pinCodeValue)) {
       return res.status(400).json({ success: false, error: 'Invalid pincode format' });
@@ -532,7 +578,7 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
       user: req.user.userId,
       name,
       email,
-      phone,
+      phone: normalizedPhone,
       address,
       city,
       state,
@@ -571,12 +617,12 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
 });
 
 // 4c. CREATE UPI ORDER
-app.post("/create-upi-order", async (req, res) => {
+app.post("/create-upi-order", authenticate, async (req, res) => {
   try {
     console.log("/create-upi-order request body (keys):", Object.keys(req.body));
     const { name, email, phone, address, city, state, pincode, totalAmount, shipping, grandTotal, discount, couponCode, items, paymentScreenshot } = req.body;
 
-    if (!name || !email || !phone || !address || !city || !state || !pincode || !grandTotal || !Array.isArray(items)) {
+    if (!name || !email || !phone || !address || !city || !state || !pincode || grandTotal == null || !Array.isArray(items)) {
       return res.status(400).json({
         success: false,
         error: "Missing UPI order details"
@@ -595,47 +641,88 @@ app.post("/create-upi-order", async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid Indian phone number' });
     }
 
+    const normalizedPhone = normalizePhone(phone);
+
     const pinCodeValue = String(pincode).trim();
     if (!/^[0-9]{6}$/.test(pinCodeValue)) {
       return res.status(400).json({ success: false, error: 'Invalid pincode format' });
     }
 
-    const requestedGrandTotal = Number(grandTotal);
-    if (Number.isNaN(requestedGrandTotal) || requestedGrandTotal <= 0) {
-      return res.status(400).json({ success: false, error: 'Invalid grand total amount' });
+    // 1. Calculate subtotal using product prices from database (prevent client manipulation)
+    let calculatedSubtotal = 0;
+    const validatedItems = [];
+    for (const item of items) {
+      const dbProduct = await Product.findOne({ productId: item.productId });
+      if (!dbProduct) {
+        return res.status(404).json({ success: false, error: `Product not found: ${item.title}` });
+      }
+      calculatedSubtotal += dbProduct.price * (item.quantity || 1);
+      validatedItems.push({
+        productId: dbProduct.productId,
+        title: dbProduct.title,
+        quantity: item.quantity || 1,
+        price: dbProduct.price,
+        image: dbProduct.image || ''
+      });
     }
 
-    // Optional auth: attach user if token present (same pattern as commissions)
-    const authHeader = req.headers.authorization;
-    let attachedUser = null;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
-      try {
-        const decoded = verifyToken(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
-        if (decoded && decoded.userId) {
-          attachedUser = await User.findById(decoded.userId).select('_id');
-        }
-      } catch (e) {
-        attachedUser = null;
+    if (calculatedSubtotal !== totalAmount) {
+      return res.status(400).json({ success: false, error: "Order subtotal calculation mismatch" });
+    }
+
+    // 2. Verify discount coupon if applied
+    let calculatedDiscount = 0;
+    if (couponCode) {
+      const code = String(couponCode).toUpperCase().trim();
+      const BACKEND_COUPONS = {
+        WELCOME10: { type: 'percent', value: 10 },
+        MITHILA15: { type: 'percent', value: 15 },
+        ART500: { type: 'flat', value: 500 },
+        FIRSTORDER: { type: 'percent', value: 20 },
+      };
+      const coupon = BACKEND_COUPONS[code];
+      if (!coupon) {
+        return res.status(400).json({ success: false, error: "Invalid coupon code" });
       }
+      if (coupon.type === 'percent') {
+        calculatedDiscount = Math.round((calculatedSubtotal * coupon.value) / 100);
+      } else if (coupon.type === 'flat') {
+        calculatedDiscount = Math.min(coupon.value, calculatedSubtotal);
+      }
+    }
+
+    if (calculatedDiscount !== discount) {
+      return res.status(400).json({ success: false, error: "Coupon discount mismatch" });
+    }
+
+    // 3. Verify shipping cost
+    const expectedShipping = calculatedSubtotal > 5000 ? 0 : 199;
+    if (expectedShipping !== shipping) {
+      return res.status(400).json({ success: false, error: "Shipping cost mismatch" });
+    }
+
+    // 4. Verify grand total
+    const expectedGrandTotal = Math.max(0, calculatedSubtotal - calculatedDiscount + expectedShipping);
+    if (Math.round(expectedGrandTotal) !== Math.round(grandTotal)) {
+      return res.status(400).json({ success: false, error: "Grand total amount mismatch" });
     }
 
     const upiOrderId = `UPI-${Date.now()}`;
 
     const cartOrder = new CartOrder({
-      user: attachedUser?._id || null,
+      user: req.user.userId,
       name,
       email,
-      phone,
+      phone: normalizedPhone,
       address,
       city,
       state,
       pincode,
-      items,
-      totalAmount: totalAmount || grandTotal,
-      shipping: shipping || 0,
-      grandTotal,
-      discount: discount || 0,
+      items: validatedItems,
+      totalAmount: calculatedSubtotal,
+      shipping: expectedShipping,
+      grandTotal: expectedGrandTotal,
+      discount: calculatedDiscount,
       couponCode: couponCode || null,
       orderId: upiOrderId,
       paymentMethod: 'upi',
@@ -647,12 +734,9 @@ app.post("/create-upi-order", async (req, res) => {
 
     await cartOrder.save();
 
-    // If user is authenticated, push order to their orders array
-    if (attachedUser) {
-      await User.findByIdAndUpdate(attachedUser._id, {
-        $push: { orders: cartOrder._id },
-      });
-    }
+    await User.findByIdAndUpdate(req.user.userId, {
+      $push: { orders: cartOrder._id },
+    });
 
     res.json({
       success: true,
@@ -829,18 +913,34 @@ app.post("/verify-cart-payment", async (req, res) => {
 });
 
 // 6. MARK PAYMENT FAILED
-app.post("/payment-failed", async (req, res) => {
+app.post("/payment-failed", authenticate, async (req, res) => {
   try {
     const { commissionId, orderId } = req.body;
 
-    const commission = await Commission.findByIdAndUpdate(
-      commissionId,
-      {
-        paymentStatus: "failed",
-        orderId: null
-      },
-      { new: true }
-    );
+    const commission = await Commission.findById(commissionId);
+    if (!commission) {
+      return res.status(404).json({ success: false, error: 'Commission not found' });
+    }
+
+    // Verify ownership
+    let isOwner = false;
+    if (commission.user) {
+      isOwner = commission.user.toString() === req.user.userId;
+    } else {
+      const user = await User.findById(req.user.userId);
+      if (user && user.email.toLowerCase() === commission.email.toLowerCase()) {
+        isOwner = true;
+      }
+    }
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ success: false, error: "Access denied" });
+    }
+
+    commission.paymentStatus = "failed";
+    commission.orderId = null;
+    await commission.save();
 
     res.json({
       success: true,

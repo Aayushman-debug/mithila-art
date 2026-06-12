@@ -55,10 +55,21 @@ function isDisposableEmail(email) {
   return blockedTempDomains.some((pattern) => domain.includes(pattern));
 }
 
+function normalizePhone(phone) {
+  if (typeof phone !== 'string') return '';
+  // Remove all non-numeric characters (spaces, +, -, etc.)
+  let cleaned = phone.replace(/\D/g, '');
+  // If it starts with 91 and is 12 digits long, strip the leading 91
+  if (cleaned.length === 12 && cleaned.startsWith('91')) {
+    cleaned = cleaned.slice(2);
+  }
+  return cleaned;
+}
+
 function validateIndianPhone(phone) {
   if (!phone || typeof phone !== 'string') return false;
-  const cleaned = phone.trim();
-  return PHONE_REGEX.test(cleaned) && !bannedPhonePatterns.has(cleaned);
+  const normalized = normalizePhone(phone);
+  return PHONE_REGEX.test(normalized) && !bannedPhonePatterns.has(normalized);
 }
 
 module.exports = {
@@ -69,5 +80,6 @@ module.exports = {
   normalizeEmail,
   validateEmail,
   isDisposableEmail,
+  normalizePhone,
   validateIndianPhone,
 };

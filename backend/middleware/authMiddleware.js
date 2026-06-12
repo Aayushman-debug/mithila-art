@@ -18,7 +18,7 @@ const authenticate = (req, res, next) => {
       return res.status(401).json({ success: false, message: 'No token provided' });
     }
 
-    const decoded = verifyToken(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
+    const decoded = verifyToken(token, process.env.JWT_SECRET);
 
     if (!decoded) {
       return res.status(401).json({ success: false, message: 'Invalid or expired token' });

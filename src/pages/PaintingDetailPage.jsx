@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -24,6 +24,7 @@ import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 import ShareModal from '../components/ui/ShareModal';
+import { productAPI } from '../api';
 
 // ── Availability helpers ─────────────────────────────────────────────────────
 
@@ -76,11 +77,59 @@ export default function PaintingDetailPage() {
   const { addItem } = useCart();
   const { isAuthenticated } = useAuth();
 
-  const painting = useMemo(() => paintings.find((p) => p.id === id), [id]);
+  const [painting, setPainting] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setError(null);
+
+    async function loadProduct() {
+      try {
+        const response = await productAPI.getProductById(id);
+        if (active) {
+          if (response.data && response.data.success && response.data.product) {
+            const p = response.data.product;
+            setPainting({
+              ...p,
+              id: p.productId || p._id,
+              images: p.gallery && p.gallery.length > 0 ? p.gallery : (p.image ? [p.image] : []),
+              inStock: p.stock > 0 && p.available !== false,
+              artist: p.artist || 'Mithila Artist',
+            });
+          } else {
+            throw new Error('Product not found in API response');
+          }
+        }
+      } catch (err) {
+        console.warn('API error, falling back to local paintings database:', err);
+        if (active) {
+          const localMatch = paintings.find((p) => p.id === id);
+          if (localMatch) {
+            setPainting(localMatch);
+          } else {
+            setError('Artwork not found');
+          }
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadProduct();
+    return () => {
+      active = false;
+    };
+  }, [id]);
 
   const images = useMemo(() => {
     if (!painting) return [];
     if (painting.images && painting.images.length > 0) return painting.images;
+    if (painting.gallery && painting.gallery.length > 0) return painting.gallery;
     if (painting.image) return [painting.image];
     return [];
   }, [painting]);
@@ -88,6 +137,11 @@ export default function PaintingDetailPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  // Reset activeIndex when the painting/images change
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [images]);
 
   const status = resolveStatus(painting);
   const badgeCfg = STATUS_BADGE[status] ?? STATUS_BADGE.available;
@@ -137,8 +191,25 @@ export default function PaintingDetailPage() {
     }
   }, [painting, navigate]);
 
-  /* ── 404 ── */
-  if (!painting) {
+  /* ── Loading ── */
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-28 pb-20 flex items-center justify-center"
+      >
+        <div className="text-center py-20">
+          <div className="inline-block w-12 h-12 border-4 border-earth-500/20 border-t-earth-500 rounded-full animate-spin mb-4"></div>
+          <p className="text-body text-warm-gray-600 dark:text-warm-gray-400 font-body">Loading artwork details...</p>
+        </div>
+      </motion.div>
+    );
+  }
+
+  /* ── Error / Not Found ── */
+  if (error || !painting) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -148,7 +219,7 @@ export default function PaintingDetailPage() {
       >
         <div className="container-custom text-center py-20">
           <h1 className="heading-lg text-charcoal dark:text-cream-100 mb-4">Artwork Not Found</h1>
-          <p className="text-body mb-8">The artwork you're looking for doesn't exist or has been removed.</p>
+          <p className="text-body mb-8">{error || "The artwork you're looking for doesn't exist or has been removed."}</p>
           <Link to="/gallery" className="btn-primary">Back to Gallery</Link>
         </div>
       </motion.div>

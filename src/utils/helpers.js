@@ -17,6 +17,21 @@ const DISPOSABLE_EMAIL_PATTERNS = [
   'fakeinbox',
 ];
 
+const BANNED_PHONE_PATTERNS = new Set([
+  '0000000000',
+  '1111111111',
+  '2222222222',
+  '3333333333',
+  '4444444444',
+  '5555555555',
+  '6666666666',
+  '7777777777',
+  '8888888888',
+  '9999999999',
+  '1234567890',
+  '0987654321',
+]);
+
 export function validateEmail(email) {
   return typeof email === 'string' && EMAIL_REGEX.test(email.trim());
 }
@@ -28,8 +43,21 @@ export function isDisposableEmail(email) {
   return DISPOSABLE_EMAIL_PATTERNS.some((pattern) => domain.includes(pattern));
 }
 
+export function normalizePhone(phone) {
+  if (typeof phone !== 'string') return '';
+  // Remove all non-numeric characters (spaces, +, -, etc.)
+  let cleaned = phone.replace(/\D/g, '');
+  // If it starts with 91 and is 12 digits long, strip the leading 91
+  if (cleaned.length === 12 && cleaned.startsWith('91')) {
+    cleaned = cleaned.slice(2);
+  }
+  return cleaned;
+}
+
 export function validateIndianPhone(phone) {
-  return typeof phone === 'string' && PHONE_REGEX.test(phone.trim());
+  if (!phone || typeof phone !== 'string') return false;
+  const normalized = normalizePhone(phone);
+  return PHONE_REGEX.test(normalized) && !BANNED_PHONE_PATTERNS.has(normalized);
 }
 
 /**
