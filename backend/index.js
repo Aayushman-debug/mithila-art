@@ -81,7 +81,12 @@ app.use(cors({
   exposedHeaders: ["set-cookie"],
 }));
 app.use(compression());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({
+  limit: '10mb',
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 app.use(helmet());
 
 // Cache Control middleware for static-like API endpoints (e.g. products)
@@ -425,7 +430,7 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
     console.log("/create-cart-order request body:", req.body);
     const { name, email, phone, address, city, state, pincode, totalAmount, shipping, grandTotal, discount, couponCode, items } = req.body;
 
-    if (!name || !email || !phone || !address || !city || !state || !pincode || !grandTotal || !Array.isArray(items)) {
+    if (!name || !email || !phone || !address || !city || !state || !pincode || grandTotal == null || !Array.isArray(items)) {
       return res.status(400).json({
         success: false,
         error: "Missing cart order details"
@@ -449,13 +454,71 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid pincode format' });
     }
 
-    const requestedGrandTotal = Number(grandTotal);
-    if (Number.isNaN(requestedGrandTotal) || requestedGrandTotal <= 0) {
-      return res.status(400).json({ success: false, error: 'Invalid grand total amount' });
+    // 1. Calculate subtotal using product prices from database (prevent client manipulation)
+    let calculatedSubtotal = 0;
+    const validatedItems = [];
+    for (const item of items) {
+      const dbProduct = await Product.findOne({ productId: item.productId });
+      if (!dbProduct) {
+        return res.status(404).json({ success: false, error: `Product not found: ${item.title}` });
+      }
+      calculatedSubtotal += dbProduct.price * (item.quantity || 1);
+      validatedItems.push({
+        productId: dbProduct.productId,
+        title: dbProduct.title,
+        quantity: item.quantity || 1,
+        price: dbProduct.price,
+        image: dbProduct.image || ''
+      });
+    }
+
+    if (calculatedSubtotal !== totalAmount) {
+      return res.status(400).json({ success: false, error: "Order subtotal calculation mismatch" });
+    }
+
+    // 2. Verify discount coupon if applied
+    let calculatedDiscount = 0;
+    if (couponCode) {
+      const code = String(couponCode).toUpperCase().trim();
+      const BACKEND_COUPONS = {
+        WELCOME10: { type: 'percent', value: 10 },
+        MITHILA15: { type: 'percent', value: 15 },
+        ART500: { type: 'flat', value: 500 },
+        FIRSTORDER: { type: 'percent', value: 20 },
+      };
+      const coupon = BACKEND_COUPONS[code];
+      if (!coupon) {
+        return res.status(400).json({ success: false, error: "Invalid coupon code" });
+      }
+      if (coupon.type === 'percent') {
+        calculatedDiscount = Math.round((calculatedSubtotal * coupon.value) / 100);
+      } else if (coupon.type === 'flat') {
+        calculatedDiscount = Math.min(coupon.value, calculatedSubtotal);
+      }
+    }
+
+    if (calculatedDiscount !== discount) {
+      return res.status(400).json({ success: false, error: "Coupon discount mismatch" });
+    }
+
+    // 3. Verify shipping cost
+    const expectedShipping = calculatedSubtotal > 5000 ? 0 : 199;
+    if (expectedShipping !== shipping) {
+      return res.status(400).json({ success: false, error: "Shipping cost mismatch" });
+    }
+
+    // 4. Verify grand total
+    const expectedGrandTotal = Math.max(0, calculatedSubtotal - calculatedDiscount + expectedShipping);
+    if (Math.round(expectedGrandTotal) !== Math.round(grandTotal)) {
+      return res.status(400).json({ success: false, error: "Grand total amount mismatch" });
+    }
+
+    if (!razorpay) {
+      return res.status(503).json({ success: false, error: 'Payment gateway not configured' });
     }
 
     const order = await razorpay.orders.create({
-      amount: Math.round(requestedGrandTotal * 100),
+      amount: Math.round(expectedGrandTotal * 100),
       currency: "INR",
       receipt: `CART-${Date.now()}`,
       notes: {
@@ -474,11 +537,11 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
       city,
       state,
       pincode,
-      items,
-      totalAmount: totalAmount || grandTotal,
-      shipping: shipping || 0,
-      grandTotal,
-      discount: discount || 0,
+      items: validatedItems,
+      totalAmount: calculatedSubtotal,
+      shipping: expectedShipping,
+      grandTotal: expectedGrandTotal,
+      discount: calculatedDiscount,
       couponCode: couponCode || null,
       orderId: order.id,
       paymentStatus: "pending"
@@ -797,6 +860,88 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/admin", adminRoutes);
+
+// Webhook handler for Razorpay async updates
+app.post("/api/webhooks/razorpay", async (req, res) => {
+  try {
+    const signature = req.headers["x-razorpay-signature"];
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
+      console.error("Webhook secret not configured on server");
+      return res.status(500).json({ success: false, error: "Webhook secret not configured" });
+    }
+
+    if (!signature) {
+      return res.status(400).json({ success: false, error: "Missing signature" });
+    }
+
+    if (!req.rawBody) {
+      return res.status(400).json({ success: false, error: "Missing request raw body" });
+    }
+
+    // Verify webhook signature
+    const expectedSignature = crypto
+      .createHmac("sha256", webhookSecret)
+      .update(req.rawBody)
+      .digest("hex");
+
+    if (expectedSignature !== signature) {
+      console.warn("Invalid webhook signature received");
+      return res.status(400).json({ success: false, error: "Invalid signature verification" });
+    }
+
+    const event = req.body;
+    console.log(`✓ Received verified webhook event: ${event.event}`);
+
+    const payload = event.payload;
+
+    if (event.event === "order.paid" || event.event === "payment.captured") {
+      const payment = payload.payment.entity;
+      const orderId = payment.order_id;
+      const paymentId = payment.id;
+
+      // Handle commission payments
+      const commission = await Commission.findOne({ orderId });
+      if (commission && commission.paymentStatus !== "paid") {
+        commission.paymentStatus = "paid";
+        commission.paymentId = paymentId;
+        commission.transactionId = paymentId;
+        commission.paidAt = new Date();
+        commission.status = "in-progress";
+        await commission.save();
+        console.log(`[Webhook] Promoted commission order ${orderId} to paid`);
+      }
+
+      // Handle cart orders
+      const cartOrder = await CartOrder.findOne({ orderId });
+      if (cartOrder && cartOrder.paymentStatus !== "paid") {
+        cartOrder.paymentStatus = "paid";
+        cartOrder.paymentId = paymentId;
+        cartOrder.transactionId = paymentId;
+        cartOrder.paidAt = new Date();
+        await cartOrder.save();
+        console.log(`[Webhook] Promoted cart order ${orderId} to paid`);
+      }
+    } else if (event.event === "payment.failed") {
+      const payment = payload.payment.entity;
+      const orderId = payment.order_id;
+
+      // Handle cart orders
+      const cartOrder = await CartOrder.findOne({ orderId });
+      if (cartOrder && cartOrder.paymentStatus === "pending") {
+        cartOrder.paymentStatus = "failed";
+        await cartOrder.save();
+        console.log(`[Webhook] Marked cart order ${orderId} as failed`);
+      }
+    }
+
+    res.json({ status: "ok" });
+  } catch (error) {
+    console.error("Webhook processing error:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // Global error handler - ensures structured JSON responses and prevents server crashes
 app.use((err, req, res, next) => {

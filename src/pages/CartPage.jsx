@@ -26,6 +26,7 @@ export default function CartPage() {
   const [screenshotFile, setScreenshotFile] = useState(null);
   const [screenshotPreview, setScreenshotPreview] = useState(null);
   const [upiOrderId, setUpiOrderId] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' or 'upi'
 
   const shipping = total > 5000 ? 0 : 199;
 
@@ -152,9 +153,13 @@ export default function CartPage() {
     }
 
     try {
+      const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
       const orderResponse = await fetch(buildApiPath('/create-cart-order'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -540,8 +545,26 @@ export default function CartPage() {
 
                 {step === 'payment' && (
                   <motion.div key="payment" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h2 className="heading-md text-charcoal dark:text-cream-200 mb-6">Pay via UPI</h2>
+                    <h2 className="heading-md text-charcoal dark:text-cream-200 mb-6">Select Payment Method</h2>
                     <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-6 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 space-y-6">
+
+                      {/* Payment Method Selector */}
+                      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod('online')}
+                          className={`flex-1 py-3.5 px-4 rounded-xl border-2 font-display font-bold text-sm transition-all duration-300 ${paymentMethod === 'online' ? 'bg-earth-500 border-earth-500 text-white shadow-md' : 'bg-white dark:bg-warm-gray-800 border-cream-200 dark:border-warm-gray-700 text-charcoal dark:text-cream-200 hover:border-earth-300'}`}
+                        >
+                          💳 Pay Online (Cards / UPI / Netbanking)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod('upi')}
+                          className={`flex-1 py-3.5 px-4 rounded-xl border-2 font-display font-bold text-sm transition-all duration-300 ${paymentMethod === 'upi' ? 'bg-earth-500 border-earth-500 text-white shadow-md' : 'bg-white dark:bg-warm-gray-800 border-cream-200 dark:border-warm-gray-700 text-charcoal dark:text-cream-200 hover:border-earth-300'}`}
+                        >
+                          🏦 Direct Bank/UPI (Scan QR Code)
+                        </button>
+                      </div>
 
                       {/* Amount Display */}
                       <div className="bg-cream-50 dark:bg-warm-gray-700/50 rounded-xl p-4 border border-cream-200 dark:border-warm-gray-600">
@@ -554,97 +577,117 @@ export default function CartPage() {
                         )}
                       </div>
 
-                      {/* UPI Deep Link Button */}
-                      <div>
-                        <button
-                          onClick={handleUpiDeepLink}
-                          className="w-full py-4 bg-earth-500 hover:bg-earth-600 text-white rounded-2xl font-display font-bold text-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]"
-                        >
-                          Pay {formatPrice(finalTotal)} via UPI
-                        </button>
-                        <p className="text-center text-xs text-warm-gray-500 font-body mt-2">
-                          Opens your UPI app on mobile
-                        </p>
-                        {/* Supported apps badges */}
-                        <div className="flex items-center justify-center gap-3 mt-3 flex-wrap">
-                          {['GPay', 'PhonePe', 'Paytm', 'BHIM'].map((app) => (
-                            <span key={app} className="text-xs px-3 py-1.5 bg-cream-100 text-earth-700 rounded-full font-body font-medium border border-cream-200">
-                              {app}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Divider */}
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
-                        <span className="text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body uppercase tracking-wider">or</span>
-                        <div className="flex-1 h-px bg-cream-200" />
-                      </div>
-
-                      {/* Show QR Code Button */}
-                      <button
-                        onClick={() => setShowQrModal(true)}
-                        className="w-full py-3.5 bg-cream-50 dark:bg-warm-gray-700/50 hover:bg-cream-100 dark:hover:bg-warm-gray-700 text-earth-700 dark:text-cream-200 rounded-2xl font-body font-semibold text-sm transition-all duration-300 border border-cream-200 dark:border-warm-gray-600 flex items-center justify-center gap-2"
-                      >
-                        <IoQrCodeOutline size={20} />
-                        Show QR Code to Scan
-                      </button>
-
-                      {/* Divider */}
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 h-px bg-cream-200" />
-                        <span className="text-warm-gray-400 text-xs font-body uppercase tracking-wider">after paying</span>
-                        <div className="flex-1 h-px bg-cream-200" />
-                      </div>
-
-                      {/* Upload Screenshot Section */}
-                      <div className="space-y-3">
-                        <p className="font-display font-semibold text-base text-charcoal dark:text-cream-200">Already paid? Upload your payment screenshot</p>
-                        <p className="text-body-sm text-warm-gray-500">Upload a screenshot of your successful UPI payment so we can verify and process your order.</p>
-
-                        <div className="relative">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleScreenshotChange}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                            id="screenshot-upload"
-                          />
-                          <label
-                            htmlFor="screenshot-upload"
-                            className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-cream-300 dark:border-warm-gray-600 rounded-2xl bg-cream-50/50 dark:bg-warm-gray-700/30 hover:bg-cream-100/50 dark:hover:bg-warm-gray-700/50 transition-colors cursor-pointer"
+                      {paymentMethod === 'online' ? (
+                        /* Online payment flow */
+                        <div className="space-y-6">
+                          <div className="p-4 bg-earth-50/50 dark:bg-warm-gray-700/30 border border-earth-200 dark:border-warm-gray-600 rounded-xl text-sm text-warm-gray-700 dark:text-cream-200 space-y-2">
+                            <p>🌟 <strong>Safe & Secured payments via Razorpay</strong></p>
+                            <p>We support Credit/Debit Cards (Visa, Mastercard, RuPay), Net Banking, popular wallets, and direct UPI transfers with instant confirmation.</p>
+                          </div>
+                          <button
+                            onClick={handlePayment}
+                            disabled={paymentLoading}
+                            className="w-full py-4 bg-gradient-to-r from-earth-500 to-earth-600 hover:from-earth-600 hover:to-earth-700 text-white rounded-2xl font-display font-bold text-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50"
                           >
-                            <IoCloudUploadOutline size={32} className="text-earth-500 mb-2" />
-                            <span className="text-sm font-body font-medium text-earth-700 dark:text-cream-200">
-                              {screenshotFile ? screenshotFile.name : 'Click to upload screenshot'}
-                            </span>
-                            <span className="text-xs text-warm-gray-400 mt-1">JPG, PNG or WEBP • Max 5MB</span>
-                          </label>
+                            {paymentLoading ? "Processing..." : `Pay ${formatPrice(finalTotal)} Online`}
+                          </button>
                         </div>
-
-                        {/* Screenshot Preview */}
-                        {screenshotPreview && (
-                          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative">
-                            <img src={screenshotPreview} alt="Payment screenshot preview" className="w-full max-h-64 object-contain rounded-xl border border-cream-200" />
+                      ) : (
+                        /* Manual UPI flow */
+                        <div className="space-y-6">
+                          {/* UPI Deep Link Button */}
+                          <div>
                             <button
-                              onClick={() => { setScreenshotFile(null); setScreenshotPreview(null); }}
-                              className="absolute top-2 right-2 w-8 h-8 bg-earth-900/70 rounded-full flex items-center justify-center text-white hover:bg-earth-900 transition-colors"
+                              onClick={handleUpiDeepLink}
+                              className="w-full py-4 bg-earth-500 hover:bg-earth-600 text-white rounded-2xl font-display font-bold text-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]"
                             >
-                              <IoCloseOutline size={18} />
+                              Pay {formatPrice(finalTotal)} via UPI App
                             </button>
-                          </motion.div>
-                        )}
+                            <p className="text-center text-xs text-warm-gray-500 font-body mt-2">
+                              Opens your UPI app on mobile
+                            </p>
+                            {/* Supported apps badges */}
+                            <div className="flex items-center justify-center gap-3 mt-3 flex-wrap">
+                              {['GPay', 'PhonePe', 'Paytm', 'BHIM'].map((app) => (
+                                <span key={app} className="text-xs px-3 py-1.5 bg-cream-100 dark:bg-warm-gray-700 text-earth-700 dark:text-cream-200 rounded-full font-body font-medium border border-cream-200 dark:border-warm-gray-600">
+                                  {app}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
 
-                        {/* Confirm Order Button */}
-                        <button
-                          onClick={handleUpiOrder}
-                          disabled={paymentLoading || !screenshotPreview}
-                          className="w-full py-3.5 bg-mithila-green hover:bg-mithila-green/90 disabled:bg-warm-gray-300 disabled:cursor-not-allowed text-white rounded-2xl font-display font-bold text-base transition-all duration-300"
-                        >
-                          {paymentLoading ? 'Submitting order...' : 'Confirm Order'}
-                        </button>
-                      </div>
+                          {/* Divider */}
+                          <div className="flex items-center gap-3">
+                            <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
+                            <span className="text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body uppercase tracking-wider">or</span>
+                            <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
+                          </div>
+
+                          {/* Show QR Code Button */}
+                          <button
+                            onClick={() => setShowQrModal(true)}
+                            className="w-full py-3.5 bg-cream-50 dark:bg-warm-gray-700/50 hover:bg-cream-100 dark:hover:bg-warm-gray-700 text-earth-700 dark:text-cream-200 rounded-2xl font-body font-semibold text-sm transition-all duration-300 border border-cream-200 dark:border-warm-gray-600 flex items-center justify-center gap-2"
+                          >
+                            <IoQrCodeOutline size={20} />
+                            Show QR Code to Scan
+                          </button>
+
+                          {/* Divider */}
+                          <div className="flex items-center gap-3">
+                            <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
+                            <span className="text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body uppercase tracking-wider">after paying</span>
+                            <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
+                          </div>
+
+                          {/* Upload Screenshot Section */}
+                          <div className="space-y-3">
+                            <p className="font-display font-semibold text-base text-charcoal dark:text-cream-200">Already paid? Upload your payment screenshot</p>
+                            <p className="text-body-sm text-warm-gray-500">Upload a screenshot of your successful UPI payment so we can verify and process your order.</p>
+
+                            <div className="relative">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleScreenshotChange}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                id="screenshot-upload"
+                              />
+                              <label
+                                htmlFor="screenshot-upload"
+                                className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-cream-300 dark:border-warm-gray-600 rounded-2xl bg-cream-50/50 dark:bg-warm-gray-700/30 hover:bg-cream-100/50 dark:hover:bg-warm-gray-700/50 transition-colors cursor-pointer"
+                              >
+                                <IoCloudUploadOutline size={32} className="text-earth-500 mb-2" />
+                                <span className="text-sm font-body font-medium text-earth-700 dark:text-cream-200">
+                                  {screenshotFile ? screenshotFile.name : 'Click to upload screenshot'}
+                                </span>
+                                <span className="text-xs text-warm-gray-400 mt-1">JPG, PNG or WEBP • Max 5MB</span>
+                              </label>
+                            </div>
+
+                            {/* Screenshot Preview */}
+                            {screenshotPreview && (
+                              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative">
+                                <img src={screenshotPreview} alt="Payment screenshot preview" className="w-full max-h-64 object-contain rounded-xl border border-cream-200 dark:border-warm-gray-700" />
+                                <button
+                                  onClick={() => { setScreenshotFile(null); setScreenshotPreview(null); }}
+                                  className="absolute top-2 right-2 w-8 h-8 bg-earth-900/70 rounded-full flex items-center justify-center text-white hover:bg-earth-900 transition-colors"
+                                >
+                                  <IoCloseOutline size={18} />
+                                </button>
+                              </motion.div>
+                            )}
+
+                            {/* Confirm Order Button */}
+                            <button
+                              onClick={handleUpiOrder}
+                              disabled={paymentLoading || !screenshotPreview}
+                              className="w-full py-3.5 bg-mithila-green hover:bg-mithila-green/90 disabled:bg-warm-gray-300 disabled:cursor-not-allowed text-white rounded-2xl font-display font-bold text-base transition-all duration-300"
+                            >
+                              {paymentLoading ? 'Submitting order...' : 'Confirm Order'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Payment Error */}
                       {paymentError && (
@@ -739,11 +782,11 @@ export default function CartPage() {
                 {step === 'payment' && (
                   <div className="space-y-3">
                     <button
-                      onClick={handleUpiOrder}
-                      disabled={paymentLoading || !screenshotPreview}
+                      onClick={paymentMethod === 'online' ? handlePayment : handleUpiOrder}
+                      disabled={paymentLoading || (paymentMethod === 'upi' && !screenshotPreview)}
                       className="btn-primary w-full text-center disabled:opacity-50"
                     >
-                      {paymentLoading ? 'Submitting...' : 'Confirm Order'}
+                      {paymentLoading ? 'Processing...' : paymentMethod === 'online' ? 'Pay Online' : 'Confirm Order'}
                     </button>
                     <button onClick={() => setStep('checkout')} className="btn-secondary w-full text-center text-sm">
                       Back
@@ -781,11 +824,11 @@ export default function CartPage() {
               )}
               {step === 'payment' && (
                 <button
-                  onClick={handleUpiOrder}
-                  disabled={paymentLoading || !screenshotPreview}
+                  onClick={paymentMethod === 'online' ? handlePayment : handleUpiOrder}
+                  disabled={paymentLoading || (paymentMethod === 'upi' && !screenshotPreview)}
                   className="btn-primary w-full py-2.5 text-sm disabled:opacity-50"
                 >
-                  {paymentLoading ? 'Submitting...' : 'Confirm'}
+                  {paymentLoading ? 'Processing...' : paymentMethod === 'online' ? 'Pay Online' : 'Confirm'}
                 </button>
               )}
             </div>
