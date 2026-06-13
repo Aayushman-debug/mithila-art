@@ -48,17 +48,14 @@ export default function CartPage() {
   const [upiOrderId, setUpiOrderId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' or 'upi'
 
-  const shipping = total > 5000 ? 0 : 199;
-
   // Coupon system
   const COUPONS = {
     WELCOME10: { type: 'percent', value: 10 },
     MITHILA15: { type: 'percent', value: 15 },
     ART500: { type: 'flat', value: 500 },
     FIRSTORDER: { type: 'percent', value: 20 },
-    TEST99: { type: 'percent', value: 99 },
-    TEST999: { type: 'percent', value: 99.9 },
-    FRIEND50: { type: 'percent', value: 50 },
+    BETA99: { type: 'percent', value: 99, freeShipping: true, singleUse: true },
+    BETA999: { type: 'percent', value: 99.9, freeShipping: true, singleUse: true },
   };
 
   const [couponInput, setCouponInput] = useState('');
@@ -88,6 +85,10 @@ export default function CartPage() {
   };
 
   const discountAmount = appliedCoupon ? computeDiscountAmount(COUPONS[appliedCoupon.code], total) : 0;
+  
+  const isFreeShipping = appliedCoupon && COUPONS[appliedCoupon.code]?.freeShipping;
+  const shipping = total > 5000 || isFreeShipping ? 0 : 199;
+  
   const finalTotal = Math.max(0, total - discountAmount + shipping);
 
   const handleInputChange = (e) => {

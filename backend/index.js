@@ -526,6 +526,7 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
 
     // 2. Verify discount coupon if applied
     let calculatedDiscount = 0;
+    let isFreeShipping = false;
     if (couponCode) {
       const code = String(couponCode).toUpperCase().trim();
       const BACKEND_COUPONS = {
@@ -533,14 +534,26 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
         MITHILA15: { type: 'percent', value: 15 },
         ART500: { type: 'flat', value: 500 },
         FIRSTORDER: { type: 'percent', value: 20 },
-        TEST99: { type: 'percent', value: 99 },
-        TEST999: { type: 'percent', value: 99.9 },
-        FRIEND50: { type: 'percent', value: 50 },
+        BETA99: { type: 'percent', value: 99, freeShipping: true, singleUse: true },
+        BETA999: { type: 'percent', value: 99.9, freeShipping: true, singleUse: true },
       };
       const coupon = BACKEND_COUPONS[code];
       if (!coupon) {
         return res.status(400).json({ success: false, error: "Invalid coupon code" });
       }
+      if (coupon.singleUse) {
+        const existingOrder = await CartOrder.findOne({ 
+          couponCode: code, 
+          paymentStatus: { $nin: ['pending', 'failed'] } 
+        });
+        if (existingOrder) {
+          return res.status(400).json({ success: false, error: "This coupon has already been used." });
+        }
+      }
+      if (coupon.freeShipping) {
+        isFreeShipping = true;
+      }
+
       if (coupon.type === 'percent') {
         calculatedDiscount = Math.round((calculatedSubtotal * coupon.value) / 100);
       } else if (coupon.type === 'flat') {
@@ -553,7 +566,10 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
     }
 
     // 3. Verify shipping cost
-    const expectedShipping = calculatedSubtotal > 5000 ? 0 : 199;
+    let expectedShipping = calculatedSubtotal > 5000 ? 0 : 199;
+    if (isFreeShipping) {
+      expectedShipping = 0;
+    }
     if (expectedShipping !== shipping) {
       return res.status(400).json({ success: false, error: "Shipping cost mismatch" });
     }
@@ -677,6 +693,7 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
 
     // 2. Verify discount coupon if applied
     let calculatedDiscount = 0;
+    let isFreeShipping = false;
     if (couponCode) {
       const code = String(couponCode).toUpperCase().trim();
       const BACKEND_COUPONS = {
@@ -684,14 +701,26 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
         MITHILA15: { type: 'percent', value: 15 },
         ART500: { type: 'flat', value: 500 },
         FIRSTORDER: { type: 'percent', value: 20 },
-        TEST99: { type: 'percent', value: 99 },
-        TEST999: { type: 'percent', value: 99.9 },
-        FRIEND50: { type: 'percent', value: 50 },
+        BETA99: { type: 'percent', value: 99, freeShipping: true, singleUse: true },
+        BETA999: { type: 'percent', value: 99.9, freeShipping: true, singleUse: true },
       };
       const coupon = BACKEND_COUPONS[code];
       if (!coupon) {
         return res.status(400).json({ success: false, error: "Invalid coupon code" });
       }
+      if (coupon.singleUse) {
+        const existingOrder = await CartOrder.findOne({ 
+          couponCode: code, 
+          paymentStatus: { $nin: ['pending', 'failed'] } 
+        });
+        if (existingOrder) {
+          return res.status(400).json({ success: false, error: "This coupon has already been used." });
+        }
+      }
+      if (coupon.freeShipping) {
+        isFreeShipping = true;
+      }
+
       if (coupon.type === 'percent') {
         calculatedDiscount = Math.round((calculatedSubtotal * coupon.value) / 100);
       } else if (coupon.type === 'flat') {
@@ -704,7 +733,10 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
     }
 
     // 3. Verify shipping cost
-    const expectedShipping = calculatedSubtotal > 5000 ? 0 : 199;
+    let expectedShipping = calculatedSubtotal > 5000 ? 0 : 199;
+    if (isFreeShipping) {
+      expectedShipping = 0;
+    }
     if (expectedShipping !== shipping) {
       return res.status(400).json({ success: false, error: "Shipping cost mismatch" });
     }
