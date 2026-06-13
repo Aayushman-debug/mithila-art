@@ -17,6 +17,8 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const collectionRoutes = require("./routes/collectionRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 const { verifyToken, authenticate, authorizeAdmin } = require('./middleware/authMiddleware');
 const User = require('./models/User');
 const Commission = require('./models/Commission');
@@ -959,7 +961,9 @@ app.post("/payment-failed", authenticate, async (req, res) => {
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/collections", collectionRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Webhook handler for Razorpay async updates
 app.post("/api/webhooks/razorpay", async (req, res) => {

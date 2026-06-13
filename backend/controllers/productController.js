@@ -2,7 +2,21 @@ const Product = require('../models/Product');
 
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({ available: true }).sort({ createdAt: -1 }).lean();
+    const { collectionId, limit, page } = req.query;
+    let query = {};
+    if (collectionId) {
+      query.collectionId = collectionId;
+    }
+    
+    let productsQuery = Product.find(query).sort({ createdAt: -1 });
+    
+    if (limit) {
+      const pageNum = parseInt(page) || 1;
+      const limitNum = parseInt(limit);
+      productsQuery = productsQuery.skip((pageNum - 1) * limitNum).limit(limitNum);
+    }
+    
+    const products = await productsQuery.lean();
     // Allow browser/CDN caching for 60s to reduce redundant DB queries
     res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=120');
     res.status(200).json({ success: true, products });

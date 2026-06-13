@@ -5,6 +5,8 @@ import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, 
 import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
+import ProductModal from '../components/admin/ProductModal';
+import CollectionModal from '../components/admin/CollectionModal';
 
 const AVAILABILITY_OPTIONS = [
   { value: 'available',           label: 'Available' },
@@ -39,6 +41,7 @@ function Toast({ message, type, onClose }) {
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: IoGridOutline },
+  { id: 'collections', label: 'Collections', icon: IoImageOutline },
   { id: 'products', label: 'Products', icon: IoCubeOutline },
   { id: 'orders', label: 'Orders', icon: IoReceiptOutline },
   { id: 'blog', label: 'Blog', icon: IoDocumentTextOutline },
@@ -150,9 +153,16 @@ export default function AdminPage() {
   const [realOrders, setRealOrders] = useState([]);
   const [realCommissions, setRealCommissions] = useState([]);
   const [realProducts, setRealProducts] = useState([]);
+  const [realCollections, setRealCollections] = useState([]);
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState('');
   const [toast, setToast] = useState(null); // { message, type }
+  
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
+  
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+  const [collectionToEdit, setCollectionToEdit] = useState(null);
   useEffect(() => {
     setLoggedIn(isAuthenticated);
   }, [isAuthenticated]);
@@ -182,6 +192,12 @@ export default function AdminPage() {
           if (res.data.success) setRealCommissions(res.data.commissions);
         }).catch(err => console.error('Failed to fetch admin commissions', err));
 
+        import('../api').then(({ collectionAPI }) => {
+          collectionAPI.getCollections().then(res => {
+            if (res.data.success) setRealCollections(res.data.collections);
+          }).catch(err => console.error('Failed to fetch collections', err));
+        });
+
         adminAPI.getProducts().then(res => {
           if (res.data.success && res.data.products.length > 0) {
             setRealProducts(res.data.products);
@@ -200,6 +216,54 @@ export default function AdminPage() {
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
   }, []);
+
+  const fetchProducts = async () => {
+    const { adminAPI } = await import('../api');
+    try {
+      const res = await adminAPI.getProducts();
+      if (res.data.success) setRealProducts(res.data.products);
+    } catch (err) {
+      console.error('Failed to fetch products', err);
+    }
+  };
+
+  const fetchCollections = async () => {
+    const { collectionAPI } = await import('../api');
+    try {
+      const res = await collectionAPI.getCollections();
+      if (res.data.success) setRealCollections(res.data.collections);
+    } catch (err) {
+      console.error('Failed to fetch collections', err);
+    }
+  };
+
+  const handleDeleteProduct = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this variant?')) return;
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.deleteProduct(id);
+      if (res.data.success) {
+        showToast('Variant deleted');
+        fetchProducts();
+      }
+    } catch (err) {
+      showToast('Failed to delete', 'error');
+    }
+  };
+
+  const handleDeleteCollection = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this collection?')) return;
+    try {
+      const { collectionAPI } = await import('../api');
+      const res = await collectionAPI.deleteCollection(id);
+      if (res.data.success) {
+        showToast('Collection deleted');
+        fetchCollections();
+      }
+    } catch (err) {
+      showToast('Failed to delete', 'error');
+    }
+  };
 
   const handleAvailabilityChange = async (productId, newStatus) => {
     try {
@@ -393,11 +457,11 @@ export default function AdminPage() {
                 <div className="bg-white rounded-2xl shadow-card overflow-hidden">
                   <div className="p-4 flex items-center justify-between border-b border-cream-100">
                     <p className="font-body text-sm text-warm-gray-500">{realProducts.length} paintings</p>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
-                      <IoAddOutline size={18} /> Add Painting
+                    <button onClick={() => { setProductToEdit(null); setIsProductModalOpen(true); }} className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
+                      <IoAddOutline size={18} /> Add Variant
                     </button>
                   </div>
-                  <div className="overflow-x-auto">
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className="text-left text-xs font-body font-semibold text-warm-gray-400 uppercase tracking-wider border-b border-cream-100">
@@ -413,7 +477,7 @@ export default function AdminPage() {
                           <tr key={p._id || p.id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-3">
-                                <img src={p.images?.[0] || p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover" />
+                                <img src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover" />
                                 <div>
                                   <p className="font-body font-medium text-sm text-charcoal">{p.title}</p>
                                   <p className="text-xs text-warm-gray-400">{p.size}</p>
@@ -439,8 +503,8 @@ export default function AdminPage() {
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex gap-2">
-                                <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors"><IoPencilOutline size={16} /></button>
-                                <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-mithila-red transition-colors"><IoTrashOutline size={16} /></button>
+                                <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors"><IoPencilOutline size={16} /></button>
+                                <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-mithila-red transition-colors"><IoTrashOutline size={16} /></button>
                               </div>
                             </td>
                           </tr>
@@ -452,6 +516,71 @@ export default function AdminPage() {
                         )}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* Mobile Card View */}
+                  <div className="md:hidden flex flex-col gap-4 p-4">
+                    {realProducts.slice(0, 20).map((p) => (
+                      <div key={p._id || p.id} className="bg-cream-50 p-4 rounded-xl border border-cream-100 flex flex-col gap-3">
+                        <div className="flex gap-4 items-center">
+                          <img src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-16 h-16 rounded-xl object-cover" />
+                          <div className="flex-1">
+                            <h4 className="font-display font-bold text-charcoal">{p.title}</h4>
+                            <p className="text-sm text-warm-gray-500">{p.size} • {p.category}</p>
+                            <p className="font-display font-semibold text-earth-700">{formatPrice(p.price)}</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center mt-2">
+                          <select
+                            value={p.availabilityStatus || 'available'}
+                            onChange={(e) => handleAvailabilityChange(p._id || p.id, e.target.value)}
+                            className={`text-xs px-2 py-1 rounded-full font-body font-medium outline-none ${availabilityColors[p.availabilityStatus || 'available']}`}
+                          >
+                            {AVAILABILITY_OPTIONS.map(opt => (
+                              <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                          </select>
+                          <div className="flex gap-2">
+                            <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-earth-500"><IoPencilOutline size={16} /></button>
+                            <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Collections Tab */}
+            {activeTab === 'collections' && (
+              <motion.div key="collections" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <div className="bg-white rounded-2xl shadow-card overflow-hidden">
+                  <div className="p-4 flex items-center justify-between border-b border-cream-100">
+                    <p className="font-body text-sm text-warm-gray-500">{realCollections.length} collections</p>
+                    <button onClick={() => { setCollectionToEdit(null); setIsCollectionModalOpen(true); }} className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
+                      <IoAddOutline size={18} /> New Collection
+                    </button>
+                  </div>
+                  
+                  {/* Collections Card View */}
+                  <div className="flex flex-col gap-4 p-4">
+                    {realCollections.map((c) => (
+                      <div key={c._id || c.collectionId} className="bg-cream-50 p-4 rounded-xl border border-cream-100 flex flex-col sm:flex-row gap-4 items-center">
+                        <img src={c.coverImage} alt={c.title} className="w-full sm:w-24 h-40 sm:h-24 rounded-xl object-cover" />
+                        <div className="flex-1 text-center sm:text-left">
+                          <h4 className="font-display font-bold text-lg text-charcoal">{c.title}</h4>
+                          <p className="text-sm text-warm-gray-500">{c.category}</p>
+                        </div>
+                        <div className="flex gap-2 w-full sm:w-auto justify-center">
+                          <button onClick={() => { setCollectionToEdit(c); setIsCollectionModalOpen(true); }} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-earth-500"><IoPencilOutline size={16} /></button>
+                          <button onClick={() => handleDeleteCollection(c._id || c.collectionId)} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
+                        </div>
+                      </div>
+                    ))}
+                    {realCollections.length === 0 && (
+                      <div className="p-8 text-center text-warm-gray-500">No collections found.</div>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -608,6 +737,21 @@ export default function AdminPage() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Modals */}
+      <ProductModal 
+        isOpen={isProductModalOpen} 
+        onClose={() => setIsProductModalOpen(false)} 
+        productToEdit={productToEdit} 
+        onSave={() => { showToast('Variant saved successfully'); fetchProducts(); }} 
+      />
+      
+      <CollectionModal 
+        isOpen={isCollectionModalOpen} 
+        onClose={() => setIsCollectionModalOpen(false)} 
+        collectionToEdit={collectionToEdit} 
+        onSave={() => { showToast('Collection saved successfully'); fetchCollections(); }} 
+      />
 
       {/* Screenshot Modal */}
       <AnimatePresence>

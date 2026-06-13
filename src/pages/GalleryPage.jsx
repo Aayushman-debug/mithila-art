@@ -20,7 +20,8 @@ import SectionHeading from '../components/ui/SectionHeading';
 
 import { paintings, categories } from '../data/paintings';
 import { formatPrice, generateWhatsAppLink } from '../utils/helpers';
-import { productAPI } from '../api';
+import { collectionAPI } from '../api';
+import FallbackImage from '../components/ui/FallbackImage';
 
 /* ───────── Animation Variants ───────── */
 const staggerGrid = {
@@ -35,29 +36,12 @@ const fadeUp = {
 
 /* ───────── Lazy Image Component ───────── */
 function LazyImage({ src, alt, className, onClick }) {
-  const [loaded, setLoaded] = useState(false);
   const [ref, inView] = useInView({ triggerOnce: true, rootMargin: '200px 0px' });
 
   return (
-    <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      {/* Shimmer placeholder */}
-      {!loaded && (
-        <div className="absolute inset-0 shimmer rounded-2xl" />
-      )}
+    <div ref={ref} className={`relative overflow-hidden ${className}`} onClick={onClick}>
       {inView && (
-        <motion.img
-          src={src}
-          alt={alt}
-          className={`w-full h-full object-cover transition-opacity duration-700 cursor-pointer ${
-            loaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          onLoad={() => setLoaded(true)}
-          onClick={onClick}
-          loading="lazy"
-          initial={{ scale: 1.08 }}
-          animate={{ scale: loaded ? 1 : 1.08 }}
-          transition={{ duration: 0.8 }}
-        />
+        <FallbackImage src={src} alt={alt} className="absolute inset-0 w-full h-full cursor-pointer" />
       )}
     </div>
   );
@@ -83,14 +67,14 @@ function GalleryItem({ item, index }) {
       className={`relative group rounded-2xl overflow-hidden shadow-card hover:shadow-glass-lg border border-cream-200/20 dark:border-warm-gray-700/20 transition-all duration-700 cursor-pointer ${heightClass}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => navigate(`/painting/${item.id}`)}
+      onClick={() => navigate(`/collection/${item.collectionId || item.id}`)}
     >
       <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
         <LazyImage
-          src={item.images?.[0] || item.image}
+          src={item.coverImage || item.images?.[0] || item.image}
           alt={item.title}
           className="absolute inset-0 w-full h-full"
-          onClick={() => navigate(`/painting/${item.id}`)}
+          onClick={() => navigate(`/collection/${item.collectionId || item.id}`)}
         />
       </div>
 
@@ -149,13 +133,13 @@ function GalleryItem({ item, index }) {
           transition={{ duration: 0.4, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
         >
           <motion.button
-            onClick={() => navigate(`/painting/${item.id}`)}
+            onClick={() => navigate(`/collection/${item.collectionId || item.id}`)}
             className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm hover:bg-white/20 hover:border-earth-500/50 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <FaExpand className="text-xs text-earth-400" />
-            View Full
+            View Collection
           </motion.button>
           <motion.button
             className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-mithila-red/50 hover:border-mithila-red/30 transition-colors"
@@ -195,22 +179,15 @@ export default function GalleryPage() {
       }, 5000);
 
       try {
-        const response = await productAPI.getProducts();
-        if (response.data.success && response.data.products) {
-          const mappedProducts = response.data.products.map(p => ({
-            ...p,
-            id: p.productId || p._id,
-            images: p.gallery && p.gallery.length > 0 ? p.gallery : (p.image ? [p.image] : []),
-            inStock: p.stock > 0 && p.available !== false,
-            artist: p.artist || 'Mithila Artist',
+        const response = await collectionAPI.getCollections();
+        if (response.data.success && response.data.collections) {
+          const mappedCollections = response.data.collections.map(c => ({
+            ...c,
+            id: c.collectionId || c._id,
+            coverImage: c.coverImage,
+            artist: 'Mithila Artist',
           }));
-          const mergedProducts = [...paintings];
-          mappedProducts.forEach(mp => {
-            const index = mergedProducts.findIndex(p => p.id === mp.id);
-            if (index !== -1) mergedProducts[index] = mp;
-            else mergedProducts.push(mp);
-          });
-          setProducts(mergedProducts);
+          setProducts(mappedCollections);
         } else {
           setProducts(paintings);
         }

@@ -13,13 +13,25 @@ const ProductSchema = new mongoose.Schema({
   description: String,
   category: { type: String, index: true },
   size: String,
+  medium: String,
+  style: String,
   price: {
     type: Number,
     required: true,
     index: true,
   },
-  image: String,
-  gallery: [String],
+  originalPrice: Number,
+  image: String, // Kept for backward compatibility during transition
+  gallery: [String], // Kept for backward compatibility
+  images: [{
+    url: String,
+    public_id: String
+  }],
+  collectionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Collection',
+    index: true,
+  },
   stock: {
     type: Number,
     default: 1,

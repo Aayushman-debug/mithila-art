@@ -167,6 +167,25 @@ export function prefetchProducts() {
   });
 }
 
+// Collection API calls
+export const collectionAPI = {
+  getCollections: () => api.get('/api/collections'),
+  getCollectionById: (id) => api.get(`/api/collections/${id}`),
+  createCollection: (data) => api.post('/api/collections', data),
+  updateCollection: (id, data) => api.put(`/api/collections/${id}`, data),
+  deleteCollection: (id) => api.delete(`/api/collections/${id}`),
+};
+
+// Upload API calls
+export const uploadAPI = {
+  uploadImage: (formData) => api.post('/api/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+  deleteImage: (publicId) => api.post('/api/upload/delete', { public_id: publicId }),
+};
+
 
 // Payment API calls
 export const paymentAPI = {
