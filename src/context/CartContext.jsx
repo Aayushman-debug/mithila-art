@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
+import { createContext, useContext, useReducer, useEffect, useMemo, useCallback, useRef } from 'react';
+import { productAPI } from '../api';
 
 /* ─── Storage key ──────────────────────────────────────────────── */
 const STORAGE_KEY = 'mithilaArt_cart';
@@ -60,6 +61,50 @@ const CartContext = createContext(null);
 /* ─── Provider ─────────────────────────────────────────────────── */
 export function CartProvider({ children }) {
   const [items, dispatch] = useReducer(cartReducer, [], loadCartFromStorage);
+  const syncedRef = useRef(false);
+
+  const syncCart = useCallback(async () => {
+    const currentItems = loadCartFromStorage();
+    if (!currentItems || currentItems.length === 0) return;
+
+    try {
+      const updatedItems = await Promise.all(
+        currentItems.map(async (item) => {
+          try {
+            const res = await productAPI.getProductById(item.id);
+            if (res.data && res.data.success && res.data.data) {
+              const product = res.data.data;
+              const firstImg = product.images?.[0];
+              const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || product.image;
+              
+              return {
+                ...item,
+                price: product.price, // Update price
+                title: product.title, // Update title
+                image: imageToUse,
+                artist: product.artist,
+                size: product.size,
+              };
+            }
+          } catch (err) {
+            console.error(`Failed to sync product ${item.id}`, err);
+          }
+          return item;
+        })
+      );
+      dispatch({ type: ActionTypes.HYDRATE, payload: updatedItems });
+    } catch (error) {
+      console.error('Error syncing cart:', error);
+    }
+  }, []);
+
+  // Sync cart with backend prices on mount
+  useEffect(() => {
+    if (!syncedRef.current) {
+      syncedRef.current = true;
+      syncCart();
+    }
+  }, [syncCart]);
 
   // Persist to localStorage on every change
   useEffect(() => {
@@ -115,10 +160,11 @@ export function CartProvider({ children }) {
       addItem,
       removeItem,
       clearCart,
+      syncCart,
       total,
       itemCount,
     }),
-    [items, addItem, removeItem, clearCart, total, itemCount],
+    [items, addItem, removeItem, clearCart, syncCart, total, itemCount],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -10,9 +10,13 @@ import { formatPrice, validateIndianPhone, normalizePhone } from '../utils/helpe
 import FallbackImage from '../components/ui/FallbackImage';
 
 export default function CartPage() {
-  const { items, removeItem, clearCart, total, itemCount } = useCart();
+  const { items, removeItem, clearCart, syncCart, total, itemCount } = useCart();
   const { isAuthenticated, user } = useAuth();
   const location = useLocation();
+
+  useEffect(() => {
+    syncCart();
+  }, [syncCart]);
   const [step, setStep] = useState('cart'); // cart, auth, checkout, payment, success
   const [checkoutError, setCheckoutError] = useState(null);
   const [formData, setFormData] = useState({
