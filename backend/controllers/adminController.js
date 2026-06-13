@@ -2,7 +2,6 @@ const User = require('../models/User');
 const CartOrder = require('../models/CartOrder');
 const Commission = require('../models/Commission');
 const Product = require('../models/Product');
-const Collection = require('../models/Collection');
 
 const getUsers = async (req, res) => {
   try {
