@@ -392,11 +392,14 @@ export default function ShopPage() {
       );
       return;
     }
+    const firstImg = painting.images?.[0];
+    const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || painting.image;
+    
     addItem({
       id: painting.id,
       title: painting.title,
       price: painting.price,
-      image: painting.images?.[0] || painting.image,
+      image: imageToUse,
       size: painting.size,
       category: painting.category,
       quantity: 1,
@@ -410,12 +413,15 @@ export default function ShopPage() {
       });
     }
 
+    const firstImg = painting.images?.[0];
+    const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || painting.image;
+
     try {
       await userAPI.toggleWishlist({
         productId: painting.id,
         title: painting.title,
         price: painting.price,
-        image: painting.images?.[0] || painting.image,
+        image: imageToUse,
         size: painting.size,
         category: painting.category,
       });

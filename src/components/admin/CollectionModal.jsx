@@ -45,21 +45,17 @@ export default function CollectionModal({ isOpen, onClose, collectionToEdit, onS
 
     setIsUploading(true);
     setError('');
-    const form = new FormData();
-    form.append('image', file);
-
-    try {
-      const res = await uploadAPI.uploadImage(form);
-      if (res.data.success) {
-        setFormData(prev => ({ ...prev, coverImage: res.data.url }));
-      } else {
-        setError('Image upload failed.');
-      }
-    } catch (err) {
-      setError('An error occurred during upload.');
-    } finally {
+    
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setFormData(prev => ({ ...prev, coverImage: reader.result }));
       setIsUploading(false);
-    }
+    };
+    reader.onerror = error => {
+      setError('Error converting image to Base64');
+      setIsUploading(false);
+    };
   };
 
   const removeImage = () => {

@@ -2,30 +2,7 @@
  * Mithila Art - Paintings Data
  * Complete catalog of Mithila/Madhubani paintings with categories.
  */
-import radhaKrishna1 from '../assets/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg'
-import ganeshPainting from '../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg'
-import suryaChakra1 from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg'
-import ramSitaDarshan from "../assets/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg";
-import shivParvatiPainting from "../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg";
-import peacockOne from "../assets/paintings/peacockOne.jpeg";
-import bridePainting from "../assets/paintings/bride.jpeg";
-import shivParvatiMarriage from "../assets/paintings/Shivparvatimarriage.jpeg";
-import fish from "../assets/paintings/fish.jpeg";
-import idkthecontext from '../assets/paintings/idkthecontext.jpeg';
-import shivparvatiblackwhite from '../assets/paintings/shivparvatiblacknwhite.jpeg';
-import ramSitaVivah from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg';
-import durgaMahishasura from '../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg';
 
-import durgaRed from '../assets/paintings/gallery_batch_1/durga_red.jpg';
-import radhaKrishnaKachni from '../assets/paintings/gallery_batch_1/radha_krishna_kachni.jpg';
-import radhaKrishnaBharni from '../assets/paintings/gallery_batch_1/radha_krishna_bharni.jpg';
-import ganeshaColored from '../assets/paintings/gallery_batch_1/ganesha_colored.jpg';
-import durgaBlackRed from '../assets/paintings/gallery_batch_1/durga_black_red.jpg';
-
-import krishnaCow from '../assets/paintings/gallery_batch_2/krishna_cow.jpg';
-import radhaKrishnaKachni2 from '../assets/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg';
-import ganeshaPink from '../assets/paintings/gallery_batch_2/ganesha_pink.jpg';
-import paintedSaree from '../assets/paintings/gallery_batch_2/painted_saree.jpg';
 export const categories = [
   {
     id: 'kohbar',
@@ -73,7 +50,7 @@ export const paintings = [
     artist: 'Lalita Pathak',
     price: 3499,
     originalPrice: 35000,
-	images: [radhaKrishna1, shivparvatiblackwhite, 'https://picsum.photos/seed/detail_p001_1/800/600', 'https://picsum.photos/seed/detail_p001_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg', '/paintings/shivparvatiblacknwhite.jpeg', 'https://picsum.photos/seed/detail_p001_1/800/600', 'https://picsum.photos/seed/detail_p001_2/800/600'],
     category: 'kohbar',
     size: '24 × 36 inches',
     medium: 'Natural dyes on handmade paper',
@@ -91,13 +68,12 @@ export const paintings = [
     titleHindi: 'कोहबर — कमल और मछली तालाब',
     artist: 'Lalita Pathak',
     price: 2599,
-	images: [shivParvatiPainting, 'https://picsum.photos/seed/detail_p002_1/800/600', 'https://picsum.photos/seed/detail_p002_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg', 'https://picsum.photos/seed/detail_p002_1/800/600', 'https://picsum.photos/seed/detail_p002_2/800/600'],
     category: 'kohbar',
     size: '18 × 24 inches',
     medium: 'Acrylic on canvas',
     style: 'Bharni',
-    description:
-      '',
+    description: '',
     inStock: true,
     availabilityStatus: 'available',
     featured: false,
@@ -110,7 +86,7 @@ export const paintings = [
     artist: 'Lalita Pathak',
     price: 7499,
     originalPrice: 50000,
-	images: [ramSitaDarshan, 'https://picsum.photos/seed/detail_p003_1/800/600', 'https://picsum.photos/seed/detail_p003_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg', 'https://picsum.photos/seed/detail_p003_1/800/600', 'https://picsum.photos/seed/detail_p003_2/800/600'],
     category: 'kohbar',
     size: '30 × 40 inches',
     medium: 'Natural dyes on handmade paper',
@@ -125,60 +101,60 @@ export const paintings = [
 
   // ── Bharni ──────────────────────────────────────────────
   {
-   id: 'p004',
-   title: 'Peacock Harmony',
-   titleHindi: 'मोर सौंदर्य',
-   artist: 'Lalita Pathak',
-  price: 4999,
-   images: [peacockOne, 'https://picsum.photos/seed/detail_p004_1/800/600', 'https://picsum.photos/seed/detail_p004_2/800/600'],
-   category: 'bharni',
-   size: '30 × 40 inches',
-   medium: 'Natural dyes on handmade paper',
-   style: 'Bharni',
-   description:
-     'A vibrant Madhubani composition featuring symbolic peacocks, floral borders, and sacred folk motifs rendered in traditional Bharni style with intricate detailing.',
-   inStock: true,
-   availabilityStatus: 'available',
-   featured: true,
-   isNew: false,
+    id: 'p004',
+    title: 'Peacock Harmony',
+    titleHindi: 'मोर सौंदर्य',
+    artist: 'Lalita Pathak',
+    price: 4999,
+    images: ['/paintings/peacockOne.jpeg', 'https://picsum.photos/seed/detail_p004_1/800/600', 'https://picsum.photos/seed/detail_p004_2/800/600'],
+    category: 'bharni',
+    size: '30 × 40 inches',
+    medium: 'Natural dyes on handmade paper',
+    style: 'Bharni',
+    description:
+      'A vibrant Madhubani composition featuring symbolic peacocks, floral borders, and sacred folk motifs rendered in traditional Bharni style with intricate detailing.',
+    inStock: true,
+    availabilityStatus: 'available',
+    featured: true,
+    isNew: false,
   },
   {
-   id: 'p005',
-   title: 'Bridal Kohbar Ceremony',
-   titleHindi: 'कोहबर विवाह चित्र',
-   artist: 'Lalita Pathak',
-  price: 6299,
-  originalPrice: 42000,
-   images: [bridePainting, 'https://picsum.photos/seed/detail_p005_1/800/600', 'https://picsum.photos/seed/detail_p005_2/800/600'],
-   category: 'kohbar',
-   size: '24 × 30 inches',
-   medium: 'Natural dyes on handmade paper',
-   style: 'Kohbar',
-   description:
-     'Traditional Mithila Kohbar painting depicting a sacred bridal ceremony composition with intricate folk detailing, ceremonial motifs, and symbolic elements celebrating marriage traditions.',
-   inStock: true,
-   availabilityStatus: 'available',
-   featured: true,
-   isNew: false,
+    id: 'p005',
+    title: 'Bridal Kohbar Ceremony',
+    titleHindi: 'कोहबर विवाह चित्र',
+    artist: 'Lalita Pathak',
+    price: 6299,
+    originalPrice: 42000,
+    images: ['/paintings/bride.jpeg', 'https://picsum.photos/seed/detail_p005_1/800/600', 'https://picsum.photos/seed/detail_p005_2/800/600'],
+    category: 'kohbar',
+    size: '24 × 30 inches',
+    medium: 'Natural dyes on handmade paper',
+    style: 'Kohbar',
+    description:
+      'Traditional Mithila Kohbar painting depicting a sacred bridal ceremony composition with intricate folk detailing, ceremonial motifs, and symbolic elements celebrating marriage traditions.',
+    inStock: true,
+    availabilityStatus: 'available',
+    featured: true,
+    isNew: false,
   },
   {
-   id: 'p006',
-   title: 'Shiv Parvati Divine Union',
-   titleHindi: 'शिव पार्वती मिलन',
-   artist: 'Lalita Pathak',
-  price: 8999,
-   images: [shivParvatiMarriage, 'https://picsum.photos/seed/detail_p006_1/800/600', 'https://picsum.photos/seed/detail_p006_2/800/600'],
-   category: 'bharni',
-   size: '24 × 36 inches',
-   medium: 'Natural dyes on handmade paper',
-   style: 'Bharni',
-   description:
-     'Traditional Madhubani painting portraying Lord Shiva and Goddess Parvati in sacred union, symbolising love, devotion, and cosmic harmony through intricate Bharni folk detailing.',
-   inStock: true,
-   availabilityStatus: 'available',
-   featured: true,
-   isNew: true,
-   },
+    id: 'p006',
+    title: 'Shiv Parvati Divine Union',
+    titleHindi: 'शिव पार्वती मिलन',
+    artist: 'Lalita Pathak',
+    price: 8999,
+    images: ['/paintings/Shivparvatimarriage.jpeg', 'https://picsum.photos/seed/detail_p006_1/800/600', 'https://picsum.photos/seed/detail_p006_2/800/600'],
+    category: 'bharni',
+    size: '24 × 36 inches',
+    medium: 'Natural dyes on handmade paper',
+    style: 'Bharni',
+    description:
+      'Traditional Madhubani painting portraying Lord Shiva and Goddess Parvati in sacred union, symbolising love, devotion, and cosmic harmony through intricate Bharni folk detailing.',
+    inStock: true,
+    availabilityStatus: 'available',
+    featured: true,
+    isNew: true,
+  },
 
   // ── Kachni ──────────────────────────────────────────────
   {
@@ -188,7 +164,7 @@ export const paintings = [
     artist: 'Lalita Pathak',
     price: 2499,
     originalPrice: 34000,
-    images: [idkthecontext, 'https://picsum.photos/seed/detail_p007_1/800/600', 'https://picsum.photos/seed/detail_p007_2/800/600'],
+    images: ['/paintings/idkthecontext.jpeg', 'https://picsum.photos/seed/detail_p007_1/800/600', 'https://picsum.photos/seed/detail_p007_2/800/600'],
     category: 'kachni',
     size: '18 × 24 inches',
     medium: 'Ink on handmade paper',
@@ -207,7 +183,7 @@ export const paintings = [
     artist: 'Lalita Pathak',
     price: 5399,
     originalPrice: 45000,
-    images: [fish, 'https://picsum.photos/seed/detail_p008_1/800/600', 'https://picsum.photos/seed/detail_p008_2/800/600'],
+    images: ['/paintings/fish.jpeg', 'https://picsum.photos/seed/detail_p008_1/800/600', 'https://picsum.photos/seed/detail_p008_2/800/600'],
     category: 'kachni',
     size: '24 × 30 inches',
     medium: 'Ink on handmade paper',
@@ -225,7 +201,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 3800,
-    images: [radhaKrishnaKachni, 'https://picsum.photos/seed/detail_p009_1/800/600', 'https://picsum.photos/seed/detail_p009_2/800/600'],
+    images: ['/paintings/gallery_batch_1/radha_krishna_kachni.jpg', 'https://picsum.photos/seed/detail_p009_1/800/600', 'https://picsum.photos/seed/detail_p009_2/800/600'],
     category: 'religious',
     size: '16 × 20 inches',
     medium: 'Ink on handmade paper',
@@ -246,7 +222,7 @@ export const paintings = [
     artist: 'Lalita Pathak',
     price: 3799,
     originalPrice: 40000,
-    images: [shivparvatiblackwhite, 'https://picsum.photos/seed/detail_p010_1/800/600', 'https://picsum.photos/seed/detail_p010_2/800/600'],
+    images: ['/paintings/shivparvatiblacknwhite.jpeg', 'https://picsum.photos/seed/detail_p010_1/800/600', 'https://picsum.photos/seed/detail_p010_2/800/600'],
     category: 'godhana',
     size: '16 × 20 inches',
     medium: 'Ink on handmade paper',
@@ -264,7 +240,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 4500,
-    images: [durgaRed, 'https://picsum.photos/seed/detail_p011_1/800/600', 'https://picsum.photos/seed/detail_p011_2/800/600'],
+    images: ['/paintings/gallery_batch_1/durga_red.jpg', 'https://picsum.photos/seed/detail_p011_1/800/600', 'https://picsum.photos/seed/detail_p011_2/800/600'],
     category: 'religious',
     size: '18 × 18 inches',
     medium: 'Ink and natural dyes on handmade paper',
@@ -282,7 +258,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 4200,
-    images: [krishnaCow, 'https://picsum.photos/seed/detail_p012_1/800/600', 'https://picsum.photos/seed/detail_p012_2/800/600'],
+    images: ['/paintings/gallery_batch_2/krishna_cow.jpg', 'https://picsum.photos/seed/detail_p012_1/800/600', 'https://picsum.photos/seed/detail_p012_2/800/600'],
     category: 'religious',
     size: '20 × 24 inches',
     medium: 'Acrylic on canvas',
@@ -301,9 +277,8 @@ export const paintings = [
     title: 'Surya Chakra — Sacred Harmony',
     titleHindi: 'सूर्य चक्र — पवित्र समरसता',
     artist: 'Lalita Pathak',
-
     price: 9499,
-	images: [suryaChakra1, 'https://picsum.photos/seed/detail_p013_1/800/600', 'https://picsum.photos/seed/detail_p013_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg', 'https://picsum.photos/seed/detail_p013_1/800/600', 'https://picsum.photos/seed/detail_p013_2/800/600'],
     category: 'tantric',
     size: '30 × 30 inches',
     medium: 'Natural dyes on handmade paper',
@@ -322,7 +297,7 @@ export const paintings = [
     artist: 'Lalita Pathak',
     price: 5800,
     originalPrice: 7000,
-    images: [durgaBlackRed, 'https://picsum.photos/seed/detail_p014_1/800/600', 'https://picsum.photos/seed/detail_p014_2/800/600'],
+    images: ['/paintings/gallery_batch_1/durga_black_red.jpg', 'https://picsum.photos/seed/detail_p014_1/800/600', 'https://picsum.photos/seed/detail_p014_2/800/600'],
     category: 'religious',
     size: '24 × 24 inches',
     medium: 'Acrylic and ink on canvas',
@@ -342,7 +317,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 5200,
-    images: [radhaKrishnaBharni, 'https://picsum.photos/seed/detail_p015_1/800/600', 'https://picsum.photos/seed/detail_p015_2/800/600'],
+    images: ['/paintings/gallery_batch_1/radha_krishna_bharni.jpg', 'https://picsum.photos/seed/detail_p015_1/800/600', 'https://picsum.photos/seed/detail_p015_2/800/600'],
     category: 'religious',
     size: '36 × 48 inches',
     medium: 'Mixed media on canvas',
@@ -360,7 +335,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 4200,
-    images: [ganeshaColored, 'https://picsum.photos/seed/detail_p016_1/800/600', 'https://picsum.photos/seed/detail_p016_2/800/600'],
+    images: ['/paintings/gallery_batch_1/ganesha_colored.jpg', 'https://picsum.photos/seed/detail_p016_1/800/600', 'https://picsum.photos/seed/detail_p016_2/800/600'],
     category: 'religious',
     size: '24 × 36 inches',
     medium: 'Acrylic on canvas',
@@ -378,7 +353,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 3500,
-    images: [radhaKrishnaKachni2, 'https://picsum.photos/seed/detail_p017_1/800/600', 'https://picsum.photos/seed/detail_p017_2/800/600'],
+    images: ['/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg', 'https://picsum.photos/seed/detail_p017_1/800/600', 'https://picsum.photos/seed/detail_p017_2/800/600'],
     category: 'religious',
     size: '20 × 24 inches',
     medium: 'Ink on handmade paper',
@@ -398,7 +373,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 2800,
-    images: [ganeshaPink, 'https://picsum.photos/seed/detail_p018_1/800/600', 'https://picsum.photos/seed/detail_p018_2/800/600'],
+    images: ['/paintings/gallery_batch_2/ganesha_pink.jpg', 'https://picsum.photos/seed/detail_p018_1/800/600', 'https://picsum.photos/seed/detail_p018_2/800/600'],
     category: 'religious',
     size: '24 × 30 inches',
     medium: 'Ink on handmade paper',
@@ -416,7 +391,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Lalita Pathak',
     price: 7500,
-    images: [paintedSaree, 'https://picsum.photos/seed/detail_p019_1/800/600', 'https://picsum.photos/seed/detail_p019_2/800/600'],
+    images: ['/paintings/gallery_batch_2/painted_saree.jpg', 'https://picsum.photos/seed/detail_p019_1/800/600', 'https://picsum.photos/seed/detail_p019_2/800/600'],
     category: 'contemporary',
     size: 'Saree',
     medium: 'Fabric paint on silk',
@@ -454,7 +429,7 @@ export const paintings = [
     titleHindi: 'राम-सीता विवाह — दिव्य विवाह',
     artist: 'Mahasundari Devi',
     price: 6499,
-    images: [ramSitaVivah, 'https://picsum.photos/seed/detail_p021_1/800/600', 'https://picsum.photos/seed/detail_p021_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg', 'https://picsum.photos/seed/detail_p021_1/800/600', 'https://picsum.photos/seed/detail_p021_2/800/600'],
     category: 'religious',
     size: '30 × 40 inches',
     medium: 'Natural dyes on handmade paper',
@@ -489,10 +464,9 @@ export const paintings = [
     title: 'Durga Mahishasura Mardini',
     titleHindi: 'दुर्गा महिषासुर मर्दिनी',
     artist: 'Lalita Pathak',
-
     price: 5599,
     originalPrice: 52000,
-	images: [durgaMahishasura, 'https://picsum.photos/seed/detail_p023_1/800/600', 'https://picsum.photos/seed/detail_p023_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg', 'https://picsum.photos/seed/detail_p023_1/800/600', 'https://picsum.photos/seed/detail_p023_2/800/600'],
     category: 'religious',
     size: '24 × 36 inches',
     medium: 'Natural dyes on handmade paper',
@@ -510,7 +484,7 @@ export const paintings = [
     titleHindi: '',
     artist: 'Godavari Dutta',
     price: 3199,
-	images: [ganeshPainting, 'https://picsum.photos/seed/detail_p024_1/800/600', 'https://picsum.photos/seed/detail_p024_2/800/600'],
+    images: ['/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg', 'https://picsum.photos/seed/detail_p024_1/800/600', 'https://picsum.photos/seed/detail_p024_2/800/600'],
     category: 'religious',
     size: '24 × 30 inches',
     medium: 'Ink on handmade paper',
@@ -535,30 +509,5 @@ paintings.forEach((p) => {
     });
   }
 });
-
-export const imageMap = {
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg': radhaKrishna1,
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg': ganeshPainting,
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg': suryaChakra1,
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg': ramSitaDarshan,
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg': shivParvatiPainting,
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg': ramSitaVivah,
-  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg': durgaMahishasura,
-  '/src/assets/paintings/peacockOne.jpeg': peacockOne,
-  '/src/assets/paintings/bride.jpeg': bridePainting,
-  '/src/assets/paintings/Shivparvatimarriage.jpeg': shivParvatiMarriage,
-  '/src/assets/paintings/fish.jpeg': fish,
-  '/src/assets/paintings/idkthecontext.jpeg': idkthecontext,
-  '/src/assets/paintings/shivparvatiblacknwhite.jpeg': shivparvatiblackwhite,
-  '/src/assets/paintings/gallery_batch_1/durga_red.jpg': durgaRed,
-  '/src/assets/paintings/gallery_batch_1/radha_krishna_kachni.jpg': radhaKrishnaKachni,
-  '/src/assets/paintings/gallery_batch_1/radha_krishna_bharni.jpg': radhaKrishnaBharni,
-  '/src/assets/paintings/gallery_batch_1/ganesha_colored.jpg': ganeshaColored,
-  '/src/assets/paintings/gallery_batch_1/durga_black_red.jpg': durgaBlackRed,
-  '/src/assets/paintings/gallery_batch_2/krishna_cow.jpg': krishnaCow,
-  '/src/assets/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg': radhaKrishnaKachni2,
-  '/src/assets/paintings/gallery_batch_2/ganesha_pink.jpg': ganeshaPink,
-  '/src/assets/paintings/gallery_batch_2/painted_saree.jpg': paintedSaree,
-};
 
 export default paintings;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiImage } from 'react-icons/fi';
 import { buildApiPath } from '../../api';
-import { imageMap } from '../../data/paintings';
 
 const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,8 +13,6 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
     if (typeof src === 'string') {
       if (src.startsWith('/uploads') || src.startsWith('uploads/')) {
         finalSrc = buildApiPath(src);
-      } else if (imageMap[src]) {
-        finalSrc = imageMap[src];
       }
     }
     setImgSrc(finalSrc);

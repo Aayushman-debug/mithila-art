@@ -10,10 +10,10 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Bharni',
     description: 'Hand-painted Radha Krishna Mithila artwork by Lalita Pathak created in traditional Madhubani style.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg',
-      '/src/assets/paintings/shivparvatiblacknwhite.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg',
+      '/paintings/shivparvatiblacknwhite.jpeg',
       'https://picsum.photos/seed/detail_p001_1/800/600',
       'https://picsum.photos/seed/detail_p001_2/800/600'
     ],
@@ -30,9 +30,9 @@ const seedPaintings = [
     medium: 'Acrylic on canvas',
     style: 'Bharni',
     description: 'Beautiful Shiv Parvati painting in vibrant colors.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg',
       'https://picsum.photos/seed/detail_p002_1/800/600',
       'https://picsum.photos/seed/detail_p002_2/800/600'
     ],
@@ -49,9 +49,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Bharni',
     description: 'Traditional Mithila painting depicting Lord Rama, Sita, and Hanuman in devotional composition with intricate Madhubani detailing and sacred symbolism.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg',
       'https://picsum.photos/seed/detail_p003_1/800/600',
       'https://picsum.photos/seed/detail_p003_2/800/600'
     ],
@@ -68,9 +68,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Bharni',
     description: 'A vibrant Madhubani composition featuring symbolic peacocks, floral borders, and sacred folk motifs rendered in traditional Bharni style with intricate detailing.',
-    image: '/src/assets/paintings/peacockOne.jpeg',
+    image: '/paintings/peacockOne.jpeg',
     gallery: [
-      '/src/assets/paintings/peacockOne.jpeg',
+      '/paintings/peacockOne.jpeg',
       'https://picsum.photos/seed/detail_p004_1/800/600',
       'https://picsum.photos/seed/detail_p004_2/800/600'
     ],
@@ -87,9 +87,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Kohbar',
     description: 'Traditional Mithila Kohbar painting depicting a sacred bridal ceremony composition with intricate folk detailing, ceremonial motifs, and symbolic elements celebrating marriage traditions.',
-    image: '/src/assets/paintings/bride.jpeg',
+    image: '/paintings/bride.jpeg',
     gallery: [
-      '/src/assets/paintings/bride.jpeg',
+      '/paintings/bride.jpeg',
       'https://picsum.photos/seed/detail_p005_1/800/600',
       'https://picsum.photos/seed/detail_p005_2/800/600'
     ],
@@ -106,9 +106,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Bharni',
     description: 'Traditional Madhubani painting portraying Lord Shiva and Goddess Parvati in sacred union, symbolising love, devotion, and cosmic harmony through intricate Bharni folk detailing.',
-    image: '/src/assets/paintings/Shivparvatimarriage.jpeg',
+    image: '/paintings/Shivparvatimarriage.jpeg',
     gallery: [
-      '/src/assets/paintings/Shivparvatimarriage.jpeg',
+      '/paintings/Shivparvatimarriage.jpeg',
       'https://picsum.photos/seed/detail_p006_1/800/600',
       'https://picsum.photos/seed/detail_p006_2/800/600'
     ],
@@ -125,9 +125,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Kachni',
     description: 'Traditional Madhubani artwork portraying a divine Matsya-inspired figure surrounded by sacred waters, lotus motifs, and intricate Mithila patterns symbolising life, spirituality, and devotion.',
-    image: '/src/assets/paintings/idkthecontext.jpeg',
+    image: '/paintings/idkthecontext.jpeg',
     gallery: [
-      '/src/assets/paintings/idkthecontext.jpeg',
+      '/paintings/idkthecontext.jpeg',
       'https://picsum.photos/seed/detail_p007_1/800/600',
       'https://picsum.photos/seed/detail_p007_2/800/600'
     ],
@@ -144,9 +144,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Kachni',
     description: 'Pairs of divine fish symbolising fertility, prosperity, and marital love in Mithila culture. Rendered in traditional Madhubani style.',
-    image: '/src/assets/paintings/fish.jpeg',
+    image: '/paintings/fish.jpeg',
     gallery: [
-      '/src/assets/paintings/fish.jpeg',
+      '/paintings/fish.jpeg',
       'https://picsum.photos/seed/detail_p008_1/800/600',
       'https://picsum.photos/seed/detail_p008_2/800/600'
     ],
@@ -163,9 +163,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Kachni',
     description: 'Lord Krishna and Radha beautifully rendered in the Kachni line-art style with striking black, red, and blue motifs under the Kadamba tree.',
-    image: '/src/assets/paintings/gallery_batch_1/radha_krishna_kachni.jpg',
+    image: '/paintings/gallery_batch_1/radha_krishna_kachni.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_1/radha_krishna_kachni.jpg',
+      '/paintings/gallery_batch_1/radha_krishna_kachni.jpg',
       'https://picsum.photos/seed/detail_p009_1/800/600',
       'https://picsum.photos/seed/detail_p009_2/800/600'
     ],
@@ -182,9 +182,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Godhana',
     description: 'Traditional Mithila artwork portraying Lord Shiva and Goddess Parvati in sacred harmony, rendered through intricate monochrome linework reflecting devotion, love, and divine balance.',
-    image: '/src/assets/paintings/shivparvatiblacknwhite.jpeg',
+    image: '/paintings/shivparvatiblacknwhite.jpeg',
     gallery: [
-      '/src/assets/paintings/shivparvatiblacknwhite.jpeg',
+      '/paintings/shivparvatiblacknwhite.jpeg',
       'https://picsum.photos/seed/detail_p010_1/800/600',
       'https://picsum.photos/seed/detail_p010_2/800/600'
     ],
@@ -201,9 +201,9 @@ const seedPaintings = [
     medium: 'Ink and natural dyes on handmade paper',
     style: 'Traditional Mithila',
     description: 'A powerful red monochrome depiction of Goddess Durga on her lion mount, wielding weapons in her many hands to defeat evil. Hand-painted in traditional Mithila style.',
-    image: '/src/assets/paintings/gallery_batch_1/durga_red.jpg',
+    image: '/paintings/gallery_batch_1/durga_red.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_1/durga_red.jpg',
+      '/paintings/gallery_batch_1/durga_red.jpg',
       'https://picsum.photos/seed/detail_p011_1/800/600',
       'https://picsum.photos/seed/detail_p011_2/800/600'
     ],
@@ -220,9 +220,9 @@ const seedPaintings = [
     medium: 'Acrylic on canvas',
     style: 'Bharni',
     description: 'A colorful and vibrant painting in the Bharni style depicting Lord Krishna playing with a cow. Rendered with rich primary colors and traditional decorative elements.',
-    image: '/src/assets/paintings/gallery_batch_2/krishna_cow.jpg',
+    image: '/paintings/gallery_batch_2/krishna_cow.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_2/krishna_cow.jpg',
+      '/paintings/gallery_batch_2/krishna_cow.jpg',
       'https://picsum.photos/seed/detail_p012_1/800/600',
       'https://picsum.photos/seed/detail_p012_2/800/600'
     ],
@@ -239,9 +239,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Tantric',
     description: 'A radiant Mithila composition centred around a sacred chakra motif symbolising harmony, prosperity, and cosmic balance. Handcrafted using traditional Maithili detailing with intricate symbolic storytelling and vibrant natural colours.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg',
       'https://picsum.photos/seed/detail_p013_1/800/600',
       'https://picsum.photos/seed/detail_p013_2/800/600'
     ],
@@ -258,9 +258,9 @@ const seedPaintings = [
     medium: 'Acrylic and ink on canvas',
     style: 'Kachni',
     description: 'A dramatic black and red Kachni style painting of Goddess Durga slaying the demon Mahishasura. Shows incredible detail in the linework and shading.',
-    image: '/src/assets/paintings/gallery_batch_1/durga_black_red.jpg',
+    image: '/paintings/gallery_batch_1/durga_black_red.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_1/durga_black_red.jpg',
+      '/paintings/gallery_batch_1/durga_black_red.jpg',
       'https://picsum.photos/seed/detail_p014_1/800/600',
       'https://picsum.photos/seed/detail_p014_2/800/600'
     ],
@@ -277,9 +277,9 @@ const seedPaintings = [
     medium: 'Mixed media on canvas',
     style: 'Bharni',
     description: 'A vibrant and colorful Bharni style painting of Radha and Krishna, filled with intricate patterns, bright natural dyes, and surrounded by nature motifs.',
-    image: '/src/assets/paintings/gallery_batch_1/radha_krishna_bharni.jpg',
+    image: '/paintings/gallery_batch_1/radha_krishna_bharni.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_1/radha_krishna_bharni.jpg',
+      '/paintings/gallery_batch_1/radha_krishna_bharni.jpg',
       'https://picsum.photos/seed/detail_p015_1/800/600',
       'https://picsum.photos/seed/detail_p015_2/800/600'
     ],
@@ -296,9 +296,9 @@ const seedPaintings = [
     medium: 'Acrylic on canvas',
     style: 'Bharni',
     description: 'An intricate portrayal of Lord Ganesha with his vahana (mouse) and a beautifully detailed peacock. Features traditional Mithila geometric borders and bright floral elements.',
-    image: '/src/assets/paintings/gallery_batch_1/ganesha_colored.jpg',
+    image: '/paintings/gallery_batch_1/ganesha_colored.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_1/ganesha_colored.jpg',
+      '/paintings/gallery_batch_1/ganesha_colored.jpg',
       'https://picsum.photos/seed/detail_p016_1/800/600',
       'https://picsum.photos/seed/detail_p016_2/800/600'
     ],
@@ -315,9 +315,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Kachni',
     description: 'An exquisite black and white Kachni painting with delicate red and yellow accents. It portrays the eternal love of Radha and Krishna standing gracefully under a Kadamba tree.',
-    image: '/src/assets/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg',
+    image: '/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg',
+      '/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg',
       'https://picsum.photos/seed/detail_p017_1/800/600',
       'https://picsum.photos/seed/detail_p017_2/800/600'
     ],
@@ -334,9 +334,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Kachni',
     description: 'A striking contemporary take on Lord Ganesha using a unique pink palette. Masterfully detailed in the Kachni line-art style alongside his faithful vahana, Mooshak.',
-    image: '/src/assets/paintings/gallery_batch_2/ganesha_pink.jpg',
+    image: '/paintings/gallery_batch_2/ganesha_pink.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_2/ganesha_pink.jpg',
+      '/paintings/gallery_batch_2/ganesha_pink.jpg',
       'https://picsum.photos/seed/detail_p018_1/800/600',
       'https://picsum.photos/seed/detail_p018_2/800/600'
     ],
@@ -353,9 +353,9 @@ const seedPaintings = [
     medium: 'Fabric paint on silk',
     style: 'Wearable Art',
     description: 'Authentic, hand-painted wearable art. This stunning silk saree is intricately hand-painted with traditional Mithila motifs, transforming an ancient art form into a breathtaking fashion statement.',
-    image: '/src/assets/paintings/gallery_batch_2/painted_saree.jpg',
+    image: '/paintings/gallery_batch_2/painted_saree.jpg',
     gallery: [
-      '/src/assets/paintings/gallery_batch_2/painted_saree.jpg',
+      '/paintings/gallery_batch_2/painted_saree.jpg',
       'https://picsum.photos/seed/detail_p019_1/800/600',
       'https://picsum.photos/seed/detail_p019_2/800/600'
     ],
@@ -391,9 +391,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Bharni',
     description: 'The celestial wedding of Lord Ram and Sita in the court of King Janaka at Janakpur. This grand composition features dozens of figures, ornate architecture, and sacred fire — a crown jewel of Mithila narrative art.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg',
       'https://picsum.photos/seed/detail_p021_1/800/600',
       'https://picsum.photos/seed/detail_p021_2/800/600'
     ],
@@ -429,9 +429,9 @@ const seedPaintings = [
     medium: 'Natural dyes on handmade paper',
     style: 'Bharni',
     description: 'Goddess Durga in her ten-armed form, slaying the buffalo demon Mahishasura. A powerful, dynamic composition in the classic Bharni palette of red, yellow, and black.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg',
       'https://picsum.photos/seed/detail_p023_1/800/600',
       'https://picsum.photos/seed/detail_p023_2/800/600'
     ],
@@ -448,9 +448,9 @@ const seedPaintings = [
     medium: 'Ink on handmade paper',
     style: 'Kachni',
     description: 'Intricate Lord Ganesh Mithila artwork rendered in traditional Kachni style featuring fine line detailing, sacred symbolism, and handcrafted Maithili artistry.',
-    image: '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg',
+    image: '/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg',
     gallery: [
-      '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg',
+      '/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg',
       'https://picsum.photos/seed/detail_p024_1/800/600',
       'https://picsum.photos/seed/detail_p024_2/800/600'
     ],

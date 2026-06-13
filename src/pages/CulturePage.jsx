@@ -4,15 +4,15 @@ import { Helmet } from 'react-helmet-async';
 import SectionHeading from '../components/ui/SectionHeading';
 import { IoFlowerOutline, IoMusicalNotesOutline, IoRestaurantOutline, IoPeopleOutline, IoSunnyOutline, IoLeafOutline, IoColorPaletteOutline, IoWaterOutline } from 'react-icons/io5';
 
-// Import local Mithila artwork
-import fishArtwork from '../assets/paintings/fish.jpeg';
-import peacockArtwork from '../assets/paintings/peacockOne.jpeg';
-import brideArtwork from '../assets/paintings/bride.jpeg';
-import shivParvatiArtwork from '../assets/paintings/Shivparvatimarriage.jpeg';
-import lotusKrishnaArtwork from '../assets/paintings/idkthecontext.jpeg';
-import sunYantraArtwork from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg';
-import ganesha_lotus from '../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg';
-import multiple_figures from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg';
+// Local Mithila artwork
+const fishArtwork = '/paintings/fish.jpeg';
+const peacockArtwork = '/paintings/peacockOne.jpeg';
+const brideArtwork = '/paintings/bride.jpeg';
+const shivParvatiArtwork = '/paintings/Shivparvatimarriage.jpeg';
+const lotusKrishnaArtwork = '/paintings/idkthecontext.jpeg';
+const sunYantraArtwork = '/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg';
+const ganesha_lotus = '/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg';
+const multiple_figures = '/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg';
 
 // Wikimedia Commons - Authentic Mithila Art
 const imgHero = shivParvatiArtwork; // Beautiful traditional Mithila wedding scene

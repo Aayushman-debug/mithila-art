@@ -85,7 +85,8 @@ export default function CollectionDetailPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map(product => {
-              const image = product.images?.[0]?.url || product.image || '';
+              const firstImg = product.images?.[0];
+              const image = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || product.image || '';
               const isAvailable = product.availabilityStatus === 'available' || product.availabilityStatus === 'only_1_left';
               
               return (

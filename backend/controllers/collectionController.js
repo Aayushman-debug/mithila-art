@@ -13,7 +13,15 @@ const getCollections = async (req, res) => {
 
 const getCollectionById = async (req, res) => {
   try {
-    const collection = await Collection.findById(req.params.id).lean();
+    let collection = null;
+    try {
+      collection = await Collection.findById(req.params.id).lean();
+    } catch (e) {}
+
+    if (!collection) {
+      collection = await Collection.findOne({ collectionId: req.params.id }).lean();
+    }
+
     if (!collection) return res.status(404).json({ success: false, message: 'Collection not found' });
     
     // Also fetch the artworks for this collection

@@ -68,18 +68,22 @@ export function CartProvider({ children }) {
 
   // ── Actions ────────────────────────────────────────────────────
   const addItem = useCallback(
-    (painting) =>
+    (painting) => {
+      const firstImg = painting.images?.[0];
+      const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || painting.image;
+
       dispatch({
         type: ActionTypes.ADD_ITEM,
         payload: {
           id: painting.id,
           title: painting.title,
           price: painting.price,
-          image: painting.images?.[0] || painting.image,
+          image: imageToUse,
           artist: painting.artist,
           size: painting.size,
         },
-      }),
+      });
+    },
     [],
   );
 
