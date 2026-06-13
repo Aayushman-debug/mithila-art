@@ -13,6 +13,8 @@ import shivParvatiMarriage from "../assets/paintings/Shivparvatimarriage.jpeg";
 import fish from "../assets/paintings/fish.jpeg";
 import idkthecontext from '../assets/paintings/idkthecontext.jpeg';
 import shivparvatiblackwhite from '../assets/paintings/shivparvatiblacknwhite.jpeg';
+import ramSitaVivah from '../assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg';
+import durgaMahishasura from '../assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg';
 
 import durgaRed from '../assets/paintings/gallery_batch_1/durga_red.jpg';
 import radhaKrishnaKachni from '../assets/paintings/gallery_batch_1/radha_krishna_kachni.jpg';
@@ -452,7 +454,7 @@ export const paintings = [
     titleHindi: 'राम-सीता विवाह — दिव्य विवाह',
     artist: 'Mahasundari Devi',
     price: 6499,
-    images: ['/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg', 'https://picsum.photos/seed/detail_p021_1/800/600', 'https://picsum.photos/seed/detail_p021_2/800/600'],
+    images: [ramSitaVivah, 'https://picsum.photos/seed/detail_p021_1/800/600', 'https://picsum.photos/seed/detail_p021_2/800/600'],
     category: 'religious',
     size: '30 × 40 inches',
     medium: 'Natural dyes on handmade paper',
@@ -490,7 +492,7 @@ export const paintings = [
 
     price: 5599,
     originalPrice: 52000,
-	images: ['/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg', 'https://picsum.photos/seed/detail_p023_1/800/600', 'https://picsum.photos/seed/detail_p023_2/800/600'],
+	images: [durgaMahishasura, 'https://picsum.photos/seed/detail_p023_1/800/600', 'https://picsum.photos/seed/detail_p023_2/800/600'],
     category: 'religious',
     size: '24 × 36 inches',
     medium: 'Natural dyes on handmade paper',
@@ -533,5 +535,30 @@ paintings.forEach((p) => {
     });
   }
 });
+
+export const imageMap = {
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.02.39 AM.jpeg': radhaKrishna1,
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg': ganeshPainting,
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg': suryaChakra1,
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.43.37 PM.jpeg': ramSitaDarshan,
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.34 AM.jpeg': shivParvatiPainting,
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg': ramSitaVivah,
+  '/src/assets/paintings/WhatsApp Image 2026-05-25 at 8.28.36 AM.jpeg': durgaMahishasura,
+  '/src/assets/paintings/peacockOne.jpeg': peacockOne,
+  '/src/assets/paintings/bride.jpeg': bridePainting,
+  '/src/assets/paintings/Shivparvatimarriage.jpeg': shivParvatiMarriage,
+  '/src/assets/paintings/fish.jpeg': fish,
+  '/src/assets/paintings/idkthecontext.jpeg': idkthecontext,
+  '/src/assets/paintings/shivparvatiblacknwhite.jpeg': shivparvatiblackwhite,
+  '/src/assets/paintings/gallery_batch_1/durga_red.jpg': durgaRed,
+  '/src/assets/paintings/gallery_batch_1/radha_krishna_kachni.jpg': radhaKrishnaKachni,
+  '/src/assets/paintings/gallery_batch_1/radha_krishna_bharni.jpg': radhaKrishnaBharni,
+  '/src/assets/paintings/gallery_batch_1/ganesha_colored.jpg': ganeshaColored,
+  '/src/assets/paintings/gallery_batch_1/durga_black_red.jpg': durgaBlackRed,
+  '/src/assets/paintings/gallery_batch_2/krishna_cow.jpg': krishnaCow,
+  '/src/assets/paintings/gallery_batch_2/radha_krishna_kachni_2.jpg': radhaKrishnaKachni2,
+  '/src/assets/paintings/gallery_batch_2/ganesha_pink.jpg': ganeshaPink,
+  '/src/assets/paintings/gallery_batch_2/painted_saree.jpg': paintedSaree,
+};
 
 export default paintings;
