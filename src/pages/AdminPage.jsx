@@ -7,6 +7,7 @@ import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
 import ProductModal from '../components/admin/ProductModal';
 import CollectionModal from '../components/admin/CollectionModal';
+import FallbackImage from '../components/ui/FallbackImage';
 
 const AVAILABILITY_OPTIONS = [
   { value: 'available',           label: 'Available' },
@@ -477,7 +478,7 @@ export default function AdminPage() {
                           <tr key={p._id || p.id} className="border-b border-cream-50 hover:bg-cream-50/50 transition-colors">
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-3">
-                                <img src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover" />
+                                <FallbackImage src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover" />
                                 <div>
                                   <p className="font-body font-medium text-sm text-charcoal">{p.title}</p>
                                   <p className="text-xs text-warm-gray-400">{p.size}</p>
@@ -523,7 +524,7 @@ export default function AdminPage() {
                     {realProducts.slice(0, 20).map((p) => (
                       <div key={p._id || p.id} className="bg-cream-50 p-4 rounded-xl border border-cream-100 flex flex-col gap-3">
                         <div className="flex gap-4 items-center">
-                          <img src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-16 h-16 rounded-xl object-cover" />
+                          <FallbackImage src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-16 h-16 rounded-xl object-cover" />
                           <div className="flex-1">
                             <h4 className="font-display font-bold text-charcoal">{p.title}</h4>
                             <p className="text-sm text-warm-gray-500">{p.size} • {p.category}</p>
@@ -567,7 +568,7 @@ export default function AdminPage() {
                   <div className="flex flex-col gap-4 p-4">
                     {realCollections.map((c) => (
                       <div key={c._id || c.collectionId} className="bg-cream-50 p-4 rounded-xl border border-cream-100 flex flex-col sm:flex-row gap-4 items-center">
-                        <img src={c.coverImage} alt={c.title} className="w-full sm:w-24 h-40 sm:h-24 rounded-xl object-cover" />
+                        <FallbackImage src={c.coverImage} alt={c.title} className="w-full sm:w-24 h-40 sm:h-24 rounded-xl object-cover" />
                         <div className="flex-1 text-center sm:text-left">
                           <h4 className="font-display font-bold text-lg text-charcoal">{c.title}</h4>
                           <p className="text-sm text-warm-gray-500">{c.category}</p>

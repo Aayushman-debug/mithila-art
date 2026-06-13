@@ -7,6 +7,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { paymentAPI, buildApiPath } from '../api';
 import { formatPrice, validateIndianPhone, normalizePhone } from '../utils/helpers';
+import FallbackImage from '../components/ui/FallbackImage';
 
 export default function CartPage() {
   const { items, removeItem, clearCart, total, itemCount } = useCart();
@@ -482,7 +483,7 @@ export default function CartPage() {
                         <motion.div key={item.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }}
                           className="bg-white dark:bg-warm-gray-800 rounded-2xl p-4 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 flex gap-4"
                         >
-                          <img src={item.images?.[0] || item.image} alt={item.title} className="w-24 h-28 sm:w-32 sm:h-36 object-cover rounded-xl" />
+                          <FallbackImage src={item.images?.[0] || item.image} alt={item.title} className="w-24 h-28 sm:w-32 sm:h-36 object-cover rounded-xl" />
                           <div className="flex-1 min-w-0">
                             <p className="text-earth-500 text-xs font-semibold tracking-wider uppercase">{item.category}</p>
                             <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-200 leading-snug truncate">{item.title}</h3>
@@ -731,7 +732,7 @@ export default function CartPage() {
                   <div className="space-y-3 mb-4 pb-4 border-b border-cream-100 dark:border-warm-gray-700 max-h-40 overflow-y-auto">
                     {items.map((item) => (
                       <div key={item.id} className="flex items-center gap-3">
-                        <img src={item.images?.[0] || item.image} alt={item.title} className="w-12 h-12 object-cover rounded-lg" />
+                        <FallbackImage src={item.images?.[0] || item.image} alt={item.title} className="w-12 h-12 object-cover rounded-lg" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-body font-medium text-charcoal dark:text-cream-200 truncate">{item.title}</p>
                           <p className="text-xs text-warm-gray-400">Qty: {item.quantity}</p>

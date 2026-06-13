@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { userAPI } from '../api';
 import { formatPrice } from '../utils/helpers';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import FallbackImage from '../components/ui/FallbackImage';
 
 export default function WishlistPage() {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ export default function WishlistPage() {
                 className="bg-white rounded-3xl shadow-card overflow-hidden"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-[150px_1fr] gap-4 p-5">
-                  <img src={item.image} alt={item.title} className="w-full h-44 object-cover rounded-3xl" />
+                  <FallbackImage src={item.image} alt={item.title} className="w-full h-44 object-cover rounded-3xl" />
                   <div className="flex flex-col justify-between">
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-earth-500 font-semibold mb-2">{item.category}</p>
