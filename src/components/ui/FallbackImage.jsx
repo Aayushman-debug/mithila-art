@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiImage } from 'react-icons/fi';
+import { buildApiPath } from '../../api';
 
 const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -8,7 +9,11 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
   const [imgSrc, setImgSrc] = useState(src);
 
   useEffect(() => {
-    setImgSrc(src);
+    let finalSrc = src;
+    if (typeof src === 'string' && (src.startsWith('/uploads') || src.startsWith('uploads/'))) {
+      finalSrc = buildApiPath(src);
+    }
+    setImgSrc(finalSrc);
     setIsLoading(true);
     setHasError(false);
   }, [src]);
