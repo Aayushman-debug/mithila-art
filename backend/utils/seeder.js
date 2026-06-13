@@ -460,8 +460,6 @@ const seedPaintings = [
   }
 ];
 
-const Collection = require('../models/Collection');
-
 const seedProducts = async () => {
   try {
     console.log('Database seeding checks started...');
@@ -475,55 +473,8 @@ const seedProducts = async () => {
     }
     console.log('✓ Seeding database verification complete.');
 
-    // Auto-migration logic for Collections
-    const collectionCount = await Collection.countDocuments();
-    if (collectionCount === 0) {
-      console.log('No collections found. Running auto-migration...');
-      const products = await Product.find({ collectionId: { $exists: false } });
-      console.log(`Found ${products.length} products to migrate.`);
-
-      const titleGroups = {};
-      for (const product of products) {
-        if (!titleGroups[product.title]) {
-          titleGroups[product.title] = [];
-        }
-        titleGroups[product.title].push(product);
-      }
-
-      let orderIndex = 0;
-      for (const title in titleGroups) {
-        const group = titleGroups[title];
-        const firstProduct = group[0];
-
-        const collection = new Collection({
-          collectionId: `c_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
-          title: title,
-          titleHindi: firstProduct.titleHindi || '',
-          description: firstProduct.description,
-          coverImage: firstProduct.image || (firstProduct.gallery && firstProduct.gallery[0]) || '',
-          category: firstProduct.category,
-          orderIndex: orderIndex++,
-          isFeatured: firstProduct.featured || false,
-        });
-
-        const savedCollection = await collection.save();
-        console.log(`Created Collection: ${title}`);
-
-        for (const product of group) {
-          product.collectionId = savedCollection._id;
-          if (product.image && (!product.images || product.images.length === 0)) {
-            product.images = [{ url: product.image, public_id: '' }];
-          } else if (product.gallery && product.gallery.length > 0 && (!product.images || product.images.length === 0)) {
-            product.images = product.gallery.map(img => ({ url: img, public_id: '' }));
-          }
-          await product.save();
-        }
-      }
-      console.log('✓ Auto-migration complete!');
-    }
-
   } catch (error) {
-    console.error('✗ Product seeding/migration failed:', error);
+    console.error('✗ Product seeding failed:', error);
   }
 };
 
