@@ -75,7 +75,7 @@ export function CartProvider({ children }) {
       dispatch({
         type: ActionTypes.ADD_ITEM,
         payload: {
-          id: painting.id,
+          id: painting._id || painting.id || painting.productId,
           title: painting.title,
           price: painting.price,
           image: imageToUse,

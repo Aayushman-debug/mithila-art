@@ -45,7 +45,7 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
-    const { productId, title, description, category, size, price, image, gallery, stock, available } = req.body;
+    const { productId, title, description, category, size, price, image, gallery, stock, available, availabilityStatus, images, medium, style, featured, originalPrice } = req.body;
 
     if (!productId || !title || !price) {
       return res.status(400).json({ success: false, message: 'Product ID, title and price are required' });
@@ -67,6 +67,12 @@ const createProduct = async (req, res) => {
       gallery,
       stock: stock || 1,
       available: available !== undefined ? available : true,
+      availabilityStatus: availabilityStatus || 'available',
+      images: images || [],
+      medium,
+      style,
+      featured: featured || false,
+      originalPrice
     });
 
     await product.save();

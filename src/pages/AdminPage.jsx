@@ -220,8 +220,8 @@ export default function AdminPage() {
   const handleDeleteProduct = async (id) => {
     if (!window.confirm('Are you sure you want to delete this artwork?')) return;
     try {
-      const { adminAPI } = await import('../api');
-      const res = await adminAPI.deleteProduct(id);
+      const { productAPI } = await import('../api');
+      const res = await productAPI.deleteProduct(id);
       if (res.data.success) {
         showToast('Artwork deleted');
         fetchProducts();
@@ -247,8 +247,8 @@ export default function AdminPage() {
 
   const handleAvailabilityChange = async (productId, newStatus) => {
     try {
-      const { adminAPI } = await import('../api');
-      const res = await adminAPI.updateProduct(productId, { availabilityStatus: newStatus });
+      const { productAPI } = await import('../api');
+      const res = await productAPI.updateProduct(productId, { availabilityStatus: newStatus });
       if (res.data.success) {
         setRealProducts(prev => prev.map(p => (p._id === productId ? { ...p, availabilityStatus: newStatus } : p)));
         showToast('Availability updated successfully');

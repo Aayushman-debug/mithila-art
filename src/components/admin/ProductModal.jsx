@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoCloseOutline, IoCloudUploadOutline, IoTrashOutline } from 'react-icons/io5';
-import { uploadAPI, adminAPI } from '../../api';
+import { uploadAPI, productAPI } from '../../api';
 
 export default function ProductModal({ isOpen, onClose, productToEdit, onSave }) {
   const [formData, setFormData] = useState({
@@ -96,9 +96,9 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
     try {
       let res;
       if (productToEdit) {
-        res = await adminAPI.updateProduct(productToEdit._id, formData);
+        res = await productAPI.updateProduct(productToEdit._id, formData);
       } else {
-        res = await adminAPI.createProduct(formData);
+        res = await productAPI.createProduct(formData);
       }
 
       if (res.data.success) {

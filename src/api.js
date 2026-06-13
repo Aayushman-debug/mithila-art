@@ -206,7 +206,6 @@ export const adminAPI = {
   rejectPayment: (orderId) => api.put(`/api/admin/orders/${orderId}/reject-payment`),
   getCommissions: () => api.get('/api/admin/commissions'),
   getProducts: () => api.get('/api/admin/products'),
-  updateProduct: (productId, data) => api.put(`/api/admin/products/${productId}`, data),
 };
 
 export default api;

@@ -22,7 +22,7 @@ import { formatPrice } from '../utils/helpers';
 export default function ArtworkDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, setIsCartOpen } = useCart();
+  const { addItem } = useCart();
   const { user, isAuthenticated } = useAuth();
 
   const [artwork, setArtwork] = useState(null);
@@ -83,16 +83,16 @@ export default function ArtworkDetailPage() {
 
   const handleAddToCart = () => {
     setAddingToCart(true);
-    addToCart(artwork);
+    addItem(artwork);
     setTimeout(() => {
       setAddingToCart(false);
-      setIsCartOpen(true);
+      navigate('/cart');
     }, 400);
   };
 
   const handleBuyNow = () => {
-    addToCart(artwork);
-    setIsCartOpen(true);
+    addItem(artwork);
+    navigate('/cart');
   };
 
   if (loading) {
