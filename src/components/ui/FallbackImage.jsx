@@ -14,6 +14,11 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
       if (src.startsWith('/uploads') || src.startsWith('uploads/')) {
         finalSrc = buildApiPath(src);
       }
+      
+      // Rewrite old paths from un-reseeded production database
+      if (finalSrc.includes('assets/paintings/')) {
+        finalSrc = finalSrc.replace(/.*assets\/paintings\//, '/paintings/');
+      }
     }
     setImgSrc(finalSrc);
     setIsLoading(true);
