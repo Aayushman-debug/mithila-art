@@ -38,7 +38,7 @@ export default function WishlistPage() {
   }, []);
 
   const handleViewProduct = (id) => {
-    navigate(`/painting/${id}`);
+    navigate(`/artwork/${id}`);
   };
 
   const handleRemove = async (item) => {

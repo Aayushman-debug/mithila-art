@@ -902,7 +902,7 @@ export default function ShopPage() {
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
                             whileHover={{ y: -2 }}
-                            onClick={() => navigate(`/painting/${painting.id}`)}
+                            onClick={() => navigate(`/artwork/${painting._id || painting.id}`)}
                             className="flex gap-5 bg-white dark:bg-warm-gray-800 rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover dark:shadow-none dark:border dark:border-warm-gray-700/50 transition-all duration-500 group cursor-pointer"
                           >
                             <div className="relative w-40 md:w-52 flex-shrink-0 overflow-hidden">
@@ -947,7 +947,7 @@ export default function ShopPage() {
                                 <div className="flex gap-2">
                                   <motion.button
                                     whileTap={{ scale: 0.9 }}
-                                    onClick={() => navigate(`/painting/${painting.id}`)}
+                                    onClick={(e) => { e.stopPropagation(); navigate(`/artwork/${painting._id || painting.id}`); }}
                                     className="px-3 py-2 text-sm font-body font-medium rounded-lg border border-cream-200 text-charcoal hover:bg-cream-50 transition-colors"
                                   >
                                     Quick View

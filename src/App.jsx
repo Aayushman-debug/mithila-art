@@ -15,7 +15,7 @@ import { prefetchProducts } from './api';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
-const CollectionDetailPage = lazy(() => import('./pages/CollectionDetailPage'));
+const ArtworkDetailPage = lazy(() => import('./pages/ArtworkDetailPage'));
 const ShopPage = lazy(() => import('./pages/ShopPage'));
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CommissionPage = lazy(() => import('./pages/CommissionPage'));
@@ -28,7 +28,6 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
-const PaintingDetailPage = lazy(() => import('./pages/PaintingDetailPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
@@ -69,7 +68,7 @@ export default function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/gallery" element={<GalleryPage />} />
-                <Route path="/collection/:id" element={<CollectionDetailPage />} />
+                <Route path="/artwork/:id" element={<ArtworkDetailPage />} />
                 <Route path="/shop" element={<ShopPage />} />
                 <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
                 <Route path="/compare" element={<ComparePage />} />
@@ -86,7 +85,6 @@ export default function App() {
                 <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
                 <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
                 <Route path="/commission-tracking" element={<ProtectedRoute><CommissionTrackingPage /></ProtectedRoute>} />
-                <Route path="/painting/:id" element={<PaintingDetailPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />

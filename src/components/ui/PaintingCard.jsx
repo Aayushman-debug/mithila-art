@@ -91,7 +91,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
         exit={{ opacity: 0, y: 20 }}
         whileHover={{ y: -6 }}
         transition={{ duration: 0.4 }}
-        onClick={() => navigate(`/painting/${painting.id}`)}
+        onClick={() => navigate(`/artwork/${painting._id || painting.id}`)}
         className="group relative bg-white dark:bg-warm-gray-800 rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover dark:shadow-none dark:hover:shadow-[0_10px_30px_-5px_rgba(139,105,20,0.15)] transition-all duration-500 border border-transparent dark:border-warm-gray-700/50 flex flex-col h-full cursor-pointer"
       >
         {/* Image */}
@@ -155,7 +155,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
           <div className="absolute bottom-3 left-3 right-3 flex opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 z-10">
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={(e) => { e.stopPropagation(); navigate(`/painting/${painting.id}`); }}
+              onClick={(e) => { e.stopPropagation(); navigate(`/artwork/${painting._id || painting.id}`); }}
               className="flex-1 py-2.5 bg-white/95 backdrop-blur-md text-charcoal font-display font-semibold text-sm rounded-xl flex items-center justify-center gap-2 hover:bg-white shadow-lg transition-colors whitespace-nowrap"
             >
               <IoEyeOutline size={18} />

@@ -28,7 +28,13 @@ const getProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findOne({ productId: req.params.productId }).lean();
+    const id = req.params.productId;
+    const mongoose = require('mongoose');
+    const query = mongoose.Types.ObjectId.isValid(id) 
+      ? { $or: [{ _id: id }, { productId: id }] }
+      : { productId: id };
+      
+    const product = await Product.findOne(query).lean();
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
     res.status(200).json({ success: true, product });
   } catch (error) {
@@ -73,8 +79,14 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
+    const id = req.params.productId;
+    const mongoose = require('mongoose');
+    const query = mongoose.Types.ObjectId.isValid(id) 
+      ? { $or: [{ _id: id }, { productId: id }] }
+      : { productId: id };
+
     const updates = req.body;
-    const product = await Product.findOneAndUpdate({ productId: req.params.productId }, updates, {
+    const product = await Product.findOneAndUpdate(query, updates, {
       new: true,
       runValidators: true,
     });
@@ -90,7 +102,13 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findOneAndDelete({ productId: req.params.productId });
+    const id = req.params.productId;
+    const mongoose = require('mongoose');
+    const query = mongoose.Types.ObjectId.isValid(id) 
+      ? { $or: [{ _id: id }, { productId: id }] }
+      : { productId: id };
+
+    const product = await Product.findOneAndDelete(query);
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
     res.status(200).json({ success: true, message: 'Product deleted' });
   } catch (error) {

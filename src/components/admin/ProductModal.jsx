@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoCloseOutline, IoCloudUploadOutline, IoTrashOutline } from 'react-icons/io5';
-import { uploadAPI, adminAPI, collectionAPI } from '../../api';
+import { uploadAPI, adminAPI } from '../../api';
 
 export default function ProductModal({ isOpen, onClose, productToEdit, onSave }) {
   const [formData, setFormData] = useState({
@@ -14,23 +14,18 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
     style: '',
     price: '',
     originalPrice: '',
-    collectionId: '',
+    featured: false,
     stock: 1,
     availabilityStatus: 'available',
     images: [],
   });
 
-  const [collections, setCollections] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
-      collectionAPI.getCollections().then(res => {
-        if (res.data.success) setCollections(res.data.collections);
-      });
-      
       if (productToEdit) {
         setFormData({
           title: productToEdit.title || '',
@@ -42,7 +37,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
           style: productToEdit.style || '',
           price: productToEdit.price || '',
           originalPrice: productToEdit.originalPrice || '',
-          collectionId: productToEdit.collectionId || '',
+          featured: productToEdit.featured || false,
           stock: productToEdit.stock !== undefined ? productToEdit.stock : 1,
           availabilityStatus: productToEdit.availabilityStatus || 'available',
           images: productToEdit.images && typeof productToEdit.images[0] === 'object' ? productToEdit.images : [],
@@ -50,7 +45,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
       } else {
         setFormData({
           title: '', productId: '', description: '', category: 'all', size: '', medium: '', style: '',
-          price: '', originalPrice: '', collectionId: '', stock: 1, availabilityStatus: 'available', images: [],
+          price: '', originalPrice: '', featured: false, stock: 1, availabilityStatus: 'available', images: [],
         });
       }
       setError('');
@@ -145,13 +140,10 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-warm-gray-600 mb-1">Parent Collection</label>
-                <select value={formData.collectionId} onChange={e => setFormData({...formData, collectionId: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none">
-                  <option value="">No Collection (Standalone)</option>
-                  {collections.map(c => (
-                    <option key={c._id} value={c._id}>{c.title}</option>
-                  ))}
-                </select>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.featured} onChange={e => setFormData({...formData, featured: e.target.checked})} className="w-4 h-4 text-earth-500 rounded border-cream-200 focus:ring-earth-500" />
+                  <span className="text-sm font-medium text-warm-gray-600">Featured Artwork (Show on homepage/top of gallery)</span>
+                </label>
               </div>
 
               <div>

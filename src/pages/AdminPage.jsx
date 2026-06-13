@@ -6,7 +6,6 @@ import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
 import ProductModal from '../components/admin/ProductModal';
-import CollectionModal from '../components/admin/CollectionModal';
 import FallbackImage from '../components/ui/FallbackImage';
 
 const AVAILABILITY_OPTIONS = [
@@ -42,8 +41,7 @@ function Toast({ message, type, onClose }) {
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: IoGridOutline },
-  { id: 'collections', label: 'Collections', icon: IoImageOutline },
-  { id: 'products', label: 'Products', icon: IoCubeOutline },
+  { id: 'products', label: 'Artworks', icon: IoImageOutline },
   { id: 'orders', label: 'Orders', icon: IoReceiptOutline },
   { id: 'blog', label: 'Blog', icon: IoDocumentTextOutline },
   { id: 'commissions', label: 'Commissions', icon: IoBrushOutline },
@@ -154,7 +152,6 @@ export default function AdminPage() {
   const [realOrders, setRealOrders] = useState([]);
   const [realCommissions, setRealCommissions] = useState([]);
   const [realProducts, setRealProducts] = useState([]);
-  const [realCollections, setRealCollections] = useState([]);
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState('');
   const [toast, setToast] = useState(null); // { message, type }
@@ -162,8 +159,6 @@ export default function AdminPage() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
   
-  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
-  const [collectionToEdit, setCollectionToEdit] = useState(null);
   useEffect(() => {
     setLoggedIn(isAuthenticated);
   }, [isAuthenticated]);
@@ -192,12 +187,6 @@ export default function AdminPage() {
         adminAPI.getCommissions().then(res => {
           if (res.data.success) setRealCommissions(res.data.commissions);
         }).catch(err => console.error('Failed to fetch admin commissions', err));
-
-        import('../api').then(({ collectionAPI }) => {
-          collectionAPI.getCollections().then(res => {
-            if (res.data.success) setRealCollections(res.data.collections);
-          }).catch(err => console.error('Failed to fetch collections', err));
-        });
 
         adminAPI.getProducts().then(res => {
           if (res.data.success && res.data.products.length > 0) {
@@ -228,23 +217,13 @@ export default function AdminPage() {
     }
   };
 
-  const fetchCollections = async () => {
-    const { collectionAPI } = await import('../api');
-    try {
-      const res = await collectionAPI.getCollections();
-      if (res.data.success) setRealCollections(res.data.collections);
-    } catch (err) {
-      console.error('Failed to fetch collections', err);
-    }
-  };
-
   const handleDeleteProduct = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this variant?')) return;
+    if (!window.confirm('Are you sure you want to delete this artwork?')) return;
     try {
       const { adminAPI } = await import('../api');
       const res = await adminAPI.deleteProduct(id);
       if (res.data.success) {
-        showToast('Variant deleted');
+        showToast('Artwork deleted');
         fetchProducts();
       }
     } catch (err) {
@@ -553,39 +532,7 @@ export default function AdminPage() {
               </motion.div>
             )}
 
-            {/* Collections Tab */}
-            {activeTab === 'collections' && (
-              <motion.div key="collections" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-                  <div className="p-4 flex items-center justify-between border-b border-cream-100">
-                    <p className="font-body text-sm text-warm-gray-500">{realCollections.length} collections</p>
-                    <button onClick={() => { setCollectionToEdit(null); setIsCollectionModalOpen(true); }} className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
-                      <IoAddOutline size={18} /> New Collection
-                    </button>
-                  </div>
-                  
-                  {/* Collections Card View */}
-                  <div className="flex flex-col gap-4 p-4">
-                    {realCollections.map((c) => (
-                      <div key={c._id || c.collectionId} className="bg-cream-50 p-4 rounded-xl border border-cream-100 flex flex-col sm:flex-row gap-4 items-center">
-                        <FallbackImage src={c.coverImage} alt={c.title} className="w-full sm:w-24 h-40 sm:h-24 rounded-xl object-cover" />
-                        <div className="flex-1 text-center sm:text-left">
-                          <h4 className="font-display font-bold text-lg text-charcoal">{c.title}</h4>
-                          <p className="text-sm text-warm-gray-500">{c.category}</p>
-                        </div>
-                        <div className="flex gap-2 w-full sm:w-auto justify-center">
-                          <button onClick={() => { setCollectionToEdit(c); setIsCollectionModalOpen(true); }} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-earth-500"><IoPencilOutline size={16} /></button>
-                          <button onClick={() => handleDeleteCollection(c._id || c.collectionId)} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
-                        </div>
-                      </div>
-                    ))}
-                    {realCollections.length === 0 && (
-                      <div className="p-8 text-center text-warm-gray-500">No collections found.</div>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            )}
+
 
             {/* Orders */}
             {activeTab === 'orders' && (
@@ -747,12 +694,7 @@ export default function AdminPage() {
         onSave={() => { showToast('Variant saved successfully'); fetchProducts(); }} 
       />
       
-      <CollectionModal 
-        isOpen={isCollectionModalOpen} 
-        onClose={() => setIsCollectionModalOpen(false)} 
-        collectionToEdit={collectionToEdit} 
-        onSave={() => { showToast('Collection saved successfully'); fetchCollections(); }} 
-      />
+
 
       {/* Screenshot Modal */}
       <AnimatePresence>

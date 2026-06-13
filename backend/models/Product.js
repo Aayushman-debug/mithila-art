@@ -27,9 +27,9 @@ const ProductSchema = new mongoose.Schema({
     url: String,
     public_id: String
   }],
-  collectionId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Collection',
+  featured: {
+    type: Boolean,
+    default: false,
     index: true,
   },
   stock: {
