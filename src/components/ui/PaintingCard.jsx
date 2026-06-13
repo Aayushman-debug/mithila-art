@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoMailOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import FallbackImage from './FallbackImage';
 
 // ── Availability helpers ─────────────────────────────────────────────────────
 
@@ -97,19 +98,20 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
         <div className="relative aspect-[4/5] overflow-hidden">
           <div className="w-full h-full transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
             <AnimatePresence mode="wait" initial={false}>
-              <motion.img
+              <motion.div
                 key={currentImg}
-                src={images[currentImg]}
-                alt={`${title} - Image ${currentImg + 1}`}
-                loading="lazy"
-                decoding="async"
-                fetchPriority="auto"
-                className={`w-full h-full object-cover transition-all duration-300 ${isCartDisabled ? 'brightness-75' : ''}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-              />
+                className="w-full h-full"
+              >
+                <FallbackImage
+                  src={typeof images[currentImg] === 'object' ? images[currentImg]?.url : images[currentImg]}
+                  alt={`${title} - Image ${currentImg + 1}`}
+                  className={`w-full h-full ${isCartDisabled ? 'brightness-75' : ''}`}
+                />
+              </motion.div>
             </AnimatePresence>
           </div>
 
