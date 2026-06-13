@@ -1,6 +1,6 @@
 const express = require('express');
 const { authenticate, authorizeAdmin } = require('../middleware/authMiddleware');
-const { getUsers, getOrders, getCommissions, getProducts, updateProduct, updateOrderStatus, verifyPayment, rejectPayment, migrateArtworkImages } = require('../controllers/adminController');
+const { getUsers, getOrders, getCommissions, getProducts, updateProduct, updateOrderStatus, verifyPayment, rejectPayment } = require('../controllers/adminController');
 
 const router = express.Router();
 
@@ -13,6 +13,5 @@ router.put('/orders/:id/reject-payment', rejectPayment);
 router.get('/commissions', getCommissions);
 router.get('/products', getProducts);
 router.put('/products/:productId', updateProduct);
-router.post('/migrate-artwork-images', migrateArtworkImages);
 
 module.exports = router;
