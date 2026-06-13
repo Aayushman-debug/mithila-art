@@ -56,6 +56,9 @@ export default function CartPage() {
     MITHILA15: { type: 'percent', value: 15 },
     ART500: { type: 'flat', value: 500 },
     FIRSTORDER: { type: 'percent', value: 20 },
+    TEST99: { type: 'percent', value: 99 },
+    TEST999: { type: 'percent', value: 99.9 },
+    FRIEND50: { type: 'percent', value: 50 },
   };
 
   const [couponInput, setCouponInput] = useState('');

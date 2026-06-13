@@ -533,6 +533,9 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
         MITHILA15: { type: 'percent', value: 15 },
         ART500: { type: 'flat', value: 500 },
         FIRSTORDER: { type: 'percent', value: 20 },
+        TEST99: { type: 'percent', value: 99 },
+        TEST999: { type: 'percent', value: 99.9 },
+        FRIEND50: { type: 'percent', value: 50 },
       };
       const coupon = BACKEND_COUPONS[code];
       if (!coupon) {
@@ -681,6 +684,9 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
         MITHILA15: { type: 'percent', value: 15 },
         ART500: { type: 'flat', value: 500 },
         FIRSTORDER: { type: 'percent', value: 20 },
+        TEST99: { type: 'percent', value: 99 },
+        TEST999: { type: 'percent', value: 99.9 },
+        FRIEND50: { type: 'percent', value: 50 },
       };
       const coupon = BACKEND_COUPONS[code];
       if (!coupon) {
