@@ -88,18 +88,16 @@ app.use(cors({
 }));
 app.use(compression());
 app.use(express.json({
-  limit: '10mb',
+  limit: '50mb',
   verify: (req, res, buf) => {
     req.rawBody = buf;
   }
 }));
 app.use(helmet());
 
-// Cache Control middleware for static-like API endpoints (e.g. products)
+// Removed aggressive caching so admin changes are visible immediately
 app.use((req, res, next) => {
-  if (req.method === 'GET' && req.path.startsWith('/api/products')) {
-    res.set('Cache-Control', 'public, max-age=60'); // Cache for 60 seconds
-  } else if (req.method === 'GET') {
+  if (req.method === 'GET') {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   }
   next();
