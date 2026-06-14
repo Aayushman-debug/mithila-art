@@ -226,10 +226,7 @@ function FilterSidebar({
                     <input
                       type="number"
                       value={priceRange[0]}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        onPriceChange([val === '' ? '' : parseInt(val) || 0, priceRange[1]]);
-                      }}
+                      onChange={(e) => onPriceChange([e.target.value, priceRange[1]])}
                       className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                       placeholder="0"
                     />
@@ -240,10 +237,7 @@ function FilterSidebar({
                     <input
                       type="number"
                       value={priceRange[1]}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        onPriceChange([priceRange[0], val === '' ? '' : parseInt(val) || 0]);
-                      }}
+                      onChange={(e) => onPriceChange([priceRange[0], e.target.value])}
                       className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                       placeholder="100000"
                     />
@@ -523,7 +517,9 @@ export default function ShopPage() {
     }
 
     // Price
-    result = result.filter((p) => p.price >= priceRange[0] && p.price <= priceRange[1]);
+    const minPrice = priceRange[0] === '' ? 0 : Number(priceRange[0]);
+    const maxPrice = priceRange[1] === '' ? Infinity : Number(priceRange[1]);
+    result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
 
     // Size
     if (selectedSizes.length > 0) {
