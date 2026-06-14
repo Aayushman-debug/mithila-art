@@ -166,7 +166,7 @@ export default function ArtworkDetailPage() {
                   transition={{ duration: 0.3 }}
                   className="w-full h-[50vh] md:h-[70vh] rounded-2xl overflow-hidden relative bg-cream-50"
                 >
-                  <FallbackImage src={mainImage} alt={artwork.title} className="absolute inset-0 w-full h-full object-contain mix-blend-multiply" />
+                  <FallbackImage src={mainImage} alt={artwork.title} className="absolute inset-0 w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
                 </motion.div>
               </AnimatePresence>
               

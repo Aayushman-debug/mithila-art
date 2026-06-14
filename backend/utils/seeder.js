@@ -463,6 +463,11 @@ const seedPaintings = [
 const seedProducts = async () => {
   try {
     console.log('Database seeding checks started...');
+    const count = await Product.countDocuments();
+    if (count > 0) {
+      console.log('Products collection is not empty, skipping seeding to avoid overwriting deleted products.');
+      return;
+    }
     for (const item of seedPaintings) {
       const exists = await Product.findOne({ productId: item.productId });
       if (!exists) {

@@ -834,6 +834,20 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* GLOBAL DARK MODE OVERRIDES FOR HARDCODED CLASSES */
+  .dark .bg-white {
+    background-color: rgb(var(--warm-gray-800) / var(--tw-bg-opacity, 1)) !important;
+  }
+  .dark .text-charcoal {
+    color: rgb(var(--warm-gray-100) / var(--tw-text-opacity, 1)) !important;
+  }
+  .dark .border-cream-100 {
+    border-color: rgb(var(--warm-gray-700) / var(--tw-border-opacity, 1)) !important;
+  }
+  .dark .border-cream-200 {
+    border-color: rgb(var(--warm-gray-600) / var(--tw-border-opacity, 1)) !important;
+  }
 }
 
 /* ═══ PAGE TRANSITIONS ═══ */
