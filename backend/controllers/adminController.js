@@ -117,6 +117,48 @@ const rejectPayment = async (req, res) => {
   }
 };
 
+const deleteOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await CartOrder.findByIdAndDelete(id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+    res.status(200).json({ success: true, message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error('Delete order error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not delete order' });
+  }
+};
+
+const cleanupBase64Images = async (req, res) => {
+  try {
+    const products = await Product.find({});
+    let count = 0;
+    for (const product of products) {
+      let needsSave = false;
+      if (product.images && product.images.length > 0) {
+        const initialLen = product.images.length;
+        product.images = product.images.filter(img => {
+          if (img.url && img.url.startsWith('data:image') && img.url.length > 100000) {
+            return false;
+          }
+          return true;
+        });
+        if (product.images.length !== initialLen) needsSave = true;
+      }
+      if (needsSave) {
+        await product.save();
+        count++;
+      }
+    }
+    res.status(200).json({ success: true, message: `Cleaned up ${count} products with massive base64 images.` });
+  } catch (error) {
+    console.error('Cleanup error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Cleanup failed' });
+  }
+};
+
 module.exports = {
   getUsers,
   getOrders,
@@ -126,4 +168,6 @@ module.exports = {
   updateOrderStatus,
   verifyPayment,
   rejectPayment,
+  deleteOrder,
+  cleanupBase64Images,
 };

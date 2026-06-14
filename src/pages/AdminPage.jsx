@@ -245,6 +245,34 @@ export default function AdminPage() {
     }
   };
 
+  const handleDeleteOrder = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this order?')) return;
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.deleteOrder(id);
+      if (res.data.success) {
+        showToast('Order deleted');
+        setRealOrders(orders => orders.filter(o => o._id !== id));
+      }
+    } catch (err) {
+      showToast('Failed to delete order', 'error');
+    }
+  };
+
+  const handleCleanupBase64 = async () => {
+    if (!window.confirm('Are you sure you want to clean up oversized base64 images from the database? This will permanently remove large image strings from products.')) return;
+    try {
+      const { adminAPI } = await import('../api');
+      const res = await adminAPI.cleanupBase64Images();
+      if (res.data.success) {
+        showToast(res.data.message);
+        fetchProducts();
+      }
+    } catch (err) {
+      showToast('Cleanup failed', 'error');
+    }
+  };
+
   const handleAvailabilityChange = async (productId, newStatus) => {
     try {
       const { productAPI } = await import('../api');
@@ -435,11 +463,16 @@ export default function AdminPage() {
             {activeTab === 'products' && (
               <motion.div key="products" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-                  <div className="p-4 flex items-center justify-between border-b border-cream-100">
+                  <div className="p-4 flex flex-col md:flex-row items-start md:items-center justify-between border-b border-cream-100 gap-4">
                     <p className="font-body text-sm text-warm-gray-500">{realProducts.length} paintings</p>
-                    <button onClick={() => { setProductToEdit(null); setIsProductModalOpen(true); }} className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
-                      <IoAddOutline size={18} /> Add Variant
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={handleCleanupBase64} className="flex items-center gap-2 px-4 py-2 bg-warm-gray-100 text-warm-gray-600 rounded-xl text-sm font-body font-medium hover:bg-warm-gray-200 transition-colors">
+                        <IoTrashOutline size={18} /> Clean Database
+                      </button>
+                      <button onClick={() => { setProductToEdit(null); setIsProductModalOpen(true); }} className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
+                        <IoAddOutline size={18} /> Add Variant
+                      </button>
+                    </div>
                   </div>
                   <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
@@ -599,6 +632,9 @@ export default function AdminPage() {
                                     <IoImageOutline size={16} />
                                   </button>
                                 )}
+                                <button onClick={() => handleDeleteOrder(order._id)} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-mithila-red transition-colors" title="Delete Order">
+                                  <IoTrashOutline size={16} />
+                                </button>
                                 {order.paymentMethod === 'upi' && order.paymentVerification === 'pending' && (
                                   <>
                                     <button onClick={() => handleVerifyPayment(order._id)} className="p-1.5 rounded-lg hover:bg-mithila-green/20 text-mithila-green transition-colors" title="Verify Payment">

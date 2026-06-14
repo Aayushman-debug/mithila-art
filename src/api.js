@@ -204,8 +204,10 @@ export const adminAPI = {
   updateOrderStatus: (orderId, status) => api.put(`/api/admin/orders/${orderId}/status`, { status }),
   verifyPayment: (orderId) => api.put(`/api/admin/orders/${orderId}/verify-payment`),
   rejectPayment: (orderId) => api.put(`/api/admin/orders/${orderId}/reject-payment`),
+  deleteOrder: (orderId) => api.delete(`/api/admin/orders/${orderId}`),
   getCommissions: () => api.get('/api/admin/commissions'),
   getProducts: () => api.get('/api/admin/products'),
+  cleanupBase64Images: () => api.post('/api/admin/cleanup'),
 };
 
 export default api;
