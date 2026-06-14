@@ -115,7 +115,7 @@ function GalleryItem({ item, index }) {
 
         {/* Details */}
         <motion.div
-          className="flex items-center gap-4 text-cream-200/60 text-sm font-body"
+          className="flex items-center gap-4 text-cream-200/80 text-sm font-body"
           initial={{ y: 12, opacity: 0 }}
           animate={hovered ? { y: 0, opacity: 1 } : { y: 12, opacity: 0 }}
           transition={{ duration: 0.4, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
@@ -285,7 +285,7 @@ export default function GalleryPage() {
               <h1 className="heading-xl text-white">
                 The <span className="text-gradient-gold">Gallery</span>
               </h1>
-              <p className="text-cream-200/60 font-body text-lg max-w-xl mx-auto">
+              <p className="text-cream-200/80 font-body text-lg max-w-xl mx-auto">
                 Explore the complete collection of hand-painted Mithila masterpieces
               </p>
             </motion.div>
@@ -298,7 +298,7 @@ export default function GalleryPage() {
             <div className="flex flex-col md:flex-row md:items-center gap-4">
               {/* Category pills */}
               <div className="w-full md:w-auto flex-1 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                <FaFilter className="text-warm-gray-400 text-sm flex-shrink-0 mr-1" />
+                <FaFilter className="text-warm-gray-500 text-sm flex-shrink-0 mr-1" />
                 {allCategories.map((cat) => (
                   <motion.button
                     key={cat}
@@ -319,7 +319,7 @@ export default function GalleryPage() {
 
               {/* Search */}
               <div className="relative w-full md:w-72">
-                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-gray-400 text-sm" />
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-gray-500 text-sm" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -330,7 +330,7 @@ export default function GalleryPage() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-400 hover:text-charcoal"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-500 hover:text-charcoal"
                   >
                     <FaTimes className="text-sm" />
                   </button>
@@ -340,7 +340,7 @@ export default function GalleryPage() {
 
             {/* Results count */}
             <motion.p
-              className="text-warm-gray-400 text-sm font-body mt-3"
+              className="text-warm-gray-500 text-sm font-body mt-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               key={filteredPaintings.length}
@@ -392,7 +392,7 @@ export default function GalleryPage() {
                   >
                     <IoGridOutline className="text-6xl text-warm-gray-300 dark:text-warm-gray-600 mx-auto mb-4" />
                     <h3 className="font-display text-2xl text-charcoal dark:text-cream-200 mb-2">No artworks found</h3>
-                    <p className="text-warm-gray-400 dark:text-warm-gray-300 font-body">
+                    <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body">
                       Try adjusting your filters or search query
                     </p>
                     <motion.button
@@ -436,7 +436,7 @@ export default function GalleryPage() {
                 Love what you see?{' '}
                 <span className="text-gradient-gold">Shop the Collection</span>
               </h2>
-              <p className="text-cream-200/60 font-body text-base">
+              <p className="text-cream-200/80 font-body text-base">
                 Browse our curated store to find pricing, availability, and purchase your
                 favourite Mithila masterpiece — each comes with a certificate of authenticity.
               </p>

@@ -133,7 +133,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
         <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
           <div className="p-4 border-b border-cream-200 flex justify-between items-center bg-cream-50">
             <h3 className="font-display font-bold text-lg text-charcoal">{productToEdit ? 'Edit Variant' : 'New Variant'}</h3>
-            <button onClick={onClose} className="p-2 text-warm-gray-400 hover:text-mithila-red transition-colors bg-white rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
+            <button onClick={onClose} className="p-2 text-warm-gray-500 hover:text-mithila-red transition-colors bg-white rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
           </div>
 
           <div className="p-6 overflow-y-auto flex-1">
@@ -209,7 +209,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
                     </div>
                   ))}
 
-                  <label className="w-24 h-24 rounded-xl border-2 border-dashed border-cream-200 flex flex-col items-center justify-center text-warm-gray-400 hover:text-earth-500 hover:border-earth-500 transition-colors cursor-pointer bg-cream-50">
+                  <label className="w-24 h-24 rounded-xl border-2 border-dashed border-cream-200 flex flex-col items-center justify-center text-warm-gray-500 hover:text-earth-500 hover:border-earth-500 transition-colors cursor-pointer bg-cream-50">
                     <IoCloudUploadOutline size={24} />
                     <span className="text-xs mt-1 font-medium">{isUploading ? 'Uploading...' : 'Upload'}</span>
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={isUploading} />

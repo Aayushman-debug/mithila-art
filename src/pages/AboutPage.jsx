@@ -386,7 +386,7 @@ function StatsSection() {
 
                 {/* Label */}
                 <p className="font-display font-semibold text-charcoal text-lg mb-1">{stat.label}</p>
-                <p className="text-warm-gray-400 text-sm font-body">{stat.description}</p>
+                <p className="text-warm-gray-500 text-sm font-body">{stat.description}</p>
               </GlassCard>
             </motion.div>
           ))}

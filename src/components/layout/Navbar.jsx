@@ -404,7 +404,7 @@ export default function Navbar() {
 
                   {/* Palette Selector */}
                   <div className="space-y-2">
-                    <p className="font-body text-xs text-warm-gray-400 mb-2">Color Palette</p>
+                    <p className="font-body text-xs text-warm-gray-500 mb-2">Color Palette</p>
                     <div className="flex flex-wrap gap-2">
                       {(isDark ? darkPalettes : lightPalettes).map((palette) => {
                         const isActive = isDark ? darkPalette === palette.id : lightPalette === palette.id;

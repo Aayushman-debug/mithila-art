@@ -694,7 +694,7 @@
   }
 
   .dark .text-body-sm {
-    /* Upgraded from text-warm-gray-400 for better readability */
+    /* Upgraded from text-warm-gray-500 for better readability */
     @apply text-warm-gray-300;
   }
 

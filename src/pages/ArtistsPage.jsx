@@ -32,7 +32,7 @@ export default function ArtistsPage() {
                 <div className="absolute bottom-6 left-6 right-6">
                   <div className="bg-white/90 dark:bg-warm-gray-800/95 backdrop-blur-md rounded-xl p-4 shadow-lg inline-block border border-cream-100/50 dark:border-warm-gray-700/50">
                     <p className="font-display font-bold text-earth-700 dark:text-earth-400">{artist.name}</p>
-                    <p className="text-xs font-body text-warm-gray-500 dark:text-warm-gray-400">{artist.born} {artist.died ? `- ${artist.died}` : '(Present)'}</p>
+                    <p className="text-xs font-body text-warm-gray-500 dark:text-warm-gray-300">{artist.born} {artist.died ? `- ${artist.died}` : '(Present)'}</p>
                   </div>
                 </div>
               </div>
@@ -43,7 +43,7 @@ export default function ArtistsPage() {
                   <h2 className="font-display text-4xl font-bold text-charcoal dark:text-white mt-4">{artist.name}</h2>
                 </div>
 
-                <div className="flex items-center gap-2 text-warm-gray-500 dark:text-warm-gray-400 font-body text-sm">
+                <div className="flex items-center gap-2 text-warm-gray-500 dark:text-warm-gray-300 font-body text-sm">
                   <IoLocationOutline className="text-earth-500 text-lg" />
                   {artist.village}
                 </div>

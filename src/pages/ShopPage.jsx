@@ -136,9 +136,9 @@ function FilterSidebar({
         >
           <span className="font-display font-semibold text-charcoal dark:text-cream-200">Category</span>
           {openSections.category ? (
-            <FaChevronUp className="text-warm-gray-400 text-xs" />
+            <FaChevronUp className="text-warm-gray-500 text-xs" />
           ) : (
-            <FaChevronDown className="text-warm-gray-400 text-xs" />
+            <FaChevronDown className="text-warm-gray-500 text-xs" />
           )}
         </button>
         <AnimatePresence>
@@ -180,7 +180,7 @@ function FilterSidebar({
                     <span className="font-body text-sm text-warm-gray-600 dark:text-warm-gray-300 group-hover:text-charcoal dark:group-hover:text-cream-100 transition-colors">
                       {cat.name}
                     </span>
-                    <span className="ml-auto font-accent text-xs text-warm-gray-400 dark:text-warm-gray-500">
+                    <span className="ml-auto font-accent text-xs text-warm-gray-500 dark:text-warm-gray-300">
                       {cat.nameHindi}
                     </span>
                     <input
@@ -205,9 +205,9 @@ function FilterSidebar({
         >
           <span className="font-display font-semibold text-charcoal dark:text-cream-200">Price Range</span>
           {openSections.price ? (
-            <FaChevronUp className="text-warm-gray-400 text-xs" />
+            <FaChevronUp className="text-warm-gray-500 text-xs" />
           ) : (
-            <FaChevronDown className="text-warm-gray-400 text-xs" />
+            <FaChevronDown className="text-warm-gray-500 text-xs" />
           )}
         </button>
         <AnimatePresence>
@@ -222,7 +222,7 @@ function FilterSidebar({
               <div className="mt-3 space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex-1">
-                    <label className="text-xs text-warm-gray-400 dark:text-warm-gray-500 font-body mb-1 block">Min (₹)</label>
+                    <label className="text-xs text-warm-gray-500 dark:text-warm-gray-300 font-body mb-1 block">Min (₹)</label>
                     <input
                       type="number"
                       value={priceRange[0]}
@@ -233,7 +233,7 @@ function FilterSidebar({
                   </div>
                   <span className="text-warm-gray-300 mt-5">—</span>
                   <div className="flex-1">
-                    <label className="text-xs text-warm-gray-400 dark:text-warm-gray-500 font-body mb-1 block">Max (₹)</label>
+                    <label className="text-xs text-warm-gray-500 dark:text-warm-gray-300 font-body mb-1 block">Max (₹)</label>
                     <input
                       type="number"
                       value={priceRange[1]}
@@ -255,7 +255,7 @@ function FilterSidebar({
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-                <div className="flex justify-between text-xs text-warm-gray-400 font-body">
+                <div className="flex justify-between text-xs text-warm-gray-500 font-body">
                   <span>{formatPrice(priceRange[0])}</span>
                   <span>{formatPrice(priceRange[1])}</span>
                 </div>
@@ -273,9 +273,9 @@ function FilterSidebar({
         >
           <span className="font-display font-semibold text-charcoal dark:text-cream-200">Size</span>
           {openSections.size ? (
-            <FaChevronUp className="text-warm-gray-400 text-xs" />
+            <FaChevronUp className="text-warm-gray-500 text-xs" />
           ) : (
-            <FaChevronDown className="text-warm-gray-400 text-xs" />
+            <FaChevronDown className="text-warm-gray-500 text-xs" />
           )}
         </button>
         <AnimatePresence>
@@ -657,7 +657,7 @@ export default function ShopPage() {
             >
               {/* Search */}
               <div className="relative flex-1 w-full md:max-w-md">
-                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-gray-400 text-sm" />
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-gray-500 text-sm" />
                 <input
                   type="text"
                   value={searchTerm}
@@ -668,7 +668,7 @@ export default function ShopPage() {
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-400 hover:text-charcoal dark:hover:text-cream-200 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-500 hover:text-charcoal dark:hover:text-cream-200 transition-colors"
                   >
                     <IoCloseOutline size={18} />
                   </button>
@@ -700,7 +700,7 @@ export default function ShopPage() {
                   >
                     Sort: {sortOptions.find((s) => s.value === sortBy)?.label}
                     <FaChevronDown
-                      className={`text-xs text-warm-gray-400 transition-transform ${
+                      className={`text-xs text-warm-gray-500 transition-transform ${
                         sortDropdownOpen ? 'rotate-180' : ''
                       }`}
                     />
@@ -741,7 +741,7 @@ export default function ShopPage() {
                     className={`p-3 transition-all ${
                       viewMode === 'grid'
                         ? 'bg-earth-500 text-white'
-                        : 'text-warm-gray-400 hover:text-charcoal dark:hover:text-cream-200'
+                        : 'text-warm-gray-500 hover:text-charcoal dark:hover:text-cream-200'
                     }`}
                   >
                     <IoGridOutline size={18} />
@@ -751,7 +751,7 @@ export default function ShopPage() {
                     className={`p-3 transition-all ${
                       viewMode === 'list'
                         ? 'bg-earth-500 text-white'
-                        : 'text-warm-gray-400 hover:text-charcoal dark:hover:text-cream-200'
+                        : 'text-warm-gray-500 hover:text-charcoal dark:hover:text-cream-200'
                     }`}
                   >
                     <IoListOutline size={18} />
@@ -760,7 +760,7 @@ export default function ShopPage() {
 
                 {/* Results count */}
                 <div className="hidden md:block ml-2">
-                  <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 font-body">
+                  <p className="text-sm text-warm-gray-500 dark:text-warm-gray-300 font-body">
                     <span className="font-semibold text-charcoal dark:text-cream-200">{filteredPaintings.length}</span>{' '}
                     {filteredPaintings.length === 1 ? 'painting' : 'paintings'}
                   </p>
@@ -795,7 +795,7 @@ export default function ShopPage() {
               <div className="flex-1 min-w-0">
                 {/* Mobile results count */}
                 <div className="md:hidden mb-4">
-                  <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 font-body">
+                  <p className="text-sm text-warm-gray-500 dark:text-warm-gray-300 font-body">
                     Showing <span className="font-semibold text-charcoal dark:text-cream-200">{filteredPaintings.length}</span>{' '}
                     {filteredPaintings.length === 1 ? 'painting' : 'paintings'}
                   </p>
@@ -926,7 +926,7 @@ export default function ShopPage() {
                                 <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-100 mb-1">
                                   {painting.title}
                                 </h3>
-                                <p className="text-warm-gray-400 text-sm font-body mb-1">
+                                <p className="text-warm-gray-500 text-sm font-body mb-1">
                                   by {painting.artist} • {painting.size}
                                 </p>
                                 <p className="text-warm-gray-500 text-sm font-body line-clamp-2 hidden md:block">
@@ -939,7 +939,7 @@ export default function ShopPage() {
                                     {formatPrice(painting.price)}
                                   </span>
                                   {painting.originalPrice && (
-                                    <span className="text-warm-gray-400 line-through text-sm">
+                                    <span className="text-warm-gray-500 line-through text-sm">
                                       {formatPrice(painting.originalPrice)}
                                     </span>
                                   )}

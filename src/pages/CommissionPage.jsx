@@ -249,11 +249,11 @@ export default function CommissionPage() {
             <div key={s} className="flex items-center gap-2 sm:gap-3">
               <div className="flex flex-col items-center gap-1">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-sm transition-all duration-500 ${
-                  i < currentStep ? 'bg-mithila-green text-white' : i === currentStep ? 'bg-earth-500 text-white shadow-gold' : 'bg-cream-200 dark:bg-warm-gray-700 text-warm-gray-400 dark:text-warm-gray-500'
+                  i < currentStep ? 'bg-mithila-green text-white' : i === currentStep ? 'bg-earth-500 text-white shadow-gold' : 'bg-cream-200 dark:bg-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-300'
                 }`}>
                   {i < currentStep ? <IoCheckmarkCircle size={20} /> : i + 1}
                 </div>
-                <span className={`hidden sm:block text-xs font-body ${i <= currentStep ? 'text-earth-700 dark:text-cream-200 font-semibold' : 'text-warm-gray-400 dark:text-warm-gray-500'}`}>
+                <span className={`hidden sm:block text-xs font-body ${i <= currentStep ? 'text-earth-700 dark:text-cream-200 font-semibold' : 'text-warm-gray-500 dark:text-warm-gray-300'}`}>
                   {s}
                 </span>
               </div>

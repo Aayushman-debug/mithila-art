@@ -306,7 +306,7 @@ function OriginStory() {
               >
                 <p className="font-accent text-earth-500 text-sm">सीता विवाह</p>
                 <p className="font-display text-3xl font-bold text-charcoal dark:text-white">2,500+</p>
-                <p className="text-warm-gray-500 dark:text-warm-gray-400 text-sm font-body">Years of Tradition</p>
+                <p className="text-warm-gray-500 dark:text-warm-gray-300 text-sm font-body">Years of Tradition</p>
               </motion.div>
 
               {/* Decorative corner */}

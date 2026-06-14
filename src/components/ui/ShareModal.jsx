@@ -52,25 +52,25 @@ export default function ShareModal({ isOpen, onClose, painting }) {
             <div className="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center group-hover:bg-[#25D366] group-hover:text-white transition-colors">
               <IoLogoWhatsapp size={24} />
             </div>
-            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-400">WhatsApp</span>
+            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-300">WhatsApp</span>
           </button>
           <button onClick={handleFacebook} className="flex flex-col items-center gap-2 group">
             <div className="w-12 h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center group-hover:bg-[#1877F2] group-hover:text-white transition-colors">
               <IoLogoFacebook size={24} />
             </div>
-            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-400">Facebook</span>
+            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-300">Facebook</span>
           </button>
           <button onClick={handleInstagram} className="flex flex-col items-center gap-2 group">
             <div className="w-12 h-12 rounded-full bg-[#E1306C]/10 text-[#E1306C] flex items-center justify-center group-hover:bg-[#E1306C] group-hover:text-white transition-colors">
               <IoLogoInstagram size={24} />
             </div>
-            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-400">Instagram</span>
+            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-300">Instagram</span>
           </button>
           <button onClick={handleCopyLink} className="flex flex-col items-center gap-2 group">
             <div className="w-12 h-12 rounded-full bg-earth-500/10 text-earth-500 flex items-center justify-center group-hover:bg-earth-500 group-hover:text-white transition-colors">
               {copied ? <IoCheckmarkOutline size={24} /> : <IoCopyOutline size={24} />}
             </div>
-            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-400">{copied ? 'Copied' : 'Copy'}</span>
+            <span className="text-xs font-body text-warm-gray-600 dark:text-warm-gray-300">{copied ? 'Copied' : 'Copy'}</span>
           </button>
         </div>
 

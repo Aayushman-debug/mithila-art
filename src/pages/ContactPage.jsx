@@ -441,7 +441,7 @@ export default function ContactPage() {
               <h1 className="heading-xl text-white">
                 Get in <span className="text-gradient-gold">Touch</span>
               </h1>
-              <p className="text-cream-200/60 font-body text-lg max-w-xl mx-auto">
+              <p className="text-cream-200/80 font-body text-lg max-w-xl mx-auto">
                 We&rsquo;d love to hear from you. Whether it&rsquo;s a commission, collaboration, or simply a love for art — reach out.
               </p>
             </motion.div>
@@ -476,7 +476,7 @@ export default function ContactPage() {
                     </motion.div>
                     <h3 className="font-display font-semibold text-warm-gray-900 dark:text-cream-100 text-lg mb-2">{card.title}</h3>
                     <p className="text-warm-gray-700 dark:text-cream-200 font-body text-sm">{card.primary}</p>
-                    <p className="text-warm-gray-500 dark:text-warm-gray-400 font-body text-sm">{card.secondary}</p>
+                    <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body text-sm">{card.secondary}</p>
                   </GlassCard>
                 </motion.a>
               ))}
@@ -501,7 +501,7 @@ export default function ContactPage() {
                 <GlassCard className="p-6 md:p-10">
                   <div className="mb-8">
                     <h2 className="heading-md text-warm-gray-900 dark:text-cream-100 mb-2">Send a Message</h2>
-                    <p className="text-warm-gray-500 dark:text-warm-gray-400 font-body">
+                    <p className="text-warm-gray-500 dark:text-warm-gray-300 font-body">
                       Fill in the details below and we&rsquo;ll get back to you within 24 hours.
                     </p>
                   </div>
@@ -534,7 +534,7 @@ export default function ContactPage() {
                         }`}
                       >
                         <span className="font-body text-sm text-warm-gray-800 dark:text-cream-200 font-medium">{wh.day}</span>
-                        <span className={`font-body text-sm ${wh.active ? 'text-mithila-green' : 'text-warm-gray-500 dark:text-warm-gray-400'}`}>
+                        <span className={`font-body text-sm ${wh.active ? 'text-mithila-green' : 'text-warm-gray-500 dark:text-warm-gray-300'}`}>
                           {wh.hours}
                         </span>
                       </div>

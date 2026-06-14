@@ -76,7 +76,7 @@ function StatCard({ label, value, icon: Icon, color }) {
         </div>
       </div>
       <p className="font-display font-bold text-3xl text-charcoal">{String(value).includes('₹') ? formatPrice(count) : count}</p>
-      <p className="text-body-sm text-warm-gray-400 mt-1">{label}</p>
+      <p className="text-body-sm text-warm-gray-500 mt-1">{label}</p>
     </motion.div>
   );
 }
@@ -398,7 +398,7 @@ export default function AdminPage() {
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
               className={`flex-1 py-3 flex flex-col items-center gap-1 text-xs font-body ${
-                activeTab === id ? 'text-earth-500' : 'text-warm-gray-400'
+                activeTab === id ? 'text-earth-500' : 'text-warm-gray-500'
               }`}
             >
               <Icon size={20} /> {label}
@@ -414,7 +414,7 @@ export default function AdminPage() {
               <h1 className="font-display font-bold text-xl text-charcoal">
                 {tabs.find((t) => t.id === activeTab)?.label}
               </h1>
-              <p className="text-body-sm text-warm-gray-400">Welcome back, {user?.name || 'Admin'}</p>
+              <p className="text-body-sm text-warm-gray-500">Welcome back, {user?.name || 'Admin'}</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-earth-500/10 flex items-center justify-center">
@@ -442,7 +442,7 @@ export default function AdminPage() {
                         <div key={order._id} className="flex items-center justify-between p-3 bg-cream-50 rounded-xl border border-cream-100">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal">{order.name}</p>
-                            <p className="text-xs text-warm-gray-400">#{order.orderId || order._id.slice(-8)}</p>
+                            <p className="text-xs text-warm-gray-500">#{order.orderId || order._id.slice(-8)}</p>
                           </div>
                           <div className="text-right">
                             <p className="font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</p>
@@ -462,7 +462,7 @@ export default function AdminPage() {
                         <div key={com._id} className="flex items-center justify-between p-3 bg-cream-50 rounded-xl border border-cream-100">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal">{com.name}</p>
-                            <p className="text-xs text-warm-gray-400">{com.style || 'Custom'} • {com.size || 'Standard'}</p>
+                            <p className="text-xs text-warm-gray-500">{com.style || 'Custom'} • {com.size || 'Standard'}</p>
                           </div>
                           <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium ${statusColors[com.status] || 'bg-warm-gray-100'}`}>{com.status}</span>
                         </div>
@@ -493,7 +493,7 @@ export default function AdminPage() {
                   <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-400 uppercase tracking-wider border-b border-cream-100">
+                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-500 uppercase tracking-wider border-b border-cream-100">
                           <th className="px-4 py-3">Painting</th>
                           <th className="px-4 py-3">Category</th>
                           <th className="px-4 py-3">Price</th>
@@ -509,7 +509,7 @@ export default function AdminPage() {
                                 <FallbackImage src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover" />
                                 <div>
                                   <p className="font-body font-medium text-sm text-charcoal">{p.title}</p>
-                                  <p className="text-xs text-warm-gray-400">{p.size}</p>
+                                  <p className="text-xs text-warm-gray-500">{p.size}</p>
                                 </div>
                               </div>
                             </td>
@@ -546,8 +546,8 @@ export default function AdminPage() {
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex gap-2">
-                                <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors"><IoPencilOutline size={16} /></button>
-                                <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-mithila-red transition-colors"><IoTrashOutline size={16} /></button>
+                                <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-500 hover:text-earth-500 transition-colors"><IoPencilOutline size={16} /></button>
+                                <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-500 hover:text-mithila-red transition-colors"><IoTrashOutline size={16} /></button>
                               </div>
                             </td>
                           </tr>
@@ -601,8 +601,8 @@ export default function AdminPage() {
                             ))}
                           </select>
                           <div className="flex gap-2">
-                            <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-earth-500"><IoPencilOutline size={16} /></button>
-                            <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-400 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
+                            <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-500 hover:text-earth-500"><IoPencilOutline size={16} /></button>
+                            <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-2 rounded-lg bg-white border border-cream-200 text-warm-gray-500 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
                           </div>
                         </div>
                       </div>
@@ -621,7 +621,7 @@ export default function AdminPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-400 uppercase tracking-wider border-b border-cream-100">
+                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-500 uppercase tracking-wider border-b border-cream-100">
                           <th className="px-4 py-3">Order ID</th>
                           <th className="px-4 py-3">Customer</th>
                           <th className="px-4 py-3">Total</th>
@@ -638,7 +638,7 @@ export default function AdminPage() {
                             <td className="px-4 py-3 font-mono text-sm text-earth-700 font-medium">#{order.orderId || order._id.slice(-8)}</td>
                             <td className="px-4 py-3">
                               <p className="font-body font-medium text-sm text-charcoal">{order.name}</p>
-                              <p className="text-xs text-warm-gray-400">{order.email}</p>
+                              <p className="text-xs text-warm-gray-500">{order.email}</p>
                             </td>
                             <td className="px-4 py-3 font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</td>
                             <td className="px-4 py-3">
@@ -673,13 +673,13 @@ export default function AdminPage() {
                             <td className="px-4 py-3 text-sm text-warm-gray-500 font-body">{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-2">
-                                <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Order"><IoEyeOutline size={16} /></button>
+                                <button className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-500 hover:text-earth-500 transition-colors" title="View Order"><IoEyeOutline size={16} /></button>
                                 {order.paymentMethod === 'upi' && order.paymentScreenshot && (
-                                  <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Screenshot">
+                                  <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-500 hover:text-earth-500 transition-colors" title="View Screenshot">
                                     <IoImageOutline size={16} />
                                   </button>
                                 )}
-                                <button onClick={() => handleDeleteOrder(order._id)} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-400 hover:text-mithila-red transition-colors" title="Delete Order">
+                                <button onClick={() => handleDeleteOrder(order._id)} className="p-1.5 rounded-lg hover:bg-cream-100 text-warm-gray-500 hover:text-mithila-red transition-colors" title="Delete Order">
                                   <IoTrashOutline size={16} />
                                 </button>
                                 {order.paymentMethod === 'upi' && order.paymentVerification === 'pending' && (
@@ -729,7 +729,7 @@ export default function AdminPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-400 uppercase tracking-wider border-b border-cream-100">
+                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-500 uppercase tracking-wider border-b border-cream-100">
                           <th className="px-4 py-3">ID</th>
                           <th className="px-4 py-3">Client</th>
                           <th className="px-4 py-3">Style</th>
@@ -744,7 +744,7 @@ export default function AdminPage() {
                             <td className="px-4 py-3 font-mono text-sm text-earth-700">#{com.referenceId || com._id.slice(-6)}</td>
                             <td className="px-4 py-3">
                               <p className="font-body font-medium text-sm text-charcoal">{com.name}</p>
-                              <p className="text-xs text-warm-gray-400">{com.email}</p>
+                              <p className="text-xs text-warm-gray-500">{com.email}</p>
                             </td>
                             <td className="px-4 py-3"><span className="text-xs px-2 py-1 bg-earth-500/10 text-earth-500 rounded-full font-body font-medium">{com.style || 'Custom'}</span></td>
                             <td className="px-4 py-3 text-sm text-warm-gray-600 font-body">{com.location}</td>
@@ -786,7 +786,7 @@ export default function AdminPage() {
             <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
               <div className="p-4 border-b border-cream-200 flex justify-between items-center bg-cream-50">
                 <h3 className="font-display font-bold text-lg text-charcoal">Payment Screenshot</h3>
-                <button onClick={() => setShowScreenshotModal(false)} className="p-2 text-warm-gray-400 hover:text-mithila-red transition-colors bg-white rounded-full shadow-sm">
+                <button onClick={() => setShowScreenshotModal(false)} className="p-2 text-warm-gray-500 hover:text-mithila-red transition-colors bg-white rounded-full shadow-sm">
                   <IoCloseOutline size={24} />
                 </button>
               </div>

@@ -202,7 +202,7 @@ export default function ArtworkDetailPage() {
                     className={`flex-1 h-14 rounded-full flex items-center justify-center gap-2 font-body font-semibold text-sm transition-all ${
                       isAvailable 
                         ? 'bg-charcoal text-white hover:bg-earth-900 shadow-xl shadow-charcoal/20 hover:-translate-y-1' 
-                        : 'bg-warm-gray-200 text-warm-gray-400 cursor-not-allowed'
+                        : 'bg-warm-gray-200 text-warm-gray-500 cursor-not-allowed'
                     }`}
                   >
                     {addingToCart ? (
@@ -220,7 +220,7 @@ export default function ArtworkDetailPage() {
                     className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all ${
                       isWishlisted 
                         ? 'bg-mithila-red/10 border-mithila-red text-mithila-red' 
-                        : 'bg-white border-cream-200 text-warm-gray-400 hover:border-mithila-red hover:text-mithila-red shadow-sm'
+                        : 'bg-white border-cream-200 text-warm-gray-500 hover:border-mithila-red hover:text-mithila-red shadow-sm'
                     }`}
                   >
                     {isWishlisted ? <IoHeart size={24} /> : <IoHeartOutline size={24} />}
@@ -265,22 +265,22 @@ export default function ArtworkDetailPage() {
                   <h3 className="font-display font-semibold text-lg text-charcoal mb-4">Artwork Details</h3>
                   <div className="grid grid-cols-2 gap-y-4 text-sm font-body">
                     <div>
-                      <span className="text-warm-gray-400 block mb-1">Medium</span>
+                      <span className="text-warm-gray-500 block mb-1">Medium</span>
                       <span className="font-medium text-charcoal">{artwork.medium || 'Natural Pigments on Handmade Paper'}</span>
                     </div>
                     {artwork.size && (
                       <div>
-                        <span className="text-warm-gray-400 block mb-1">Dimensions</span>
+                        <span className="text-warm-gray-500 block mb-1">Dimensions</span>
                         <span className="font-medium text-charcoal">{artwork.size}</span>
                       </div>
                     )}
                     <div>
-                      <span className="text-warm-gray-400 block mb-1">Style / Category</span>
+                      <span className="text-warm-gray-500 block mb-1">Style / Category</span>
                       <span className="font-medium text-charcoal">{artwork.category || 'Mithila Art'}</span>
                     </div>
                     {artwork.style && (
                       <div>
-                        <span className="text-warm-gray-400 block mb-1">Specific Style</span>
+                        <span className="text-warm-gray-500 block mb-1">Specific Style</span>
                         <span className="font-medium text-charcoal">{artwork.style}</span>
                       </div>
                     )}

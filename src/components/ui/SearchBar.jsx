@@ -62,7 +62,7 @@ export default function SearchBar() {
             className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white dark:bg-warm-gray-800 rounded-2xl shadow-xl border border-cream-200 dark:border-warm-gray-700 overflow-hidden z-50"
           >
             <div className="flex items-center p-3 border-b border-cream-100 dark:border-warm-gray-700">
-              <IoSearchOutline className="text-warm-gray-400 ml-2" size={20} />
+              <IoSearchOutline className="text-warm-gray-500 ml-2" size={20} />
               <input
                 autoFocus
                 type="text"
@@ -80,7 +80,7 @@ export default function SearchBar() {
 
             <div className="max-h-80 overflow-y-auto">
               {query.trim().length > 1 && results.length === 0 ? (
-                <div className="p-6 text-center text-warm-gray-500 dark:text-warm-gray-400 font-body text-sm">
+                <div className="p-6 text-center text-warm-gray-500 dark:text-warm-gray-300 font-body text-sm">
                   No artworks found matching "{query}"
                 </div>
               ) : (
@@ -97,13 +97,13 @@ export default function SearchBar() {
                     />
                     <div>
                       <h4 className="font-display font-semibold text-charcoal dark:text-cream-100 text-sm">{painting.title}</h4>
-                      <p className="font-body text-xs text-warm-gray-500 dark:text-warm-gray-400 capitalize">{painting.category}</p>
+                      <p className="font-body text-xs text-warm-gray-500 dark:text-warm-gray-300 capitalize">{painting.category}</p>
                     </div>
                   </div>
                 ))
               )}
               {query.trim().length <= 1 && (
-                <div className="p-4 text-center text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body">
+                <div className="p-4 text-center text-warm-gray-500 dark:text-warm-gray-300 text-xs font-body">
                   Type at least 2 characters to search
                 </div>
               )}

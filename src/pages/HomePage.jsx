@@ -252,7 +252,7 @@ function FeaturedCategories() {
 
                   {/* Name */}
                   <h3 className="font-display font-semibold text-charcoal dark:text-cream-100 text-lg mb-1">{cat.name}</h3>
-                  <p className="text-warm-gray-400 dark:text-warm-gray-500 text-sm font-body">{cat.description}</p>
+                  <p className="text-warm-gray-500 dark:text-warm-gray-300 text-sm font-body">{cat.description}</p>
 
                   {/* Arrow */}
                   <motion.div
@@ -607,7 +607,7 @@ function TestimonialsSection() {
                           </div>
                           <div className="text-left">
                             <p className="font-display font-semibold text-charcoal dark:text-cream-100 text-lg">{testimonial.name}</p>
-                            <p className="text-warm-gray-400 dark:text-warm-gray-500 text-sm font-body">{testimonial.location}</p>
+                            <p className="text-warm-gray-500 dark:text-warm-gray-300 text-sm font-body">{testimonial.location}</p>
                           </div>
                         </div>
                       </GlassCard>

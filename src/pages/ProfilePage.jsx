@@ -195,7 +195,7 @@ export default function ProfilePage() {
                 // View Mode
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-400 mb-1">
+                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-300 mb-1">
                       Full Name
                     </p>
                     <p className="text-lg font-semibold text-warm-gray-900 dark:text-cream-100">
@@ -206,7 +206,7 @@ export default function ProfilePage() {
                   <div className="h-px bg-gradient-to-r from-earth-500/20 to-transparent"></div>
 
                   <div>
-                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-400 mb-1">
+                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-300 mb-1">
                       Email Address
                     </p>
                     <p className="text-lg font-semibold text-warm-gray-900 dark:text-cream-100">
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                   <div className="h-px bg-gradient-to-r from-earth-500/20 to-transparent"></div>
 
                   <div>
-                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-400 mb-1">
+                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-300 mb-1">
                       Phone Number
                     </p>
                     <p className="text-lg font-semibold text-warm-gray-900 dark:text-cream-100">
@@ -228,7 +228,7 @@ export default function ProfilePage() {
                   <div className="h-px bg-gradient-to-r from-earth-500/20 to-transparent"></div>
 
                   <div>
-                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-400 mb-1">
+                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-300 mb-1">
                       Member Since
                     </p>
                     <p className="text-lg font-semibold text-warm-gray-900 dark:text-cream-100">
@@ -259,7 +259,7 @@ export default function ProfilePage() {
                     ? `You have ${user.commissions.length} commission request${user.commissions.length > 1 ? 's' : ''}.`
                     : 'No commission requests yet.'}
                 </p>
-                <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 mb-6">
+                <p className="text-sm text-warm-gray-500 dark:text-warm-gray-300 mb-6">
                   {(user?.commissions || []).length > 0
                     ? 'Track your commissioning progress and approvals in one place.'
                     : 'Start by creating a custom commission request.'}
@@ -287,7 +287,7 @@ export default function ProfilePage() {
                     ? `You have ${user.orders.length} completed order${user.orders.length > 1 ? 's' : ''}.`
                     : 'No orders yet.'}
                 </p>
-                <p className="text-sm text-warm-gray-500 dark:text-warm-gray-400 mb-6">
+                <p className="text-sm text-warm-gray-500 dark:text-warm-gray-300 mb-6">
                   {(user?.orders || []).length > 0
                     ? 'Review your order history and payment status.'
                     : 'Browse our gallery and shop to make your first purchase.'}

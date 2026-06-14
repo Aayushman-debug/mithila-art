@@ -75,7 +75,7 @@ export default function ComparePage() {
                       </div>
                     </div>
                     
-                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-400 font-body leading-relaxed flex-1 line-clamp-4">
+                    <p className="text-sm text-warm-gray-600 dark:text-warm-gray-300 font-body leading-relaxed flex-1 line-clamp-4">
                       {painting.description}
                     </p>
 

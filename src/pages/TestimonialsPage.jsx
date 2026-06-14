@@ -91,7 +91,7 @@ export default function TestimonialsPage() {
                 />
                 <div>
                   <p className="font-display font-semibold text-charcoal">{testimonial.name}</p>
-                  <p className="text-body-sm text-warm-gray-400">{testimonial.location}</p>
+                  <p className="text-body-sm text-warm-gray-500">{testimonial.location}</p>
                 </div>
               </div>
               <p className="text-xs text-warm-gray-300 mt-3 font-body">{testimonial.date}</p>

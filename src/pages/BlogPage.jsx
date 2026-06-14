@@ -76,7 +76,7 @@ export default function BlogPage() {
                     {filteredPosts[0].title}
                   </h2>
                   <p className="text-warm-gray-600 font-body text-lg line-clamp-3 mb-6 leading-relaxed">{filteredPosts[0].excerpt}</p>
-                  <div className="flex items-center gap-4 text-sm font-body text-warm-gray-400 mt-auto">
+                  <div className="flex items-center gap-4 text-sm font-body text-warm-gray-500 mt-auto">
                     <span>{filteredPosts[0].author}</span>
                     <span>•</span>
                     <span>{filteredPosts[0].date}</span>
@@ -111,13 +111,13 @@ export default function BlogPage() {
                     <div className="p-6 flex flex-col flex-grow">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-earth-500 text-xs font-bold uppercase tracking-wider">{post.category}</span>
-                        <span className="text-warm-gray-400 text-xs font-body">{post.date}</span>
+                        <span className="text-warm-gray-500 text-xs font-body">{post.date}</span>
                       </div>
                       <h3 className="font-display font-bold text-xl text-charcoal leading-snug line-clamp-2 mb-3 group-hover:text-earth-700 transition-colors">
                         {post.title}
                       </h3>
                       <p className="text-warm-gray-600 font-body text-sm line-clamp-3 mb-6 flex-grow">{post.excerpt}</p>
-                      <div className="flex items-center justify-between text-xs text-warm-gray-400 font-body mt-auto pt-4 border-t border-cream-100">
+                      <div className="flex items-center justify-between text-xs text-warm-gray-500 font-body mt-auto pt-4 border-t border-cream-100">
                         <span>{post.author}</span>
                         <span className="flex items-center gap-1"><IoTimeOutline size={14} /> {post.readTime}</span>
                       </div>

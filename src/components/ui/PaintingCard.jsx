@@ -30,7 +30,7 @@ const STATUS_CONFIG = {
   coming_soon: {
     label: 'Coming Soon',
     dotClass: 'bg-warm-gray-400',
-    textClass: 'text-warm-gray-500 dark:text-warm-gray-400',
+    textClass: 'text-warm-gray-500 dark:text-warm-gray-300',
   },
   commission_available: {
     label: 'Commission Available',
@@ -192,7 +192,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                   {formatPrice(price)}
                 </span>
                 {originalPrice && (
-                  <span className="text-warm-gray-400 dark:text-warm-gray-500 line-through text-xs">
+                  <span className="text-warm-gray-500 dark:text-warm-gray-300 line-through text-xs">
                     {formatPrice(originalPrice)}
                   </span>
                 )}
@@ -229,7 +229,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                 disabled={isCartDisabled}
                 className={`flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold rounded-xl transition-colors whitespace-nowrap ${
                   isCartDisabled
-                    ? 'bg-warm-gray-200 dark:bg-warm-gray-700 text-warm-gray-400 cursor-not-allowed'
+                    ? 'bg-warm-gray-200 dark:bg-warm-gray-700 text-warm-gray-500 cursor-not-allowed'
                     : 'bg-earth-500 hover:bg-earth-600 text-white'
                 }`}
               >

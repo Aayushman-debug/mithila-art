@@ -456,10 +456,10 @@ export default function CartPage() {
             const isActive = i <= currentStepIndex;
             return (
               <div key={s} className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-sm transition-all duration-300 ${isActive ? 'bg-earth-500 text-white shadow-gold' : 'bg-cream-200 dark:bg-warm-gray-700 text-warm-gray-400 dark:text-warm-gray-500'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-sm transition-all duration-300 ${isActive ? 'bg-earth-500 text-white shadow-gold' : 'bg-cream-200 dark:bg-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-300'}`}>
                   {i + 1}
                 </div>
-                <span className={`hidden sm:block font-body text-sm ${isActive ? 'text-earth-700 dark:text-earth-400 font-semibold' : 'text-warm-gray-400 dark:text-warm-gray-500'}`}>{s}</span>
+                <span className={`hidden sm:block font-body text-sm ${isActive ? 'text-earth-700 dark:text-earth-400 font-semibold' : 'text-warm-gray-500 dark:text-warm-gray-300'}`}>{s}</span>
                 {i < 2 && <div className={`w-12 h-0.5 ${isActive ? 'bg-earth-500' : 'bg-cream-200 dark:bg-warm-gray-700'}`} />}
               </div>
             );
@@ -495,14 +495,14 @@ export default function CartPage() {
                           <div className="flex-1 min-w-0">
                             <p className="text-earth-500 text-xs font-semibold tracking-wider uppercase">{item.category}</p>
                             <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-200 leading-snug truncate">{item.title}</h3>
-                            <p className="text-body-sm text-warm-gray-400 mb-3">{item.size}</p>
+                            <p className="text-body-sm text-warm-gray-500 mb-3">{item.size}</p>
                             <div className="flex items-center justify-between flex-wrap gap-2">
                               <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">{formatPrice(item.price)}</span>
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center bg-mithila-orange/10 rounded-xl overflow-hidden px-3 py-1.5">
                                   <span className="font-body font-semibold text-xs text-mithila-orange tracking-wider">ORIGINAL 1 OF 1</span>
                                 </div>
-                                <button onClick={() => removeItem(item.id)} className="p-2 text-warm-gray-400 hover:text-mithila-red transition-colors">
+                                <button onClick={() => removeItem(item.id)} className="p-2 text-warm-gray-500 hover:text-mithila-red transition-colors">
                                   <IoTrashOutline size={18} />
                                 </button>
                               </div>
@@ -649,7 +649,7 @@ export default function CartPage() {
                           {/* Divider */}
                           <div className="flex items-center gap-3">
                             <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
-                            <span className="text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body uppercase tracking-wider">or</span>
+                            <span className="text-warm-gray-500 dark:text-warm-gray-300 text-xs font-body uppercase tracking-wider">or</span>
                             <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
                           </div>
 
@@ -665,7 +665,7 @@ export default function CartPage() {
                           {/* Divider */}
                           <div className="flex items-center gap-3">
                             <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
-                            <span className="text-warm-gray-400 dark:text-warm-gray-500 text-xs font-body uppercase tracking-wider">after paying</span>
+                            <span className="text-warm-gray-500 dark:text-warm-gray-300 text-xs font-body uppercase tracking-wider">after paying</span>
                             <div className="flex-1 h-px bg-cream-200 dark:bg-warm-gray-700" />
                           </div>
 
@@ -690,7 +690,7 @@ export default function CartPage() {
                                 <span className="text-sm font-body font-medium text-earth-700 dark:text-cream-200">
                                   {screenshotFile ? screenshotFile.name : 'Click to upload screenshot'}
                                 </span>
-                                <span className="text-xs text-warm-gray-400 mt-1">JPG, PNG or WEBP • Max 5MB</span>
+                                <span className="text-xs text-warm-gray-500 mt-1">JPG, PNG or WEBP • Max 5MB</span>
                               </label>
                             </div>
 
@@ -743,7 +743,7 @@ export default function CartPage() {
                         <FallbackImage src={item.images?.[0] || item.image} alt={item.title} className="w-12 h-12 object-cover rounded-lg" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-body font-medium text-charcoal dark:text-cream-200 truncate">{item.title}</p>
-                          <p className="text-xs text-warm-gray-400">Qty: {item.quantity}</p>
+                          <p className="text-xs text-warm-gray-500">Qty: {item.quantity}</p>
                         </div>
                         <p className="text-sm font-semibold text-earth-700 dark:text-earth-400">{formatPrice(item.price * item.quantity)}</p>
                       </div>
@@ -768,7 +768,7 @@ export default function CartPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="font-semibold text-earth-700 dark:text-earth-400">-{formatPrice(discountAmount)}</div>
-                          <button onClick={handleRemoveCoupon} className="text-xs text-warm-gray-400 hover:text-mithila-red">Remove</button>
+                          <button onClick={handleRemoveCoupon} className="text-xs text-warm-gray-500 hover:text-mithila-red">Remove</button>
                         </div>
                       </div>
                     )}
@@ -832,7 +832,7 @@ export default function CartPage() {
         {step !== 'success' && items.length > 0 && (
           <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-warm-gray-800/95 backdrop-blur-md border-t border-cream-200 dark:border-warm-gray-700 px-6 py-4 shadow-[0_-8px_30px_rgba(0,0,0,0.06)] z-40 flex items-center justify-between safe-bottom">
             <div className="flex flex-col">
-              <span className="text-xs text-warm-gray-400 font-body">Total Amount</span>
+              <span className="text-xs text-warm-gray-500 font-body">Total Amount</span>
               <span className="font-display font-bold text-lg text-earth-700 dark:text-earth-400">{formatPrice(finalTotal)}</span>
             </div>
             <div className="w-1/2">
