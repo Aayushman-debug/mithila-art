@@ -289,6 +289,22 @@ export default function AdminPage() {
     }
   };
 
+  const handleCategoryChange = async (productId, newCategory) => {
+    try {
+      const { productAPI } = await import('../api');
+      const res = await productAPI.updateProduct(productId, { category: newCategory });
+      if (res.data.success) {
+        setRealProducts(prev => prev.map(p => (p._id === productId ? { ...p, category: newCategory } : p)));
+        showToast('Category updated successfully');
+      } else {
+        showToast('Update failed: ' + (res.data.message || 'Unknown error'), 'error');
+      }
+    } catch (err) {
+      console.error('Failed to update category', err);
+      showToast('Failed to update category', 'error');
+    }
+  };
+
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const { adminAPI } = await import('../api');
@@ -498,7 +514,21 @@ export default function AdminPage() {
                               </div>
                             </td>
                             <td className="px-4 py-3">
-                              <span className="text-xs px-2 py-1 bg-earth-500/10 text-earth-500 rounded-full font-body font-medium">{p.category}</span>
+                              <select
+                                value={p.category || 'all'}
+                                onChange={(e) => handleCategoryChange(p._id || p.id, e.target.value)}
+                                className="text-xs px-2 py-1 bg-earth-500/10 text-earth-500 rounded-full font-body font-medium cursor-pointer border border-transparent hover:border-earth-200 outline-none"
+                              >
+                                <option value="all">All</option>
+                                <option value="religious">Religious</option>
+                                <option value="contemporary">Contemporary</option>
+                                <option value="nature">Nature</option>
+                                <option value="godna">Godna</option>
+                                <option value="kohbar">Kohbar</option>
+                                <option value="bharni">Bharni</option>
+                                <option value="kachni">Kachni</option>
+                                <option value="tantric">Tantric</option>
+                              </select>
                             </td>
                             <td className="px-4 py-3 font-display font-semibold text-earth-700">{formatPrice(p.price)}</td>
                             <td className="px-4 py-3">
@@ -539,7 +569,24 @@ export default function AdminPage() {
                           <FallbackImage src={p.images?.[0]?.url || p.images?.[0] || p.image} alt={p.title} className="w-16 h-16 rounded-xl object-cover" />
                           <div className="flex-1">
                             <h4 className="font-display font-bold text-charcoal">{p.title}</h4>
-                            <p className="text-sm text-warm-gray-500">{p.size} • {p.category}</p>
+                            <div className="flex gap-2 items-center">
+                              <p className="text-sm text-warm-gray-500">{p.size} •</p>
+                              <select
+                                value={p.category || 'all'}
+                                onChange={(e) => handleCategoryChange(p._id || p.id, e.target.value)}
+                                className="text-xs px-2 py-0.5 bg-earth-500/10 text-earth-500 rounded-full font-body font-medium cursor-pointer border border-transparent hover:border-earth-200 outline-none"
+                              >
+                                <option value="all">All</option>
+                                <option value="religious">Religious</option>
+                                <option value="contemporary">Contemporary</option>
+                                <option value="nature">Nature</option>
+                                <option value="godna">Godna</option>
+                                <option value="kohbar">Kohbar</option>
+                                <option value="bharni">Bharni</option>
+                                <option value="kachni">Kachni</option>
+                                <option value="tantric">Tantric</option>
+                              </select>
+                            </div>
                             <p className="font-display font-semibold text-earth-700">{formatPrice(p.price)}</p>
                           </div>
                         </div>

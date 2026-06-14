@@ -40,7 +40,9 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
           featured: productToEdit.featured || false,
           stock: productToEdit.stock !== undefined ? productToEdit.stock : 1,
           availabilityStatus: productToEdit.availabilityStatus || 'available',
-          images: productToEdit.images && typeof productToEdit.images[0] === 'object' ? productToEdit.images : [],
+          images: productToEdit.images && productToEdit.images.length > 0 
+            ? productToEdit.images.map(img => typeof img === 'string' ? { url: img, public_id: '' } : img)
+            : (productToEdit.image ? [{ url: productToEdit.image, public_id: '' }] : []),
         });
       } else {
         setFormData({
@@ -99,10 +101,15 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
 
     try {
       let res;
+      const payload = { ...formData };
+      if (payload.images && payload.images.length > 0) {
+        payload.image = payload.images[0].url; // Ensure backward compatibility
+      }
+      
       if (productToEdit) {
-        res = await productAPI.updateProduct(productToEdit._id, formData);
+        res = await productAPI.updateProduct(productToEdit._id, payload);
       } else {
-        res = await productAPI.createProduct(formData);
+        res = await productAPI.createProduct(payload);
       }
 
       if (res.data.success) {
