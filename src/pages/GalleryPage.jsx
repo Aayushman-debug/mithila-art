@@ -327,7 +327,7 @@ export default function GalleryPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search paintings..."
-                  className="w-full pl-10 pr-10 py-2.5 rounded-full bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-600 text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 font-body text-sm focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-full bg-white dark:bg-warm-gray-800 border border-warm-gray-300 dark:border-warm-gray-600 shadow-md text-charcoal dark:text-cream-100 placeholder-warm-gray-500 dark:placeholder-warm-gray-400 font-body text-sm focus:outline-none focus:ring-2 focus:ring-earth-500/50 focus:border-earth-500 transition-all"
                 />
                 {searchQuery && (
                   <button

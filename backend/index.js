@@ -159,7 +159,6 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mithilaRe
 })
   .then(async () => {
     console.log("✓ MongoDB Connected");
-    await seedProducts();
   })
   .catch(err => console.error("✗ MongoDB Error:", err));
 

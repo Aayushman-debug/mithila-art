@@ -663,7 +663,7 @@ export default function ShopPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search paintings, artists, styles..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-cream-200 dark:border-warm-gray-700 bg-white dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all shadow-sm"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-warm-gray-300 dark:border-warm-gray-600 bg-white dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-500 dark:placeholder-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-earth-500/50 focus:border-earth-500 transition-all shadow-md"
                 />
                 {searchTerm && (
                   <button
