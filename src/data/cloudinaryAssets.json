@@ -1,0 +1,171 @@
+{
+  "artist_mahasundari_devi": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451238/mithila_art_assets/artists/artist_mahasundari_devi.jpg",
+    "public_id": "mithila_art_assets/artists/artist_mahasundari_devi",
+    "width": 2592,
+    "height": 1944,
+    "license": "CC BY 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Devi6.JPG",
+    "attribution": "Mahasundari Devi (own work) / Wikimedia Commons CC BY 3.0",
+    "subject": "Mahasundari Devi",
+    "uploaded": "2026-06-14T15:33:59.612Z"
+  },
+  "artist_baua_devi": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451249/mithila_art_assets/artists/artist_baua_devi.jpg",
+    "public_id": "mithila_art_assets/artists/artist_baua_devi",
+    "width": 2200,
+    "height": 2135,
+    "license": "GODL-India",
+    "source": "https://commons.wikimedia.org/wiki/File:The_President,_Shri_Pranab_Mukherjee_presenting_the_Padma_Shri_Award_to_Smt._Baoa_Devi.jpg",
+    "attribution": "Government of India (GODL-India)",
+    "subject": "Baua Devi receiving Padma Shri, 2017",
+    "uploaded": "2026-06-14T15:34:10.690Z"
+  },
+  "artist_dulari_devi": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451256/mithila_art_assets/artists/artist_dulari_devi.jpg",
+    "public_id": "mithila_art_assets/artists/artist_dulari_devi",
+    "width": 941,
+    "height": 1473,
+    "license": "GODL-India",
+    "source": "https://commons.wikimedia.org/wiki/File:Dulari_Devi.jpg",
+    "attribution": "Rashtrapati Bhavan / Wikimedia Commons GODL-India",
+    "subject": "Dulari Devi",
+    "uploaded": "2026-06-14T15:34:16.468Z"
+  },
+  "art_madhubani_main": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451328/mithila_art_assets/artworks/art_madhubani_main.jpg",
+    "public_id": "mithila_art_assets/artworks/art_madhubani_main",
+    "width": 2884,
+    "height": 2322,
+    "license": "Public Domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Madhubani_art.jpg",
+    "attribution": "Wikimedia Commons",
+    "subject": "Traditional Madhubani painting",
+    "uploaded": "2026-06-14T15:35:29.552Z"
+  },
+  "art_madhubani_painting": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451349/mithila_art_assets/artworks/art_madhubani_painting.jpg",
+    "public_id": "mithila_art_assets/artworks/art_madhubani_painting",
+    "width": 4288,
+    "height": 2848,
+    "license": "Public Domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Madhubani_painting.jpg",
+    "attribution": "Wikimedia Commons",
+    "subject": "Mithila painting",
+    "uploaded": "2026-06-14T15:35:50.009Z"
+  },
+  "art_sita_vivah": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451401/mithila_art_assets/artworks/art_sita_vivah.jpg",
+    "public_id": "mithila_art_assets/artworks/art_sita_vivah",
+    "width": 2789,
+    "height": 3719,
+    "license": "Public Domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Madhubani_Painting_of_Ram_-_Sita_Vivah.jpg",
+    "attribution": "Wikimedia Commons",
+    "subject": "Madhubani painting — Ram Sita Vivah",
+    "uploaded": "2026-06-14T15:36:42.628Z"
+  },
+  "art_sita_birth": {
+    "error": "File size too large. Got 37314538. Maximum is 10485760. Upgrade your plan to enjoy higher limits https://www.cloudinary.com/pricing/upgrades/file-limit",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Birth_of_Sita_-_Raja_Janaka_of_Mithila_carrying_her_in_his_lap.jpg"
+  },
+  "art_kohbar": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451693/mithila_art_assets/artworks/art_kohbar.jpg",
+    "public_id": "mithila_art_assets/artworks/art_kohbar",
+    "width": 3072,
+    "height": 4096,
+    "license": "CC0 1.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Sohrai_and_Kohbar_Paintings_03.jpg",
+    "attribution": "CC0 / Wikimedia Commons",
+    "subject": "Kohbar (nuptial chamber) painting",
+    "uploaded": "2026-06-14T15:41:33.912Z"
+  },
+  "art_exhibition": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451710/mithila_art_assets/artworks/art_exhibition.jpg",
+    "public_id": "mithila_art_assets/artworks/art_exhibition",
+    "width": 2592,
+    "height": 1456,
+    "license": "CC BY-SA 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Madhubani_Painting_Exhibition.jpg",
+    "attribution": "Wikimedia Commons CC BY-SA 3.0",
+    "subject": "Madhubani Painting Exhibition",
+    "uploaded": "2026-06-14T15:41:50.650Z"
+  },
+  "art_dilli_haat": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451793/mithila_art_assets/artworks/art_dilli_haat.jpg",
+    "public_id": "mithila_art_assets/artworks/art_dilli_haat",
+    "width": 3888,
+    "height": 2592,
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Dilli_Haat_Madhubani_Mithila_Painting_Artist.jpg",
+    "attribution": "Wikimedia Commons CC BY 2.0",
+    "subject": "Mithila artist at Dilli Haat",
+    "uploaded": "2026-06-14T15:43:14.964Z"
+  },
+  "art_patna_junction": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451824/mithila_art_assets/artworks/art_patna_junction.jpg",
+    "public_id": "mithila_art_assets/artworks/art_patna_junction",
+    "width": 3413,
+    "height": 1664,
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Mithila_Painting_at_Patna_Junction.jpg",
+    "attribution": "Wikimedia Commons CC BY-SA 4.0",
+    "subject": "Mithila mural at Patna Junction",
+    "uploaded": "2026-06-14T15:43:45.202Z"
+  },
+  "art_fish_motif": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451843/mithila_art_assets/artworks/art_fish_motif.png",
+    "public_id": "mithila_art_assets/artworks/art_fish_motif",
+    "width": 236,
+    "height": 257,
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Madhubani_Fish_Motif_with_Stylized_Geometric_Scales_and_Red-Toned_Accents_from_Mithila_India.png",
+    "attribution": "Wikimedia Commons CC BY-SA 4.0",
+    "subject": "Madhubani fish motif",
+    "uploaded": "2026-06-14T15:44:04.175Z"
+  },
+  "festival_chhath": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781451988/mithila_art_assets/festivals/festival_chhath.jpg",
+    "public_id": "mithila_art_assets/festivals/festival_chhath",
+    "width": 9296,
+    "height": 3744,
+    "license": "Public Domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Chhath_Puja_Worship.jpg",
+    "attribution": "Wikimedia Commons",
+    "subject": "Chhath Puja worship at the riverside",
+    "uploaded": "2026-06-14T15:46:28.784Z"
+  },
+  "festival_sama_chakeva": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781452049/mithila_art_assets/festivals/festival_sama_chakeva.jpg",
+    "public_id": "mithila_art_assets/festivals/festival_sama_chakeva",
+    "width": 3024,
+    "height": 4032,
+    "license": "Public Domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Sama_chakeva.jpg",
+    "attribution": "Wikimedia Commons",
+    "subject": "Sama Chakeva festival",
+    "uploaded": "2026-06-14T15:47:30.060Z"
+  },
+  "festival_sama_2": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781452118/mithila_art_assets/festivals/festival_sama_2.jpg",
+    "public_id": "mithila_art_assets/festivals/festival_sama_2",
+    "width": 2250,
+    "height": 4000,
+    "license": "Public Domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Sama_Chakeva_is_a_native_festival_of_Mithila.jpg",
+    "attribution": "Wikimedia Commons",
+    "subject": "Sama Chakeva — native festival of Mithila",
+    "uploaded": "2026-06-14T15:48:38.593Z"
+  },
+  "art_mixed": {
+    "cloudinary_url": "https://res.cloudinary.com/dn4f4fr1n/image/upload/v1781452175/mithila_art_assets/artworks/art_mixed.jpg",
+    "public_id": "mithila_art_assets/artworks/art_mixed",
+    "width": 4000,
+    "height": 2664,
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Madhubani_paintings_or_Milithila_Painting_-IMG_0028.jpg",
+    "attribution": "Wikimedia Commons CC BY 2.0",
+    "subject": "Madhubani paintings collection",
+    "uploaded": "2026-06-14T15:49:36.031Z"
+  }
+}
