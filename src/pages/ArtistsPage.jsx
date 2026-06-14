@@ -35,6 +35,9 @@ export default function ArtistsPage() {
                     <p className="text-xs font-body text-warm-gray-500 dark:text-warm-gray-300">{artist.born} {artist.died ? `- ${artist.died}` : '(Present)'}</p>
                   </div>
                 </div>
+                <div className="absolute top-4 right-4 bg-black/60 text-white/80 text-[10px] px-2 py-1 rounded backdrop-blur-md">
+                  Image via Wikimedia Commons
+                </div>
               </div>
 
               <div className="w-full lg:w-1/2 space-y-6">

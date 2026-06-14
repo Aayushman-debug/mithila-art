@@ -119,7 +119,7 @@ const artStyles = [
     icon: FaPalette,
     color: 'bg-mithila-red',
     gradient: 'from-mithila-red/10 to-mithila-orange/10',
-    image: 'https://picsum.photos/seed/bharni-style/400/300',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Madhubani_art.jpg',
   },
   {
     name: 'Kachni',
@@ -130,7 +130,7 @@ const artStyles = [
     icon: FaFeatherAlt,
     color: 'bg-charcoal',
     gradient: 'from-warm-gray-200/50 to-warm-gray-100/50',
-    image: 'https://picsum.photos/seed/kachni-style/400/300',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Madhubani_painting.jpg',
   },
   {
     name: 'Tantric',
@@ -141,7 +141,7 @@ const artStyles = [
     icon: FaOm,
     color: 'bg-mithila-purple',
     gradient: 'from-mithila-purple/10 to-mithila-blue/10',
-    image: 'https://picsum.photos/seed/tantric-style/400/300',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Madhubani_Art_-_1.jpg',
   },
   {
     name: 'Godhana',
@@ -152,7 +152,7 @@ const artStyles = [
     icon: IoFlower,
     color: 'bg-mithila-green',
     gradient: 'from-mithila-green/10 to-mithila-yellow/10',
-    image: 'https://picsum.photos/seed/godhana-style/400/300',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Madhubani_Art_-_2.jpg',
   },
   {
     name: 'Kohbar',
@@ -163,7 +163,7 @@ const artStyles = [
     icon: FaStar,
     color: 'bg-earth-500',
     gradient: 'from-earth-500/10 to-cream-200/30',
-    image: 'https://picsum.photos/seed/kohbar-style/400/300',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Madhubani_art.jpg',
   },
 ];
 
@@ -292,7 +292,7 @@ function OriginStory() {
                 transition={{ duration: 0.5 }}
               >
                 <img
-                  src="https://picsum.photos/seed/mithila-origin/600/700"
+                  src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Madhubani_painting.jpg"
                   alt="Ancient Mithila wall painting showing the wedding of Sita and Ram"
                   className="w-full h-[500px] lg:h-[600px] object-cover"
                 />

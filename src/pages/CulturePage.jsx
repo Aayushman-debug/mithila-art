@@ -5,14 +5,14 @@ import SectionHeading from '../components/ui/SectionHeading';
 import { IoFlowerOutline, IoMusicalNotesOutline, IoRestaurantOutline, IoPeopleOutline, IoSunnyOutline, IoLeafOutline, IoColorPaletteOutline, IoWaterOutline } from 'react-icons/io5';
 
 // Local Mithila artwork
-const fishArtwork = '/paintings/fish.jpeg';
-const peacockArtwork = '/paintings/peacockOne.jpeg';
-const brideArtwork = '/paintings/bride.jpeg';
-const shivParvatiArtwork = '/paintings/Shivparvatimarriage.jpeg';
-const lotusKrishnaArtwork = '/paintings/idkthecontext.jpeg';
-const sunYantraArtwork = '/paintings/WhatsApp Image 2026-05-25 at 5.40.19 PM.jpeg';
-const ganesha_lotus = '/paintings/WhatsApp Image 2026-05-25 at 8.28.30 AM.jpeg';
-const multiple_figures = '/paintings/WhatsApp Image 2026-05-25 at 5.37.33 PM.jpeg';
+const fishArtwork = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Madhubani_art.jpg';
+const peacockArtwork = 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Madhubani_painting.jpg';
+const brideArtwork = 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Madhubani_Art_-_2.jpg';
+const shivParvatiArtwork = 'https://upload.wikimedia.org/wikipedia/commons/4/41/Madhubani_Art_-_1.jpg';
+const lotusKrishnaArtwork = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Madhubani_art.jpg';
+const sunYantraArtwork = 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Madhubani_painting.jpg';
+const ganesha_lotus = 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Madhubani_Art_-_2.jpg';
+const multiple_figures = 'https://upload.wikimedia.org/wikipedia/commons/4/41/Madhubani_Art_-_1.jpg';
 
 // Wikimedia Commons - Authentic Mithila Art
 const imgHero = shivParvatiArtwork; // Beautiful traditional Mithila wedding scene
