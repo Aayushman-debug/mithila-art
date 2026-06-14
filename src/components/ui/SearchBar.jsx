@@ -39,7 +39,7 @@ export default function SearchBar() {
   const handleResultClick = (id) => {
     setIsOpen(false);
     setQuery('');
-    navigate(`/painting/${id}`);
+    navigate(`/artwork/${id}`);
   };
 
   return (
