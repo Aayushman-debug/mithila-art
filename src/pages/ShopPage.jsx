@@ -226,7 +226,10 @@ function FilterSidebar({
                     <input
                       type="number"
                       value={priceRange[0]}
-                      onChange={(e) => onPriceChange([parseInt(e.target.value) || 0, priceRange[1]])}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        onPriceChange([val === '' ? '' : parseInt(val) || 0, priceRange[1]]);
+                      }}
                       className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                       placeholder="0"
                     />
@@ -237,7 +240,10 @@ function FilterSidebar({
                     <input
                       type="number"
                       value={priceRange[1]}
-                      onChange={(e) => onPriceChange([priceRange[0], parseInt(e.target.value) || 100000])}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        onPriceChange([priceRange[0], val === '' ? '' : parseInt(val) || 0]);
+                      }}
                       className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-800 font-body text-sm text-charcoal dark:text-cream-200 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 transition-all"
                       placeholder="100000"
                     />
@@ -248,8 +254,8 @@ function FilterSidebar({
                   <motion.div
                     className="absolute h-full bg-gradient-gold rounded-full"
                     style={{
-                      left: `${(priceRange[0] / 100000) * 100}%`,
-                      right: `${100 - (priceRange[1] / 100000) * 100}%`,
+                      left: `${((priceRange[0] === '' ? 0 : priceRange[0]) / 100000) * 100}%`,
+                      right: `${100 - ((priceRange[1] === '' ? 100000 : priceRange[1]) / 100000) * 100}%`,
                     }}
                     layout
                     transition={{ duration: 0.3 }}
