@@ -2,6 +2,7 @@ const User = require('../models/User');
 const CartOrder = require('../models/CartOrder');
 const Commission = require('../models/Commission');
 const Product = require('../models/Product');
+const Coupon = require('../models/Coupon');
 
 const getUsers = async (req, res) => {
   try {
@@ -159,6 +160,70 @@ const cleanupBase64Images = async (req, res) => {
   }
 };
 
+const getCoupons = async (req, res) => {
+  try {
+    const coupons = await Coupon.find().sort({ createdAt: -1 }).lean();
+    res.status(200).json({ success: true, coupons });
+  } catch (error) {
+    console.error('Get coupons error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not fetch coupons' });
+  }
+};
+
+const createCoupon = async (req, res) => {
+  try {
+    const { code, type, value, freeShipping, singleUse } = req.body;
+    if (!code || !type || !value) {
+      return res.status(400).json({ success: false, message: 'Missing required fields' });
+    }
+    const newCoupon = new Coupon({
+      code: code.toUpperCase().trim(),
+      type,
+      value,
+      freeShipping,
+      singleUse
+    });
+    await newCoupon.save();
+    res.status(201).json({ success: true, coupon: newCoupon });
+  } catch (error) {
+    console.error('Create coupon error:', error);
+    if (error.code === 11000) {
+      return res.status(400).json({ success: false, message: 'Coupon code already exists' });
+    }
+    res.status(500).json({ success: false, message: error.message || 'Could not create coupon' });
+  }
+};
+
+const toggleCoupon = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const coupon = await Coupon.findById(id);
+    if (!coupon) {
+      return res.status(404).json({ success: false, message: 'Coupon not found' });
+    }
+    coupon.isActive = !coupon.isActive;
+    await coupon.save();
+    res.status(200).json({ success: true, coupon });
+  } catch (error) {
+    console.error('Toggle coupon error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not toggle coupon' });
+  }
+};
+
+const deleteCoupon = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const coupon = await Coupon.findByIdAndDelete(id);
+    if (!coupon) {
+      return res.status(404).json({ success: false, message: 'Coupon not found' });
+    }
+    res.status(200).json({ success: true, message: 'Coupon deleted successfully' });
+  } catch (error) {
+    console.error('Delete coupon error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Could not delete coupon' });
+  }
+};
+
 module.exports = {
   getUsers,
   getOrders,
@@ -170,4 +235,8 @@ module.exports = {
   rejectPayment,
   deleteOrder,
   cleanupBase64Images,
+  getCoupons,
+  createCoupon,
+  toggleCoupon,
+  deleteCoupon,
 };

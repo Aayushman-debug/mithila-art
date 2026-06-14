@@ -48,19 +48,10 @@ export default function CartPage() {
   const [upiOrderId, setUpiOrderId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' or 'upi'
 
-  // Coupon system
-  const COUPONS = {
-    WELCOME10: { type: 'percent', value: 10 },
-    MITHILA15: { type: 'percent', value: 15 },
-    ART500: { type: 'flat', value: 500 },
-    FIRSTORDER: { type: 'percent', value: 20 },
-    BETA99: { type: 'percent', value: 99, freeShipping: true, singleUse: true },
-    BETA999: { type: 'percent', value: 99.9, freeShipping: true, singleUse: true },
-  };
-
   const [couponInput, setCouponInput] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, desc }
+  const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, desc, type, value, freeShipping }
   const [couponError, setCouponError] = useState(null);
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   useEffect(() => {
     try {
@@ -84,9 +75,9 @@ export default function CartPage() {
     return Math.min(coupon.value, subtotal);
   };
 
-  const discountAmount = appliedCoupon ? computeDiscountAmount(COUPONS[appliedCoupon.code], total) : 0;
+  const discountAmount = appliedCoupon ? computeDiscountAmount(appliedCoupon, total) : 0;
   
-  const isFreeShipping = appliedCoupon && COUPONS[appliedCoupon.code]?.freeShipping;
+  const isFreeShipping = appliedCoupon && appliedCoupon.freeShipping;
   const shipping = total > 5000 || isFreeShipping ? 0 : 199;
   
   const finalTotal = Math.max(0, total - discountAmount + shipping);
@@ -95,7 +86,7 @@ export default function CartPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleApplyCoupon = () => {
+  const handleApplyCoupon = async () => {
     setCouponError(null);
     const code = (couponInput || '').trim().toUpperCase();
     if (!code) {
@@ -106,20 +97,25 @@ export default function CartPage() {
       setCouponError('Coupon already applied.');
       return;
     }
-    const coupon = COUPONS[code];
-    if (!coupon) {
-      setCouponError('Invalid coupon code.');
-      return;
-    }
     if (items.length === 0) {
       setCouponError('Add items to cart before applying a coupon.');
       return;
     }
 
-    const desc = coupon.type === 'percent' ? `${coupon.value}% OFF` : `₹${coupon.value} OFF`;
-    const applied = { code, desc };
-    setAppliedCoupon(applied);
-    setCouponInput('');
+    setValidatingCoupon(true);
+    try {
+      const response = await paymentAPI.validateCoupon({ code });
+      if (response.data.success) {
+        const coupon = response.data.coupon;
+        const desc = coupon.type === 'percent' ? `${coupon.value}% OFF` : `₹${coupon.value} OFF`;
+        setAppliedCoupon({ ...coupon, desc });
+        setCouponInput('');
+      }
+    } catch (err) {
+      setCouponError(err.response?.data?.error || 'Invalid or inactive coupon code.');
+    } finally {
+      setValidatingCoupon(false);
+    }
   };
 
   const handleRemoveCoupon = () => {
@@ -757,7 +753,9 @@ export default function CartPage() {
                     <label className="block text-sm font-body font-medium text-warm-gray-600 dark:text-warm-gray-300 mb-2">Coupon Code:</label>
                     <div className="flex gap-2">
                       <input value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="ENTER CODE" className="flex-1 px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500" />
-                      <button onClick={handleApplyCoupon} className="btn-primary px-4">Apply</button>
+                      <button onClick={handleApplyCoupon} disabled={validatingCoupon} className="btn-primary px-4 disabled:opacity-50">
+                        {validatingCoupon ? 'Validating...' : 'Apply'}
+                      </button>
                     </div>
                     {couponError && <p className="text-xs text-red-600 mt-2">{couponError}</p>}
                     {appliedCoupon && (

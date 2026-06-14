@@ -24,6 +24,7 @@ const User = require('./models/User');
 const Commission = require('./models/Commission');
 const CartOrder = require('./models/CartOrder');
 const Product = require('./models/Product');
+const Coupon = require('./models/Coupon');
 
 const requiredEnv = [
   "MONGODB_URI",
@@ -468,6 +469,43 @@ app.post("/create-order", authenticate, async (req, res) => {
   }
 });
 
+// Validate Coupon Endpoint
+app.post("/validate-coupon", authenticate, async (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) {
+      return res.status(400).json({ success: false, error: "Coupon code is required" });
+    }
+    const couponCode = String(code).toUpperCase().trim();
+    const coupon = await Coupon.findOne({ code: couponCode, isActive: true });
+    if (!coupon) {
+      return res.status(400).json({ success: false, error: "Invalid or inactive coupon code" });
+    }
+    if (coupon.singleUse) {
+      const existingOrder = await CartOrder.findOne({
+        couponCode,
+        paymentStatus: { $nin: ['pending', 'failed'] },
+        user: req.user.userId
+      });
+      if (existingOrder) {
+        return res.status(400).json({ success: false, error: "You have already used this coupon." });
+      }
+    }
+    res.json({
+      success: true,
+      coupon: {
+        code: coupon.code,
+        type: coupon.type,
+        value: coupon.value,
+        freeShipping: coupon.freeShipping
+      }
+    });
+  } catch (error) {
+    console.error("Coupon validation error:", error);
+    res.status(500).json({ success: false, error: "Could not validate coupon" });
+  }
+});
+
 // 4b. CREATE CART ORDER
 app.post("/create-cart-order", authenticate, async (req, res) => {
   try {
@@ -530,25 +568,19 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
     let isFreeShipping = false;
     if (couponCode) {
       const code = String(couponCode).toUpperCase().trim();
-      const BACKEND_COUPONS = {
-        WELCOME10: { type: 'percent', value: 10 },
-        MITHILA15: { type: 'percent', value: 15 },
-        ART500: { type: 'flat', value: 500 },
-        FIRSTORDER: { type: 'percent', value: 20 },
-        BETA99: { type: 'percent', value: 99, freeShipping: true, singleUse: true },
-        BETA999: { type: 'percent', value: 99.9, freeShipping: true, singleUse: true },
-      };
-      const coupon = BACKEND_COUPONS[code];
+      const coupon = await Coupon.findOne({ code, isActive: true });
       if (!coupon) {
-        return res.status(400).json({ success: false, error: "Invalid coupon code" });
+        return res.status(400).json({ success: false, error: "Invalid or inactive coupon code" });
       }
       if (coupon.singleUse) {
+        // For single use, we check if this specific user has used it.
         const existingOrder = await CartOrder.findOne({
           couponCode: code,
-          paymentStatus: { $nin: ['pending', 'failed'] }
+          paymentStatus: { $nin: ['pending', 'failed'] },
+          user: req.user.userId
         });
         if (existingOrder) {
-          return res.status(400).json({ success: false, error: "This coupon has already been used." });
+          return res.status(400).json({ success: false, error: "You have already used this coupon." });
         }
       }
       if (coupon.freeShipping) {
@@ -700,25 +732,19 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
     let isFreeShipping = false;
     if (couponCode) {
       const code = String(couponCode).toUpperCase().trim();
-      const BACKEND_COUPONS = {
-        WELCOME10: { type: 'percent', value: 10 },
-        MITHILA15: { type: 'percent', value: 15 },
-        ART500: { type: 'flat', value: 500 },
-        FIRSTORDER: { type: 'percent', value: 20 },
-        BETA99: { type: 'percent', value: 99, freeShipping: true, singleUse: true },
-        BETA999: { type: 'percent', value: 99.9, freeShipping: true, singleUse: true },
-      };
-      const coupon = BACKEND_COUPONS[code];
+      const coupon = await Coupon.findOne({ code, isActive: true });
       if (!coupon) {
-        return res.status(400).json({ success: false, error: "Invalid coupon code" });
+        return res.status(400).json({ success: false, error: "Invalid or inactive coupon code" });
       }
       if (coupon.singleUse) {
+        // For single use, we check if this specific user has used it.
         const existingOrder = await CartOrder.findOne({
           couponCode: code,
-          paymentStatus: { $nin: ['pending', 'failed'] }
+          paymentStatus: { $nin: ['pending', 'failed'] },
+          user: req.user.userId
         });
         if (existingOrder) {
-          return res.status(400).json({ success: false, error: "This coupon has already been used." });
+          return res.status(400).json({ success: false, error: "You have already used this coupon." });
         }
       }
       if (coupon.freeShipping) {
@@ -945,6 +971,13 @@ app.post("/verify-cart-payment", async (req, res) => {
     updatedOrder.transactionId = paymentId;
     updatedOrder.paidAt = new Date();
     await updatedOrder.save();
+
+    if (updatedOrder.couponCode) {
+      await Coupon.findOneAndUpdate(
+        { code: String(updatedOrder.couponCode).toUpperCase().trim() },
+        { $inc: { usageCount: 1 } }
+      );
+    }
 
     res.json({ success: true, message: 'Payment verified successfully', order: updatedOrder });
   } catch (error) {

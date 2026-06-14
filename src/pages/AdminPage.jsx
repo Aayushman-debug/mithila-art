@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline } from 'react-icons/io5';
+import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline, IoTicketOutline } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
 import ProductModal from '../components/admin/ProductModal';
+import CouponsManager from '../components/admin/CouponsManager';
 import FallbackImage from '../components/ui/FallbackImage';
 
 const AVAILABILITY_OPTIONS = [
@@ -43,7 +44,7 @@ const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: IoGridOutline },
   { id: 'products', label: 'Artworks', icon: IoImageOutline },
   { id: 'orders', label: 'Orders', icon: IoReceiptOutline },
-  { id: 'blog', label: 'Blog', icon: IoDocumentTextOutline },
+  { id: 'coupons', label: 'Coupons', icon: IoTicketOutline },
   { id: 'commissions', label: 'Commissions', icon: IoBrushOutline },
 ];
 
@@ -707,6 +708,13 @@ export default function AdminPage() {
                     </table>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Coupons */}
+            {activeTab === 'coupons' && (
+              <motion.div key="coupons" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                <CouponsManager showToast={showToast} />
               </motion.div>
             )}
 

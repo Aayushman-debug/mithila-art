@@ -476,13 +476,7 @@ export default function ShopPage() {
             inStock: p.stock > 0 && p.available !== false,
             artist: p.artist || 'Mithila Artist',
           }));
-          const mergedProducts = [...paintings];
-          mappedProducts.forEach(mp => {
-            const index = mergedProducts.findIndex(p => p.id === mp.id);
-            if (index !== -1) mergedProducts[index] = mp;
-            else mergedProducts.push(mp);
-          });
-          setProducts(mergedProducts);
+          setProducts(mappedProducts);
         } else {
           setProducts(paintings);
         }

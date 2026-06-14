@@ -183,8 +183,10 @@ export default function GalleryPage() {
         if (response.data.success && response.data.products) {
           const mappedProducts = response.data.products.map(p => ({
             ...p,
-            id: p._id || p.productId,
-            artist: 'Mithila Artist',
+            id: p.productId || p._id,
+            images: (p.images && p.images.length > 0) ? p.images : (p.gallery && p.gallery.length > 0 ? p.gallery : (p.image ? [p.image] : [])),
+            inStock: p.stock > 0 && p.available !== false,
+            artist: p.artist || 'Mithila Artist',
           }));
           setProducts(mappedProducts);
         } else {

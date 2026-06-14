@@ -195,6 +195,7 @@ export const paymentAPI = {
   createCartOrder: (data) => api.post('/create-cart-order', data),
   verifyCartPayment: (data) => api.post('/verify-cart-payment', data),
   createUpiOrder: (data) => api.post('/create-upi-order', data),
+  validateCoupon: (data) => api.post('/validate-coupon', data),
 };
 
 // Admin API calls
