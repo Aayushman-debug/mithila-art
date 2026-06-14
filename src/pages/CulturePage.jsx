@@ -521,6 +521,71 @@ function FestivalsSection() {
   );
 }
 
+// ─── 5.5 RITUALS & DAILY LIFE ─────────────────────────────────────────────────
+const RITUALS = [
+  {
+    title: 'Birth & Coming of Age',
+    description: 'When a child is born, the birth room is painted with protective symbols and images of Krishna\'s childhood. As daughters come of age, they are taught the family\'s painting tradition — a rite of passage that connects each generation to the artistic lineage.',
+    icon: IoSparklesOutline,
+    color: 'text-mithila-yellow',
+    bg: 'bg-mithila-yellow/5',
+  },
+  {
+    title: 'Harvest & Seasonal Rites',
+    description: 'Paintings mark the agricultural calendar: rice-planting songs are accompanied by floor art, and harvest festivals feature elaborate compositions celebrating the abundance of the land. The Tree of Life motif connects human prosperity to natural cycles.',
+    icon: IoLeafOutline,
+    color: 'text-mithila-green',
+    bg: 'bg-mithila-green/5',
+  },
+  {
+    title: 'Prayer & Devotion',
+    description: 'Every Maithil home features a puja room adorned with paintings of the family\'s chosen deities — Durga, Shiva, Krishna, or Ganesha. These devotional panels are repainted for each major prayer ceremony, ensuring the spiritual vitality of the home.',
+    icon: IoSunnyOutline,
+    color: 'text-mithila-purple',
+    bg: 'bg-mithila-purple/5',
+  },
+  {
+    title: 'Community & Identity',
+    description: 'Mithila painting has become a powerful marker of regional identity. The Madhubani railway station, government buildings, and even the Indian Parliament feature Mithila murals — a public declaration that art and community are inseparable in this tradition.',
+    icon: IoPeopleOutline,
+    color: 'text-mithila-blue',
+    bg: 'bg-mithila-blue/5',
+  },
+];
+
+function RitualsSection() {
+  return (
+    <section className="py-24 bg-white dark:bg-warm-gray-950 relative overflow-hidden">
+      <div className="container-custom relative z-10">
+        <SectionHeading
+          title="Woven into Life Itself"
+          subtitle="Mithila painting is not merely decorative — it is a living ritual practice that sanctifies every milestone of human experience"
+          accent
+          centered
+        />
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+          {RITUALS.map((ritual, i) => (
+            <motion.div
+              key={ritual.title}
+              initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-30px' }}
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5 } } }}
+            >
+              <div className={`${ritual.bg} border border-warm-gray-100 dark:border-warm-gray-800 rounded-2xl p-6 h-full hover:shadow-card-hover transition-all duration-500 group`}>
+                <div className={`w-14 h-14 rounded-xl ${ritual.bg} border border-current/10 flex items-center justify-center mb-4 ${ritual.color} group-hover:scale-110 transition-transform duration-300`}>
+                  <ritual.icon className="text-2xl" />
+                </div>
+                <h3 className="font-display text-xl font-bold text-charcoal dark:text-white mb-3">{ritual.title}</h3>
+                <p className="text-warm-gray-600 dark:text-warm-gray-300 font-body leading-relaxed text-sm">{ritual.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── 6. SYMBOLISM ─────────────────────────────────────────────────────────────
 const SYMBOLS = [
   { name: 'Fish (Machh)', emoji: '🐟', meaning: 'The fish is the most universal symbol in Mithila art — representing fertility, prosperity, conjugal love, and abundance. Fish appear in virtually every Kohbar (wedding) painting. The pair of fish is a direct invocation of the divine couple — Shiva and Parvati, or Vishnu and Lakshmi.', vedic: 'Also associated with Matsya, the first avatar of Vishnu.' },
@@ -806,6 +871,25 @@ function PaletteSection() {
               </motion.div>
             ))}
 
+            {/* Traditional surfaces */}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mt-8 bg-earth-500/10 border border-earth-500/20 rounded-xl p-6">
+              <h4 className="font-display text-lg font-bold text-earth-400 mb-3">Traditional Painting Surfaces</h4>
+              <ul className="space-y-2">
+                {[
+                  'Freshly plastered mud walls (bhitti chitra)',
+                  'Earthen floors (aripan)',
+                  'Handmade paper (kagaz)',
+                  'Canvas cloth (kapda)',
+                  'Papier-mâché objects',
+                ].map((surface) => (
+                  <li key={surface} className="text-white/50 font-body text-sm flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-earth-500 flex-shrink-0" />
+                    {surface}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
             {/* Artist at work image */}
             <div className="rounded-xl overflow-hidden mt-2">
               <VerifiedImage
@@ -888,6 +972,7 @@ export default function CulturePage() {
       <Helmet>
         <title>Mithila Culture — Heritage, Festivals & Traditions | Lalita Pathak</title>
         <meta name="description" content="A museum-quality guide to the culture, festivals, symbolism, painting styles, and historical geography of the Mithila region of Bihar, India. Including Chhath Puja, Sama Chakeva, Kohbar art, and the five styles of Madhubani painting." />
+        <link rel="canonical" href="https://lalitapathak.com/culture" />
       </Helmet>
 
       <Hero />
@@ -895,6 +980,7 @@ export default function CulturePage() {
       <OriginSection />
       <Timeline />
       <FestivalsSection />
+      <RitualsSection />
       <SymbolismSection />
       <StylesSection />
       <PaletteSection />

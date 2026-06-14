@@ -11,7 +11,7 @@ const footerLinks = {
     { name: 'Blog', path: '/blog' },
   ],
   information: [
-    { name: 'Mithila History', path: '/mithila-history' },
+    { name: 'Culture', path: '/culture' },
     { name: 'Commission', path: '/commission' },
     { name: 'Testimonials', path: '/testimonials' },
     { name: 'Contact', path: '/contact' },

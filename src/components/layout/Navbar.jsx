@@ -13,7 +13,6 @@ const navLinks = [
   { name: 'Gallery', path: '/gallery' },
   { name: 'Shop', path: '/shop' },
   { name: 'Commission', path: '/commission' },
-  { name: 'History', path: '/mithila-history' },
   { name: 'Culture', path: '/culture' },
   { name: 'Artists', path: '/artists' },
   { name: 'Blog', path: '/blog' },
@@ -45,7 +44,7 @@ export default function Navbar() {
   const { isDark, toggleTheme, darkPalette, setDarkPalette, lightPalette, setLightPalette } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
-  const isHeroPage = ['/', '/about', '/culture', '/mithila-history'].includes(location.pathname);
+  const isHeroPage = ['/', '/about', '/culture'].includes(location.pathname);
   const isNavbarScrolled = !isHeroPage || scrolled;
 
   useEffect(() => {

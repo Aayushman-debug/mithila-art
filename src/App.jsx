@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -21,7 +21,7 @@ const CartPage = lazy(() => import('./pages/CartPage'));
 const CommissionPage = lazy(() => import('./pages/CommissionPage'));
 const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 const TestimonialsPage = lazy(() => import('./pages/TestimonialsPage'));
-const MithilaHistoryPage = lazy(() => import('./pages/MithilaHistoryPage'));
+
 const CulturePage = lazy(() => import('./pages/CulturePage'));
 const ArtistsPage = lazy(() => import('./pages/ArtistsPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
@@ -75,7 +75,8 @@ export default function App() {
                 <Route path="/commission" element={<CommissionPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/testimonials" element={<TestimonialsPage />} />
-                <Route path="/mithila-history" element={<MithilaHistoryPage />} />
+                <Route path="/mithila-history" element={<Navigate to="/culture" replace />} />
+                <Route path="/history" element={<Navigate to="/culture" replace />} />
                 <Route path="/culture" element={<CulturePage />} />
                 <Route path="/artists" element={<ArtistsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
