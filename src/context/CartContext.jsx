@@ -72,8 +72,8 @@ export function CartProvider({ children }) {
         currentItems.map(async (item) => {
           try {
             const res = await productAPI.getProductById(item.id);
-            if (res.data && res.data.success && res.data.data) {
-              const product = res.data.data;
+            if (res.data && res.data.success && res.data.product) {
+              const product = res.data.product;
               const firstImg = product.images?.[0];
               const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || product.image;
               

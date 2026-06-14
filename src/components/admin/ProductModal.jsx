@@ -59,19 +59,23 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
     setIsUploading(true);
     setError('');
     
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setFormData(prev => ({
-        ...prev,
-        images: [...prev.images, { url: reader.result, public_id: `local_${Date.now()}` }]
-      }));
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await uploadAPI.uploadImage(formData);
+      if (res.data.success) {
+        setFormData(prev => ({
+          ...prev,
+          images: [...prev.images, { url: res.data.url, public_id: res.data.public_id }]
+        }));
+      } else {
+        setError(res.data.message || 'Failed to upload image');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error uploading image');
+    } finally {
       setIsUploading(false);
-    };
-    reader.onerror = error => {
-      setError('Error converting image to Base64');
-      setIsUploading(false);
-    };
+    }
   };
 
   const removeImage = async (index, publicId) => {

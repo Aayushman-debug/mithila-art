@@ -506,7 +506,10 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
     let calculatedSubtotal = 0;
     const validatedItems = [];
     for (const item of items) {
-      const dbProduct = await Product.findOne({ productId: item.productId });
+      const query = mongoose.Types.ObjectId.isValid(item.productId)
+        ? { $or: [{ _id: item.productId }, { productId: item.productId }] }
+        : { productId: item.productId };
+      const dbProduct = await Product.findOne(query);
       if (!dbProduct) {
         return res.status(404).json({ success: false, error: `Product not found: ${item.title}` });
       }
@@ -673,7 +676,10 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
     let calculatedSubtotal = 0;
     const validatedItems = [];
     for (const item of items) {
-      const dbProduct = await Product.findOne({ productId: item.productId });
+      const query = mongoose.Types.ObjectId.isValid(item.productId)
+        ? { $or: [{ _id: item.productId }, { productId: item.productId }] }
+        : { productId: item.productId };
+      const dbProduct = await Product.findOne(query);
       if (!dbProduct) {
         return res.status(404).json({ success: false, error: `Product not found: ${item.title}` });
       }
