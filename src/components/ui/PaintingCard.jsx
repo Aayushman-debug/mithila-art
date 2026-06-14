@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoCartOutline, IoEyeOutline, IoHeartOutline, IoHeart, IoChevronBackOutline, IoChevronForwardOutline, IoMailOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import { useInView } from 'react-intersection-observer';
 import FallbackImage from './FallbackImage';
 
 // ── Availability helpers ─────────────────────────────────────────────────────
@@ -52,6 +53,8 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
   const images = painting.images && painting.images.length > 0 ? painting.images : [painting.image];
   const [currentImg, setCurrentImg] = useState(0);
 
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: '200px 0px' });
+
   const status = resolveStatus(painting);
   const statusConfig = STATUS_CONFIG[status];
 
@@ -86,6 +89,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
     <>
       <motion.div
         layout
+        ref={ref}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
@@ -106,11 +110,13 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                 transition={{ duration: 0.3 }}
                 className="w-full h-full"
               >
-                <FallbackImage
-                  src={typeof images[currentImg] === 'object' ? images[currentImg]?.url : images[currentImg]}
-                  alt={`${title} - Image ${currentImg + 1}`}
-                  className={`w-full h-full ${isCartDisabled ? 'brightness-75' : ''}`}
-                />
+                {inView && (
+                  <FallbackImage
+                    src={typeof images[currentImg] === 'object' ? images[currentImg]?.url : images[currentImg]}
+                    alt={`${title} - Image ${currentImg + 1}`}
+                    className={`w-full h-full ${isCartDisabled ? 'brightness-75' : ''}`}
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
