@@ -7,6 +7,7 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [imgSrc, setImgSrc] = useState(src);
+  const imgRef = React.useRef(null);
 
   useEffect(() => {
     let finalSrc = src;
@@ -24,6 +25,16 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
     setIsLoading(true);
     setHasError(false);
   }, [src]);
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      if (imgRef.current.naturalWidth === 0) {
+        handleError();
+      } else {
+        handleLoad();
+      }
+    }
+  }, [imgSrc]);
 
   const handleError = () => {
     if (!hasError && fallbackSrc) {
@@ -60,6 +71,7 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
       {/* Actual Image */}
       {!hasError ? (
         <img
+          ref={imgRef}
           src={imgSrc}
           alt={alt || 'Image'}
           loading="lazy"

@@ -203,9 +203,9 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
                 <label className="block text-sm font-medium text-warm-gray-600 mb-2">Variant Images</label>
                 <div className="flex flex-wrap gap-4 mb-4">
                   {formData.images.map((img, i) => (
-                    <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-cream-200 group">
+                    <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-cream-200">
                       <img src={img.url} className="w-full h-full object-cover" alt="Product" />
-                      <button type="button" onClick={() => removeImage(i, img.public_id)} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><IoTrashOutline size={14} /></button>
+                      <button type="button" onClick={() => removeImage(i, img.public_id)} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full shadow hover:bg-red-600 transition-colors"><IoTrashOutline size={14} /></button>
                     </div>
                   ))}
 
