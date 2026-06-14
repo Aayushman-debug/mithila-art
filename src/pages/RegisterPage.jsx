@@ -121,7 +121,7 @@ export default function SignupPage() {
         <meta name="description" content="Create your account" />
       </Helmet>
 
-      <div className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-32 pb-12 px-4">
+      <div className="min-h-screen bg-cream-50 dark:bg-warm-gray-900 pt-32 pb-12 px-4 overflow-x-hidden">
         <div className="max-w-lg mx-auto">
           <motion.div
             initial="hidden"

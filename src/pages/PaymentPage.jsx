@@ -256,7 +256,7 @@ export default function PaymentPage() {
 
               <div className="border-t border-earth-200 pt-6">
                 <p className="text-warm-gray-600 text-sm mb-2">Amount Due</p>
-                <p className="text-earth-700 font-display text-5xl font-bold">₹{commission.quotedBudget}</p>
+                <p className="text-earth-700 font-display text-3xl md:text-5xl font-bold">₹{commission.quotedBudget}</p>
                 <p className="text-warm-gray-500 text-xs mt-2">Secured payment via Razorpay</p>
               </div>
             </div>

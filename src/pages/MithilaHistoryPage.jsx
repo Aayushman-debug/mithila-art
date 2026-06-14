@@ -227,7 +227,7 @@ function HeroSection() {
             <span className="h-px w-16 bg-gradient-to-l from-transparent to-earth-500" />
           </motion.div>
 
-          <motion.h1 variants={fadeUp} className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white !leading-[1.05]">
+          <motion.h1 variants={fadeUp} className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white !leading-[1.05]">
             The Sacred Legacy of{' '}
             <span className="bg-gradient-to-r from-earth-400 via-cream-300 to-earth-400 bg-clip-text text-transparent">
               Mithila Art
