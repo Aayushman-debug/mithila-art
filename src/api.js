@@ -209,6 +209,10 @@ export const adminAPI = {
   getCommissions: () => api.get('/api/admin/commissions'),
   getProducts: () => api.get('/api/admin/products'),
   cleanupBase64Images: () => api.post('/api/admin/cleanup'),
+  getCoupons: () => api.get('/api/admin/coupons'),
+  createCoupon: (data) => api.post('/api/admin/coupons', data),
+  toggleCoupon: (id) => api.put(`/api/admin/coupons/${id}/toggle`),
+  deleteCoupon: (id) => api.delete(`/api/admin/coupons/${id}`),
 };
 
 export default api;
