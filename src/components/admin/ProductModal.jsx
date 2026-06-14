@@ -128,60 +128,60 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
             <h3 className="font-display font-bold text-lg text-charcoal">{productToEdit ? 'Edit Variant' : 'New Variant'}</h3>
             <button onClick={onClose} className="p-2 text-warm-gray-400 hover:text-mithila-red transition-colors bg-white rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
           </div>
-          
+
           <div className="p-6 overflow-y-auto flex-1">
             <form id="productForm" onSubmit={handleSubmit} className="space-y-6">
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Title</label>
-                  <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input required type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Product ID (Unique SKU)</label>
-                  <input required type="text" value={formData.productId} onChange={e => setFormData({...formData, productId: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input required type="text" value={formData.productId} onChange={e => setFormData({ ...formData, productId: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
               </div>
 
               <div>
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={formData.featured} onChange={e => setFormData({...formData, featured: e.target.checked})} className="w-4 h-4 text-earth-500 rounded border-cream-200 focus:ring-earth-500" />
+                  <input type="checkbox" checked={formData.featured} onChange={e => setFormData({ ...formData, featured: e.target.checked })} className="w-4 h-4 text-earth-500 rounded border-cream-200 focus:ring-earth-500" />
                   <span className="text-sm font-medium text-warm-gray-600">Featured Artwork (Show on homepage/top of gallery)</span>
                 </label>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-warm-gray-600 mb-1">Description</label>
-                <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none"></textarea>
+                <textarea rows="3" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none"></textarea>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Price (₹)</label>
-                  <input required type="number" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input required type="number" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Category</label>
-                  <input type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input type="text" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Size</label>
-                  <input type="text" value={formData.size} onChange={e => setFormData({...formData, size: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input type="text" value={formData.size} onChange={e => setFormData({ ...formData, size: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Medium</label>
-                  <input type="text" value={formData.medium} onChange={e => setFormData({...formData, medium: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input type="text" value={formData.medium} onChange={e => setFormData({ ...formData, medium: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Stock</label>
-                  <input required type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
+                  <input required type="number" value={formData.stock} onChange={e => setFormData({ ...formData, stock: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-warm-gray-600 mb-1">Availability</label>
-                  <select value={formData.availabilityStatus} onChange={e => setFormData({...formData, availabilityStatus: e.target.value})} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none">
+                  <select value={formData.availabilityStatus} onChange={e => setFormData({ ...formData, availabilityStatus: e.target.value })} className="w-full p-2 border border-cream-200 rounded-lg focus:ring-2 focus:ring-earth-500 outline-none">
                     <option value="available">Available</option>
                     <option value="only_1_left">Only 1 Left</option>
                     <option value="out_of_stock">Out of Stock</option>
@@ -198,10 +198,10 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
                   {formData.images.map((img, i) => (
                     <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-cream-200 group">
                       <img src={img.url} className="w-full h-full object-cover" alt="Product" />
-                      <button type="button" onClick={() => removeImage(i, img.public_id)} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><IoTrashOutline size={14}/></button>
+                      <button type="button" onClick={() => removeImage(i, img.public_id)} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><IoTrashOutline size={14} /></button>
                     </div>
                   ))}
-                  
+
                   <label className="w-24 h-24 rounded-xl border-2 border-dashed border-cream-200 flex flex-col items-center justify-center text-warm-gray-400 hover:text-earth-500 hover:border-earth-500 transition-colors cursor-pointer bg-cream-50">
                     <IoCloudUploadOutline size={24} />
                     <span className="text-xs mt-1 font-medium">{isUploading ? 'Uploading...' : 'Upload'}</span>
@@ -211,7 +211,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
               </div>
 
               {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
-              
+
             </form>
           </div>
 

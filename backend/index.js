@@ -109,13 +109,13 @@ const { sanitize } = mongoSanitize;
 app.use((req, res, next) => {
   try {
     if (req.body) req.body = sanitize(req.body);
-  } catch (e) {}
+  } catch (e) { }
   try {
     if (req.params) req.params = sanitize(req.params);
-  } catch (e) {}
+  } catch (e) { }
   try {
     if (req.headers) req.headers = sanitize(req.headers);
-  } catch (e) {}
+  } catch (e) { }
   try {
     if (req.query) {
       // If query property is writable, replace; otherwise mutate in-place
@@ -129,7 +129,7 @@ app.use((req, res, next) => {
         Object.assign(req.query, cleaned);
       }
     }
-  } catch (e) {}
+  } catch (e) { }
   next();
 });
 // Note: xss-clean middleware has been removed due to prototype pollution vulnerabilities.
@@ -268,7 +268,7 @@ app.post("/commissions", async (req, res) => {
 app.get("/commission/:commissionId", authenticate, async (req, res) => {
   try {
     const commission = await Commission.findById(req.params.commissionId);
-    
+
     if (!commission) {
       return res.status(404).json({
         success: false,
@@ -545,9 +545,9 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
         return res.status(400).json({ success: false, error: "Invalid coupon code" });
       }
       if (coupon.singleUse) {
-        const existingOrder = await CartOrder.findOne({ 
-          couponCode: code, 
-          paymentStatus: { $nin: ['pending', 'failed'] } 
+        const existingOrder = await CartOrder.findOne({
+          couponCode: code,
+          paymentStatus: { $nin: ['pending', 'failed'] }
         });
         if (existingOrder) {
           return res.status(400).json({ success: false, error: "This coupon has already been used." });
@@ -715,9 +715,9 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
         return res.status(400).json({ success: false, error: "Invalid coupon code" });
       }
       if (coupon.singleUse) {
-        const existingOrder = await CartOrder.findOne({ 
-          couponCode: code, 
-          paymentStatus: { $nin: ['pending', 'failed'] } 
+        const existingOrder = await CartOrder.findOne({
+          couponCode: code,
+          paymentStatus: { $nin: ['pending', 'failed'] }
         });
         if (existingOrder) {
           return res.status(400).json({ success: false, error: "This coupon has already been used." });

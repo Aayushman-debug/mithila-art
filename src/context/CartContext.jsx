@@ -76,7 +76,7 @@ export function CartProvider({ children }) {
               const product = res.data.product;
               const firstImg = product.images?.[0];
               const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || product.image;
-              
+
               return {
                 ...item,
                 price: product.price, // Update price
