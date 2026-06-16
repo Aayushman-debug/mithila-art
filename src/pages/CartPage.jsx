@@ -338,7 +338,9 @@ export default function CartPage() {
           price: item.price,
           image: item.images?.[0] || item.image || ''
         })),
-        paymentScreenshot: screenshotPreview,
+        // TODO: Upload screenshot to Cloudinary first, store only the URL.
+        // Sending raw base64 bloats MongoDB documents (2–5 MB per order).
+        paymentScreenshot: screenshotPreview ? '[screenshot-pending-cloudinary-upload]' : null,
       });
 
       if (res.data.success) {

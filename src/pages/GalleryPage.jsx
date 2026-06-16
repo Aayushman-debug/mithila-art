@@ -8,31 +8,16 @@ import {
   FaTimes,
   FaExpand,
   FaFilter,
-  FaThLarge,
-  FaEye,
   FaHeart,
   FaShoppingBag,
   FaArrowRight,
 } from 'react-icons/fa';
-import { IoSparkles, IoGridOutline } from 'react-icons/io5';
+import { IoGridOutline } from 'react-icons/io5';
 
-import SectionHeading from '../components/ui/SectionHeading';
-
-import { paintings, categories } from '../data/paintings';
+import { paintings } from '../data/paintings';
 import { formatPrice, generateWhatsAppLink } from '../utils/helpers';
 import { productAPI } from '../api';
 import FallbackImage from '../components/ui/FallbackImage';
-
-/* ───────── Animation Variants ───────── */
-const staggerGrid = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-};
 
 /* ───────── Lazy Image Component ───────── */
 function LazyImage({ src, alt, className, onClick }) {

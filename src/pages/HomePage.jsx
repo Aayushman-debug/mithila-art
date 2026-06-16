@@ -755,6 +755,11 @@ function NewsletterSection() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email) {
+      // No email backend wired — redirect to WhatsApp so the artist can follow up
+      window.open(
+        `https://wa.me/919142168466?text=${encodeURIComponent(`Hi! I want updates on Mithila Art. My email: ${email}`)}`,
+        '_blank'
+      );
       setSubmitted(true);
       setEmail('');
       setTimeout(() => setSubmitted(false), 4000);
@@ -834,7 +839,7 @@ function NewsletterSection() {
                   className="flex items-center justify-center gap-3 py-4 px-6 rounded-full bg-mithila-green/20 border border-mithila-green/30 text-mithila-green-light"
                 >
                   <IoSparkles className="text-xl" />
-                  <span className="font-body font-medium">Welcome to the Mithila art family!</span>
+                  <span className="font-body font-medium">Thanks! We’ll be in touch via WhatsApp 🙏</span>
                 </motion.div>
               )}
             </AnimatePresence>
