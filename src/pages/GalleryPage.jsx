@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { useInView } from 'react-intersection-observer';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
@@ -58,8 +58,6 @@ function GalleryItem({ item, index }) {
 
   return (
     <motion.div
-      layout
-      layoutId={`gallery-item-${item.id}`}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
@@ -363,7 +361,6 @@ export default function GalleryPage() {
           <div className="absolute inset-0 mithila-pattern opacity-10" />
 
           <div className="container-custom relative z-10">
-            <LayoutGroup>
               {/* Waking-up banner — shown above the grid, not instead of it */}
               {productsLoading && showWakingUpMsg && (
                 <div className="bg-earth-500/10 dark:bg-earth-500/5 border border-earth-500/20 text-earth-700 dark:text-earth-400 p-4 rounded-xl flex flex-col items-center justify-center text-center animate-pulse mb-6">
@@ -374,10 +371,7 @@ export default function GalleryPage() {
 
               <AnimatePresence mode="popLayout">
                 {filteredPaintings.length > 0 ? (
-                  <motion.div
-                    layout
-                    className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5"
-                  >
+                  <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [&>*]:mb-5">
                     {filteredPaintings.map((item, index) => (
                       <GalleryItem
                         key={item.id}
@@ -385,7 +379,7 @@ export default function GalleryPage() {
                         index={index}
                       />
                     ))}
-                  </motion.div>
+                  </div>
                 ) : (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -411,7 +405,6 @@ export default function GalleryPage() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </LayoutGroup>
           </div>
         </section>
 

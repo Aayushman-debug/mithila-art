@@ -40,6 +40,9 @@ export default function ComparePage() {
           </div>
         ) : (
           <div className="overflow-x-auto pb-6 scrollbar-hide">
+            {compareItems.length > 1 && (
+              <p className="sm:hidden text-xs text-warm-gray-400 text-center mb-3 font-body">← Swipe to compare artworks →</p>
+            )}
             <div className="flex gap-6 min-w-max">
               {compareItems.map((painting) => (
                 <div key={painting.id} className="w-[300px] flex flex-col bg-white dark:bg-warm-gray-800 rounded-2xl shadow-card border border-cream-200/50 dark:border-warm-gray-700/50 overflow-hidden relative group">
