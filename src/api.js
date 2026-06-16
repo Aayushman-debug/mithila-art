@@ -92,9 +92,10 @@ export const authAPI = {
 };
 
 // Commission API calls
+// NOTE: Backend commission routes must be mounted at /api/commissions
 export const commissionAPI = {
-  submitCommission: (data) => api.post('/commissions', data),
-  getCommission: (id) => api.get(`/commission/${id}`),
+  submitCommission: (data) => api.post('/api/commissions', data),
+  getCommission: (id) => api.get(`/api/commissions/${id}`),
 };
 
 // User API calls
@@ -167,14 +168,8 @@ export function prefetchProducts() {
   });
 }
 
-// Collection API calls
-export const collectionAPI = {
-  getCollections: () => api.get('/api/collections'),
-  getCollectionById: (id) => api.get(`/api/collections/${id}`),
-  createCollection: (data) => api.post('/api/collections', data),
-  updateCollection: (id, data) => api.put(`/api/collections/${id}`, data),
-  deleteCollection: (id) => api.delete(`/api/collections/${id}`),
-};
+// NOTE: collectionAPI removed — no backend routes exist for /api/collections
+// and this export was never imported anywhere in the project.
 
 // Upload API calls
 export const uploadAPI = {
@@ -188,14 +183,16 @@ export const uploadAPI = {
 
 
 // Payment API calls
+// NOTE: These routes must match the backend server mount paths exactly.
+// If the backend mounts payment routes at /api/payments, update the paths below.
 export const paymentAPI = {
-  createCommissionOrder: (data) => api.post('/create-order', data),
-  verifyCommissionPayment: (data) => api.post('/verify-payment', data),
-  markPaymentFailed: (data) => api.post('/payment-failed', data),
-  createCartOrder: (data) => api.post('/create-cart-order', data),
-  verifyCartPayment: (data) => api.post('/verify-cart-payment', data),
-  createUpiOrder: (data) => api.post('/create-upi-order', data),
-  validateCoupon: (data) => api.post('/validate-coupon', data),
+  createCommissionOrder: (data) => api.post('/api/create-order', data),
+  verifyCommissionPayment: (data) => api.post('/api/verify-payment', data),
+  markPaymentFailed: (data) => api.post('/api/payment-failed', data),
+  createCartOrder: (data) => api.post('/api/create-cart-order', data),
+  verifyCartPayment: (data) => api.post('/api/verify-cart-payment', data),
+  createUpiOrder: (data) => api.post('/api/create-upi-order', data),
+  validateCoupon: (data) => api.post('/api/validate-coupon', data),
 };
 
 // Admin API calls
