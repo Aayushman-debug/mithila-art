@@ -387,7 +387,7 @@ export default function CartPage() {
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex gap-4 justify-center flex-wrap">
             <Link to="/shop" className="btn-primary">Continue Shopping</Link>
-            <a href="https://wa.me/917488337792?text=Hi!%20I%20just%20placed%20an%20order." target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-2">
+            <a href="https://wa.me/919142168466?text=Hi!%20I%20just%20placed%20an%20order." target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-2">
               <IoLogoWhatsapp size={20} /> Track on WhatsApp
             </a>
           </motion.div>
@@ -545,7 +545,7 @@ export default function CartPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Phone *</label>
-                        <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="+91 74883 37792" />
+                        <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 bg-cream-50 dark:bg-warm-gray-700/50 border border-cream-200 dark:border-warm-gray-600 rounded-xl text-charcoal dark:text-cream-100 placeholder-warm-gray-400 dark:placeholder-warm-gray-500 focus:outline-none focus:ring-2 focus:ring-earth-500/30 focus:border-earth-500 font-body transition-all" placeholder="+91 91421 68466" />
                       </div>
                       <div>
                         <label className="block text-sm font-body font-medium text-warm-gray-600 mb-1">Address *</label>

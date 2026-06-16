@@ -64,9 +64,9 @@ const contactCards = [
   {
     icon: FaPhone,
     title: 'Phone',
-    primary: '+91 74883 37792',
+    primary: '+91 91421 68466',
     secondary: 'Call or WhatsApp',
-    link: 'tel:+917488337792',
+    link: 'tel:+919142168466',
     color: 'bg-mithila-green',
   },
   {
@@ -93,7 +93,7 @@ const socialLinks = [
   { icon: FaTwitter, href: 'https://twitter.com', label: 'Twitter', color: 'hover:bg-sky-500' },
   { icon: FaPinterestP, href: 'https://pinterest.com', label: 'Pinterest', color: 'hover:bg-red-600' },
   { icon: FaYoutube, href: 'https://youtube.com', label: 'YouTube', color: 'hover:bg-red-500' },
-  { icon: FaWhatsapp, href: 'https://wa.me/917488337792', label: 'WhatsApp', color: 'hover:bg-green-500' },
+  { icon: FaWhatsapp, href: 'https://wa.me/919142168466', label: 'WhatsApp', color: 'hover:bg-green-500' },
 ];
 
 const workingHours = [
@@ -292,7 +292,7 @@ function ContactForm() {
                 value={form.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
                 onBlur={() => handleBlur('phone')}
-                placeholder="+91 74883 37792"
+                placeholder="+91 91421 68466"
                 className={inputClasses('phone')}
               />
               {errors.phone && touched.phone && (
@@ -565,7 +565,7 @@ export default function ContactPage() {
 
                 {/* Quick WhatsApp */}
                 <motion.a
-                  href="https://wa.me/917488337792?text=Hello%20Lalita%20ji%2C%20I%20am%20interested%20in%20your%20Mithila%20paintings"
+                  href="https://wa.me/919142168466?text=Hello%20Lalita%20ji%2C%20I%20am%20interested%20in%20your%20Mithila%20paintings"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block"

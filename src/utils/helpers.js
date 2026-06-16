@@ -112,10 +112,10 @@ export function debounce(fn, delay = 300) {
 /**
  * Generate a WhatsApp click-to-chat link with a pre-filled message.
  * @param {string} message — text to pre-fill
- * @param {string} [phone='+917488337792'] — phone number with country code
+ * @param {string} [phone='+919142168466'] — phone number with country code
  * @returns {string} WhatsApp URL
  */
-export function generateWhatsAppLink(message, phone = '+917488337792') {
+export function generateWhatsAppLink(message, phone = '+919142168466') {
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encoded}`;
 }

@@ -491,7 +491,7 @@ export default function Navbar() {
                 )}
 
                 <div className="mt-6 pt-6 border-t border-cream-200 text-center">
-                  <p className="text-body-sm">📞 +91 74883 37792</p>
+                  <p className="text-body-sm">📞 +91 91421 68466</p>
                   <p className="text-body-sm mt-1">✉️ pathaklalita129@gmail.com</p>
                 </div>
               </div>

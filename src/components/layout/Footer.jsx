@@ -42,7 +42,7 @@ const socialLinks = [
   },
   {
     icon: FaWhatsapp,
-    href: 'https://wa.me/917488337792',
+    href: 'https://wa.me/919142168466',
     label: 'WhatsApp'
   }
 ];
@@ -147,8 +147,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <IoCallOutline className="text-earth-400 flex-shrink-0" size={18} />
-                <a href="tel:+917488337792" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
-                  +91 74883 37792
+                <a href="tel:+919142168466" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
+                  +91 91421 68466
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -159,7 +159,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-earth-400 flex-shrink-0" size={18} />
-                <a href="https://wa.me/917488337792" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
+                <a href="https://wa.me/919142168466" className="text-warm-gray-300/70 hover:text-earth-400 text-sm transition-colors">
                   WhatsApp Us
                 </a>
               </li>

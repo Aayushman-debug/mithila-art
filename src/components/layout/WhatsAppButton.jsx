@@ -16,7 +16,7 @@ export default function WhatsAppButton() {
 
   return (
     <motion.a
-      href="https://wa.me/917488337792?text=Hi%20Lalita%20ji!%20I%27m%20interested%20in%20your%20Mithila%20paintings."
+      href="https://wa.me/919142168466?text=Hi%20Lalita%20ji!%20I%27m%20interested%20in%20your%20Mithila%20paintings."
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float group"
