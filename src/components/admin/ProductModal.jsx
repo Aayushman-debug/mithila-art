@@ -136,7 +136,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
             <button onClick={onClose} className="p-2 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
           </div>
 
-          <div className="p-6 overflow-y-auto flex-1">
+          <div className="p-4 md:p-6 overflow-y-auto flex-1">
             <form id="productForm" onSubmit={handleSubmit} className="space-y-6">
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

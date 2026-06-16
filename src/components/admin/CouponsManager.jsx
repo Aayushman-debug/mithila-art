@@ -169,7 +169,7 @@ export default function CouponsManager({ showToast }) {
       </AnimatePresence>
 
       <div className="bg-white dark:bg-warm-gray-800 rounded-2xl border border-cream-200 dark:border-warm-gray-700 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead className="bg-cream-50 dark:bg-warm-gray-900/50 border-b border-cream-200 dark:border-warm-gray-700 font-display text-sm text-warm-gray-500 dark:text-warm-gray-400">
               <tr>
@@ -214,6 +214,46 @@ export default function CouponsManager({ showToast }) {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden flex flex-col gap-4 p-4">
+          {loading ? (
+            <p className="text-center text-warm-gray-500 py-4 font-body text-sm">Loading coupons...</p>
+          ) : coupons.length === 0 ? (
+            <p className="text-center text-warm-gray-500 py-4 font-body text-sm">No coupons found</p>
+          ) : coupons.map(c => (
+            <div key={c._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="font-display font-bold text-lg text-charcoal dark:text-cream-100 uppercase">{c.code}</p>
+                  <p className="text-sm font-medium text-earth-600 dark:text-earth-400">
+                    {c.type === 'percent' ? `${c.value}% OFF` : `₹${c.value} OFF`}
+                  </p>
+                </div>
+                <button 
+                  onClick={() => handleToggle(c._id)}
+                  className={`text-xs px-3 py-1 rounded-full font-medium ${c.isActive ? 'bg-mithila-green/10 text-mithila-green' : 'bg-warm-gray-200 text-warm-gray-500 dark:bg-warm-gray-700'}`}
+                >
+                  {c.isActive ? 'Active' : 'Inactive'}
+                </button>
+              </div>
+              
+              <div className="flex flex-wrap items-center gap-2 text-xs text-warm-gray-500 dark:text-warm-gray-400 font-body">
+                <span>Usage: <strong className="text-charcoal dark:text-cream-200">{c.usageCount}</strong></span>
+                {(c.freeShipping || c.singleUse) && <span>•</span>}
+                {c.freeShipping && <span className="text-mithila-green font-medium">Free Shipping</span>}
+                {c.freeShipping && c.singleUse && <span>•</span>}
+                {c.singleUse && <span className="text-earth-600 dark:text-earth-400 font-medium">Single Use</span>}
+              </div>
+
+              <div className="flex justify-end mt-2 pt-2 border-t border-cream-200 dark:border-warm-gray-700">
+                <button onClick={() => handleDelete(c._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-mithila-red transition-colors flex items-center gap-1 text-xs font-medium">
+                  <IoTrashOutline size={16} /> Delete
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

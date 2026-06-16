@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline, IoTicketOutline } from 'react-icons/io5';
+import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline, IoTicketOutline, IoPeopleOutline } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
@@ -46,6 +46,7 @@ const tabs = [
   { id: 'orders', label: 'Orders', icon: IoReceiptOutline },
   { id: 'coupons', label: 'Coupons', icon: IoTicketOutline },
   { id: 'commissions', label: 'Commissions', icon: IoBrushOutline },
+  { id: 'users', label: 'Users', icon: IoPeopleOutline },
 ];
 
 function StatCard({ label, value, icon: Icon, color }) {
@@ -153,6 +154,7 @@ export default function AdminPage() {
   const [realOrders, setRealOrders] = useState([]);
   const [realCommissions, setRealCommissions] = useState([]);
   const [realProducts, setRealProducts] = useState([]);
+  const [realUsers, setRealUsers] = useState([]);
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState('');
   const [toast, setToast] = useState(null); // { message, type }
@@ -188,6 +190,10 @@ export default function AdminPage() {
         adminAPI.getCommissions().then(res => {
           if (res.data.success) setRealCommissions(res.data.commissions);
         }).catch(err => console.error('Failed to fetch admin commissions', err));
+
+        adminAPI.getUsers().then(res => {
+          if (res.data.success) setRealUsers(res.data.users);
+        }).catch(err => console.error('Failed to fetch admin users', err));
 
         adminAPI.getProducts().then(res => {
           if (res.data.success && res.data.products.length > 0) {
@@ -395,10 +401,10 @@ export default function AdminPage() {
         </div>
 
         {/* Mobile Tab Bar */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-warm-gray-800 border-t border-cream-200 dark:border-warm-gray-700 z-50 flex">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-warm-gray-800 border-t border-cream-200 dark:border-warm-gray-700 z-50 flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
-              className={`flex-1 py-3 flex flex-col items-center gap-1 text-xs font-body ${
+              className={`flex-none min-w-[76px] py-3 flex flex-col items-center gap-1 text-xs font-body ${
                 activeTab === id ? 'text-earth-500' : 'text-warm-gray-500 dark:text-warm-gray-400'
               }`}
             >
@@ -428,11 +434,14 @@ export default function AdminPage() {
             {/* Dashboard */}
             {activeTab === 'dashboard' && (
               <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                   <StatCard label="Total Paintings" value={paintings.length.toString()} icon={IoCubeOutline} color="bg-mithila-blue" />
+                  <StatCard label="Total Users" value={realUsers.length.toString()} icon={IoPeopleOutline} color="bg-purple-500" />
                   <StatCard label="Total Orders" value={realOrders.length.toString()} icon={IoReceiptOutline} color="bg-mithila-green" />
                   <StatCard label="Revenue" value={`₹${totalRevenue}`} icon={IoGridOutline} color="bg-earth-500" />
                   <StatCard label="Commissions" value={realCommissions.length.toString()} icon={IoBrushOutline} color="bg-mithila-orange" />
+                  <StatCard label="Pending Orders" value={realOrders.filter(o => o.status === 'Pending' || o.status === 'New').length.toString()} icon={IoReceiptOutline} color="bg-warm-gray-400" />
+                  <StatCard label="Pending Comms." value={realCommissions.filter(c => c.status === 'submitted' || c.status === 'Pending').length.toString()} icon={IoBrushOutline} color="bg-warm-gray-400" />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -619,7 +628,7 @@ export default function AdminPage() {
             {activeTab === 'orders' && (
               <motion.div key="orders" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="bg-white dark:bg-warm-gray-800 rounded-2xl shadow-card overflow-hidden">
-                  <div className="overflow-x-auto">
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className="text-left text-xs font-body font-semibold text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider border-b border-cream-100 dark:border-warm-gray-700">
@@ -707,6 +716,64 @@ export default function AdminPage() {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile Card View for Orders */}
+                  <div className="md:hidden flex flex-col gap-4 p-4">
+                    {realOrders.map((order) => (
+                      <div key={order._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{order.name}</p>
+                            <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">#{order.orderId || order._id.slice(-8)}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</p>
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium ${order.paymentMethod === 'upi' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
+                              {order.paymentMethod === 'upi' ? 'UPI' : 'Razorpay'}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between text-xs font-body text-warm-gray-500">
+                          <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                          <span className={`px-2 py-1 rounded-full font-medium ${order.paymentMethod === 'upi' ? (order.paymentVerification === 'verified' ? 'bg-mithila-green/10 text-mithila-green' : order.paymentVerification === 'rejected' ? 'bg-mithila-red/10 text-mithila-red' : 'bg-mithila-orange/10 text-mithila-orange') : (order.paymentStatus === 'paid' ? 'bg-mithila-green/10 text-mithila-green' : 'bg-warm-gray-100 text-warm-gray-600')}`}>
+                            {order.paymentMethod === 'upi' ? (order.paymentVerification || 'pending') : (order.paymentStatus || 'pending')}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-cream-200 dark:border-warm-gray-700">
+                          <select 
+                            value={order.status || 'Pending'} 
+                            onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                            className={`text-xs px-2 py-1.5 rounded-lg font-body font-medium outline-none ${statusColors[order.status || 'Pending']}`}
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Pending Payment Verification">Pending Payment Verification</option>
+                          </select>
+                          
+                          <div className="flex gap-1">
+                            <button className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-earth-500"><IoEyeOutline size={16} /></button>
+                            {order.paymentMethod === 'upi' && order.paymentScreenshot && (
+                              <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-earth-500"><IoImageOutline size={16} /></button>
+                            )}
+                            <button onClick={() => handleDeleteOrder(order._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
+                            {order.paymentMethod === 'upi' && order.paymentVerification === 'pending' && (
+                              <>
+                                <button onClick={() => handleVerifyPayment(order._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-mithila-green"><IoCheckmarkOutline size={16} /></button>
+                                <button onClick={() => handleRejectPayment(order._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-mithila-red"><IoCloseOutline size={16} /></button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {realOrders.length === 0 && (
+                      <p className="text-center text-warm-gray-500 py-4 font-body text-sm">No orders found.</p>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -718,14 +785,56 @@ export default function AdminPage() {
               </motion.div>
             )}
 
-            {/* Blog */}
-            {activeTab === 'blog' && (
-              <motion.div key="blog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-6 shadow-card text-center py-16">
-                  <IoDocumentTextOutline className="text-cream-300 mx-auto mb-4" size={48} />
-                  <h3 className="heading-sm text-charcoal dark:text-cream-100 mb-2">Blog Management</h3>
-                  <p className="text-body-sm max-w-md mx-auto mb-6">Create, edit, and manage your blog posts. Share stories about Mithila art and engage with your audience.</p>
-                  <button className="btn-primary">Create New Post</button>
+            {/* Users */}
+            {activeTab === 'users' && (
+              <motion.div key="users" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <div className="bg-white dark:bg-warm-gray-800 rounded-2xl shadow-card overflow-hidden">
+                  <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="text-left text-xs font-body font-semibold text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider border-b border-cream-100 dark:border-warm-gray-700">
+                          <th className="px-4 py-3">Name</th>
+                          <th className="px-4 py-3">Email</th>
+                          <th className="px-4 py-3">Role</th>
+                          <th className="px-4 py-3">Reg. Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {realUsers.map((u) => (
+                          <tr key={u._id} className="border-b border-cream-50 hover:bg-cream-50 dark:hover:bg-warm-gray-700 dark:bg-warm-gray-900/50 transition-colors">
+                            <td className="px-4 py-3 font-body font-medium text-sm text-charcoal dark:text-cream-100">{u.name}</td>
+                            <td className="px-4 py-3 font-body text-sm text-warm-gray-600 dark:text-warm-gray-300">{u.email}</td>
+                            <td className="px-4 py-3">
+                              <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-warm-gray-100 text-warm-gray-600'}`}>{u.role}</span>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-warm-gray-500 dark:text-warm-gray-400 font-body">{new Date(u.createdAt).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                        {realUsers.length === 0 && (
+                          <tr>
+                            <td colSpan="4" className="px-4 py-8 text-center text-warm-gray-500 dark:text-warm-gray-400 font-body">No users found.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile Card View for Users */}
+                  <div className="md:hidden flex flex-col gap-4 p-4">
+                    {realUsers.map((u) => (
+                      <div key={u._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-2">
+                        <div className="flex justify-between items-center">
+                          <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{u.name}</p>
+                          <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-warm-gray-100 text-warm-gray-600'}`}>{u.role}</span>
+                        </div>
+                        <p className="text-sm font-body text-warm-gray-600 dark:text-warm-gray-300 truncate">{u.email}</p>
+                        <p className="text-xs font-body text-warm-gray-500 dark:text-warm-gray-400">Registered: {new Date(u.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    ))}
+                    {realUsers.length === 0 && (
+                      <p className="text-center text-warm-gray-500 py-4 font-body text-sm">No users found.</p>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -734,7 +843,7 @@ export default function AdminPage() {
             {activeTab === 'commissions' && (
               <motion.div key="commissions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="bg-white dark:bg-warm-gray-800 rounded-2xl shadow-card overflow-hidden">
-                  <div className="overflow-x-auto">
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className="text-left text-xs font-body font-semibold text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider border-b border-cream-100 dark:border-warm-gray-700">
@@ -769,6 +878,43 @@ export default function AdminPage() {
                         )}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* Mobile Card View for Commissions */}
+                  <div className="md:hidden flex flex-col gap-4 p-4">
+                    {realCommissions.map((com) => (
+                      <div key={com._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{com.name}</p>
+                            <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">#{com.referenceId || com._id.slice(-6)}</p>
+                          </div>
+                          <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${statusColors[com.status] || 'bg-warm-gray-100'}`}>{com.status}</span>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-xs font-body mt-1">
+                          <div className="truncate">
+                            <p className="text-warm-gray-500">Email</p>
+                            <p className="font-medium text-charcoal dark:text-cream-100 truncate" title={com.email}>{com.email}</p>
+                          </div>
+                          <div className="truncate">
+                            <p className="text-warm-gray-500">Location</p>
+                            <p className="font-medium text-charcoal dark:text-cream-100 truncate" title={com.location}>{com.location}</p>
+                          </div>
+                          <div className="truncate">
+                            <p className="text-warm-gray-500">Style</p>
+                            <p className="font-medium text-earth-500 truncate" title={com.style || 'Custom'}>{com.style || 'Custom'}</p>
+                          </div>
+                          <div>
+                            <p className="text-warm-gray-500">Date</p>
+                            <p className="font-medium text-charcoal dark:text-cream-100">{new Date(com.submittedAt).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {realCommissions.length === 0 && (
+                      <p className="text-center text-warm-gray-500 py-4 font-body text-sm">No commission requests found.</p>
+                    )}
                   </div>
                 </div>
               </motion.div>
