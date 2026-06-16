@@ -22,7 +22,7 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits: { fileSize: 5 * 1024 * 1024 } }); // 5 MB max
 
 // @route   POST /api/upload
 // @desc    Upload an image
@@ -55,7 +55,12 @@ router.post('/delete', authenticate, authorizeAdmin, async (req, res) => {
     if (!public_id) {
       return res.status(400).json({ success: false, message: 'public_id is required' });
     }
-    
+
+    // Prevent deletion of assets outside this app's Cloudinary folder
+    if (!public_id.startsWith('mithila_art_uploads/')) {
+      return res.status(400).json({ success: false, message: 'Invalid public_id: must belong to the mithila_art_uploads folder' });
+    }
+
     const result = await cloudinary.uploader.destroy(public_id);
     
     if (result.result === 'ok') {

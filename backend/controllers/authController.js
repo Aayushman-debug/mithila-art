@@ -263,23 +263,26 @@ const login = async (req, res) => {
     const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'Account does not exist' });
+      // Generic message — prevents user enumeration
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
     // Compare passwords
     const isPasswordValid = await user.comparePassword(password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ success: false, message: 'Invalid password' });
+      // Generic message — prevents user enumeration
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
-    // Check email verification (Bypassed for Option A)
-    // if (!user.isVerified) {
-    //   return res.status(403).json({ 
-    //     success: false, 
-    //     message: 'Please verify your email address before logging in. Check your inbox for the verification link.' 
-    //   });
-    // }
+    // Enforce email verification before allowing login
+    if (!user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: 'Please verify your email address before logging in. Check your inbox for the verification link.',
+        requiresVerification: true,
+      });
+    }
 
     // Generate token
     const token = generateToken(user);
@@ -398,7 +401,8 @@ const forgotPassword = async (req, res) => {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      return res.status(404).json({ success: false, message: 'Account not found' });
+      // Return 200 with a generic message to prevent email enumeration
+      return res.status(200).json({ success: true, message: 'If this email is registered, a reset link has been sent.' });
     }
 
     const resetToken = crypto.randomBytes(20).toString('hex');
@@ -561,6 +565,21 @@ const facebookLogin = async (req, res) => {
     const { token } = req.body;
     if (!token) {
       return res.status(400).json({ success: false, message: 'Facebook token is required' });
+    }
+
+    // Verify the token was issued for THIS app, not any other Facebook app
+    const appId = process.env.FACEBOOK_APP_ID;
+    const appSecret = process.env.FACEBOOK_APP_SECRET;
+    if (!appId || !appSecret) {
+      console.error('FACEBOOK_APP_ID or FACEBOOK_APP_SECRET not configured');
+      return res.status(500).json({ success: false, message: 'Facebook login is not configured on the server' });
+    }
+    const debugRes = await axios.get(
+      `https://graph.facebook.com/debug_token?input_token=${token}&access_token=${appId}|${appSecret}`
+    );
+    const debugData = debugRes.data && debugRes.data.data;
+    if (!debugData || !debugData.is_valid || String(debugData.app_id) !== String(appId)) {
+      return res.status(401).json({ success: false, message: 'Invalid or expired Facebook token' });
     }
 
     const fbRes = await axios.get(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);

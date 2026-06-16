@@ -91,7 +91,16 @@ const updateProduct = async (req, res) => {
       ? { $or: [{ _id: id }, { productId: id }] }
       : { productId: id };
 
-    const updates = req.body;
+    // Allowlist to prevent mass assignment of internal fields
+    const ALLOWED_UPDATE_FIELDS = [
+      'title', 'description', 'category', 'size', 'medium', 'style',
+      'price', 'originalPrice', 'image', 'gallery', 'images',
+      'stock', 'available', 'availabilityStatus', 'featured',
+    ];
+    const updates = {};
+    for (const key of ALLOWED_UPDATE_FIELDS) {
+      if (req.body[key] !== undefined) updates[key] = req.body[key];
+    }
     const product = await Product.findOneAndUpdate(query, updates, {
       new: true,
       runValidators: true,
