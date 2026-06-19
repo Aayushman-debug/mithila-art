@@ -29,6 +29,7 @@ export default function ArtworkDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
 
@@ -40,6 +41,9 @@ export default function ArtworkDetailPage() {
         const res = await productAPI.getProductById(id);
         if (res.data.success) {
           setArtwork(res.data.product);
+          if (res.data.product.variants && res.data.product.variants.length > 0) {
+            setSelectedVariant(res.data.product.variants[0]);
+          }
         } else {
           setError('Artwork not found.');
         }
@@ -81,9 +85,19 @@ export default function ArtworkDetailPage() {
     }
   };
 
+  const getCartItem = () => ({
+    ...artwork,
+    variantId: selectedVariant?.variantId,
+    variantName: selectedVariant?.variantName,
+    price: selectedVariant ? selectedVariant.price : artwork.price,
+    image: selectedVariant?.image?.url || (artwork.images?.length > 0 ? (artwork.images[activeImageIndex]?.url || artwork.images[activeImageIndex]) : artwork.image),
+    size: selectedVariant ? selectedVariant.size : artwork.size,
+    medium: selectedVariant ? selectedVariant.medium : artwork.medium,
+  });
+
   const handleAddToCart = () => {
     setAddingToCart(true);
-    addItem(artwork);
+    addItem(getCartItem());
     setTimeout(() => {
       setAddingToCart(false);
       navigate('/cart');
@@ -91,7 +105,7 @@ export default function ArtworkDetailPage() {
   };
 
   const handleBuyNow = () => {
-    addItem(artwork);
+    addItem(getCartItem());
     navigate('/cart');
   };
 
@@ -113,10 +127,15 @@ export default function ArtworkDetailPage() {
     );
   }
 
+  const hasVariants = artwork.variants && artwork.variants.length > 0;
   const images = artwork.images?.length > 0 ? artwork.images : [{ url: artwork.image }];
-  const mainImage = images[activeImageIndex]?.url || images[activeImageIndex] || artwork.image;
+  const mainImage = selectedVariant?.image?.url || (images[activeImageIndex]?.url || images[activeImageIndex] || artwork.image);
   
-  const isAvailable = artwork.availabilityStatus !== 'out_of_stock' && artwork.inStock !== false;
+  const activePrice = selectedVariant ? selectedVariant.price : artwork.price;
+  const activeStatus = selectedVariant ? selectedVariant.availabilityStatus : artwork.availabilityStatus;
+  const activeStock = selectedVariant ? selectedVariant.stock : artwork.stock;
+  
+  const isAvailable = activeStatus !== 'out_of_stock' && activeStock !== 0 && activeStock !== false && artwork.inStock !== false;
 
   return (
     <div className="min-h-screen bg-cream-50 pt-24 pb-20">
@@ -138,28 +157,48 @@ export default function ArtworkDetailPage() {
           
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4">
-            {/* Thumbnails */}
-            {images.length > 1 && (
+            {/* Thumbnails / Variant Selector */}
+            {hasVariants ? (
               <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-visible md:w-24 shrink-0 pb-2 md:pb-0 scrollbar-hide">
-                {images.map((img, idx) => (
+                {artwork.variants.map((v, idx) => (
                   <button
-                    key={idx}
-                    onClick={() => setActiveImageIndex(idx)}
+                    key={v.variantId || idx}
+                    onClick={() => setSelectedVariant(v)}
+                    title={v.variantName}
                     className={`relative w-20 h-24 md:w-24 md:h-28 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
-                      activeImageIndex === idx ? 'border-earth-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
+                      selectedVariant?.variantId === v.variantId ? 'border-earth-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <FallbackImage src={img.url || img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                    <FallbackImage src={v.image?.url || artwork.image} alt={v.variantName} className="w-full h-full object-cover" />
+                    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[10px] py-1 text-center truncate px-1">
+                      {v.variantName || `Var ${idx + 1}`}
+                    </div>
                   </button>
                 ))}
               </div>
+            ) : (
+              images.length > 1 && (
+                <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-visible md:w-24 shrink-0 pb-2 md:pb-0 scrollbar-hide">
+                  {images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative w-20 h-24 md:w-24 md:h-28 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
+                        activeImageIndex === idx ? 'border-earth-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <FallbackImage src={img.url || img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )
             )}
 
             {/* Main Image */}
             <div className="flex-1 w-full bg-white rounded-3xl p-4 shadow-card border border-cream-100 relative group overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeImageIndex}
+                  key={selectedVariant ? selectedVariant.variantId : activeImageIndex}
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
@@ -189,7 +228,7 @@ export default function ArtworkDetailPage() {
                   {artwork.title}
                 </h1>
                 <p className="text-xl font-display text-earth-700 font-semibold">
-                  {formatPrice(artwork.price)}
+                  {formatPrice(activePrice)}
                 </p>
               </div>
 
@@ -266,12 +305,12 @@ export default function ArtworkDetailPage() {
                   <div className="grid grid-cols-2 gap-y-4 text-sm font-body">
                     <div>
                       <span className="text-warm-gray-500 block mb-1">Medium</span>
-                      <span className="font-medium text-charcoal">{artwork.medium || 'Natural Pigments on Handmade Paper'}</span>
+                      <span className="font-medium text-charcoal">{selectedVariant ? selectedVariant.medium : (artwork.medium || 'Natural Pigments on Handmade Paper')}</span>
                     </div>
-                    {artwork.size && (
+                    {(selectedVariant?.size || artwork.size) && (
                       <div>
                         <span className="text-warm-gray-500 block mb-1">Dimensions</span>
-                        <span className="font-medium text-charcoal">{artwork.size}</span>
+                        <span className="font-medium text-charcoal">{selectedVariant ? selectedVariant.size : artwork.size}</span>
                       </div>
                     )}
                     <div>

@@ -69,6 +69,7 @@ const createProduct = async (req, res) => {
       available: available !== undefined ? available : true,
       availabilityStatus: availabilityStatus || 'available',
       images: images || [],
+      variants: req.body.variants || [],
       medium,
       style,
       featured: featured || false,
@@ -94,7 +95,7 @@ const updateProduct = async (req, res) => {
     // Allowlist to prevent mass assignment of internal fields
     const ALLOWED_UPDATE_FIELDS = [
       'title', 'description', 'category', 'size', 'medium', 'style',
-      'price', 'originalPrice', 'image', 'gallery', 'images',
+      'price', 'originalPrice', 'image', 'gallery', 'images', 'variants',
       'stock', 'available', 'availabilityStatus', 'featured',
     ];
     const updates = {};

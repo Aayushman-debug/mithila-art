@@ -26,6 +26,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
   
   const [currentArtwork, setCurrentArtwork] = useState(artwork);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
 
@@ -33,6 +34,11 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
     if (isOpen) {
       setCurrentArtwork(artwork);
       setActiveImageIndex(0); // Reset on open
+      if (artwork?.variants && artwork.variants.length > 0) {
+        setSelectedVariant(artwork.variants[0]);
+      } else {
+        setSelectedVariant(null);
+      }
     }
   }, [isOpen, artwork]);
 
@@ -64,41 +70,60 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
     }
   };
 
+  const getCartItem = () => ({
+    ...currentArtwork,
+    variantId: selectedVariant?.variantId,
+    variantName: selectedVariant?.variantName,
+    price: selectedVariant ? selectedVariant.price : currentArtwork.price,
+    image: selectedVariant?.image?.url || (currentArtwork.images?.length > 0 ? (currentArtwork.images[activeImageIndex]?.url || currentArtwork.images[activeImageIndex]) : currentArtwork.image),
+    size: selectedVariant ? selectedVariant.size : currentArtwork.size,
+    medium: selectedVariant ? selectedVariant.medium : currentArtwork.medium,
+  });
+
   const handleAddToCart = () => {
     setAddingToCart(true);
-    addItem(currentArtwork);
+    addItem(getCartItem());
     setTimeout(() => {
       setAddingToCart(false);
       onClose();
-      // Don't auto-redirect to cart, just show success in quick view context or toast (already handled by ToastContext)
     }, 400);
   };
 
   const handleBuyNow = () => {
-    addItem(currentArtwork);
+    addItem(getCartItem());
     onClose();
     navigate('/cart');
   };
 
   if (!currentArtwork) return null;
 
+  const hasVariants = currentArtwork.variants && currentArtwork.variants.length > 0;
   const images = currentArtwork.images?.length > 0 ? currentArtwork.images : [{ url: currentArtwork.image }];
-  const mainImage = images[activeImageIndex]?.url || images[activeImageIndex] || currentArtwork.image;
-  const isAvailable = currentArtwork.availabilityStatus !== 'out_of_stock' && currentArtwork.inStock !== false;
+  const mainImage = selectedVariant?.image?.url || (images[activeImageIndex]?.url || images[activeImageIndex] || currentArtwork.image);
+  
+  const activePrice = selectedVariant ? selectedVariant.price : currentArtwork.price;
+  const activeStatus = selectedVariant ? selectedVariant.availabilityStatus : currentArtwork.availabilityStatus;
+  const activeStock = selectedVariant ? selectedVariant.stock : currentArtwork.stock;
+  
+  const isAvailable = activeStatus !== 'out_of_stock' && activeStock !== 0 && activeStock !== false && currentArtwork.inStock !== false;
 
   const currentIndex = paintings.findIndex(p => p.id === currentArtwork?.id || p.productId === currentArtwork?.id || p._id === currentArtwork?._id);
   
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentArtwork(paintings[currentIndex - 1]);
+      const nextArt = paintings[currentIndex - 1];
+      setCurrentArtwork(nextArt);
       setActiveImageIndex(0);
+      setSelectedVariant(nextArt.variants?.[0] || null);
     }
   };
 
   const handleNext = () => {
     if (currentIndex !== -1 && currentIndex < paintings.length - 1) {
-      setCurrentArtwork(paintings[currentIndex + 1]);
+      const nextArt = paintings[currentIndex + 1];
+      setCurrentArtwork(nextArt);
       setActiveImageIndex(0);
+      setSelectedVariant(nextArt.variants?.[0] || null);
     }
   };
 
@@ -144,28 +169,48 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
         
         {/* Left Column: Image Gallery */}
         <div className="md:col-span-7 flex flex-col md:flex-row gap-4 h-[50vh] md:h-[70vh]">
-          {/* Thumbnails */}
-          {images.length > 1 && (
+          {/* Thumbnails / Variant Selector */}
+          {hasVariants ? (
             <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto md:w-20 shrink-0 pb-2 md:pb-0 custom-scrollbar">
-              {images.map((img, idx) => (
+              {currentArtwork.variants.map((v, idx) => (
                 <button
-                  key={idx}
-                  onClick={() => setActiveImageIndex(idx)}
+                  key={v.variantId || idx}
+                  onClick={() => setSelectedVariant(v)}
+                  title={v.variantName}
                   className={`relative w-20 h-24 md:w-full md:h-24 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
-                    activeImageIndex === idx ? 'border-earth-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
+                    selectedVariant?.variantId === v.variantId ? 'border-earth-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
                   }`}
                 >
-                  <FallbackImage src={img.url || img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  <FallbackImage src={v.image?.url || currentArtwork.image} alt={v.variantName} className="w-full h-full object-cover" />
+                  <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[10px] py-1 text-center truncate px-1">
+                    {v.variantName || `Var ${idx + 1}`}
+                  </div>
                 </button>
               ))}
             </div>
+          ) : (
+            images.length > 1 && (
+              <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto md:w-20 shrink-0 pb-2 md:pb-0 custom-scrollbar">
+                {images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-20 h-24 md:w-full md:h-24 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
+                      activeImageIndex === idx ? 'border-earth-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <FallbackImage src={img.url || img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )
           )}
 
           {/* Main Image */}
           <div className="flex-1 w-full bg-cream-50/50 dark:bg-warm-gray-800/50 rounded-2xl p-4 border border-cream-200/50 dark:border-warm-gray-700/50 relative group overflow-hidden flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeImageIndex}
+                key={selectedVariant ? selectedVariant.variantId : activeImageIndex}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
@@ -189,7 +234,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
           <div className="space-y-6">
             <div className="space-y-2">
               <p className="text-2xl font-display text-earth-600 dark:text-earth-400 font-semibold">
-                {formatPrice(currentArtwork.price)}
+                {formatPrice(activePrice)}
               </p>
               {!isAvailable && (
                 <span className="inline-block px-3 py-1 bg-mithila-red/10 text-mithila-red rounded-full text-xs font-bold">
@@ -249,12 +294,12 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
                 <div className="grid grid-cols-2 gap-y-3 text-sm font-body">
                   <div>
                     <span className="text-warm-gray-500 dark:text-warm-gray-400 block mb-0.5 text-xs">Medium</span>
-                    <span className="font-medium text-charcoal dark:text-cream-100">{currentArtwork.medium || 'Natural Pigments on Handmade Paper'}</span>
+                    <span className="font-medium text-charcoal dark:text-cream-100">{selectedVariant ? selectedVariant.medium : (currentArtwork.medium || 'Natural Pigments on Handmade Paper')}</span>
                   </div>
-                  {currentArtwork.size && (
+                  {(selectedVariant?.size || currentArtwork.size) && (
                     <div>
                       <span className="text-warm-gray-500 dark:text-warm-gray-400 block mb-0.5 text-xs">Dimensions</span>
-                      <span className="font-medium text-charcoal dark:text-cream-100">{currentArtwork.size}</span>
+                      <span className="font-medium text-charcoal dark:text-cream-100">{selectedVariant ? selectedVariant.size : currentArtwork.size}</span>
                     </div>
                   )}
                 </div>

@@ -12,6 +12,9 @@ const CartOrderSchema = new mongoose.Schema({
   items: [
     {
       productId: String,
+      variantId: String,
+      variantName: String,
+      variantImage: String,
       title: String,
       quantity: Number,
       price: Number,

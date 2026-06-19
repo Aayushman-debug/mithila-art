@@ -47,6 +47,20 @@ const ProductSchema = new mongoose.Schema({
     default: 'available',
     index: true,
   },
+  variants: [{
+    variantId: { type: String, required: true },
+    variantName: String,
+    image: { url: String, public_id: String },
+    size: String,
+    medium: String,
+    price: Number,
+    stock: { type: Number, default: 1 },
+    availabilityStatus: {
+      type: String,
+      enum: ['available', 'only_1_left', 'out_of_stock', 'coming_soon', 'commission_available'],
+      default: 'available',
+    }
+  }],
   createdAt: {
     type: Date,
     default: Date.now,

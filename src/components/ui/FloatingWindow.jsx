@@ -66,7 +66,7 @@ export default function FloatingWindow({
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 22, stiffness: 150 }}
-              className={`relative w-full max-h-[90vh] bg-white/90 dark:bg-warm-gray-900/90 backdrop-blur-xl border border-white/20 dark:border-warm-gray-700/30 rounded-t-3xl shadow-2xl flex flex-col overflow-hidden ${className}`}
+              className={`relative w-full max-h-[100dvh] bg-white dark:bg-warm-gray-900 border border-white/20 dark:border-warm-gray-700/30 rounded-t-3xl shadow-2xl flex flex-col overflow-hidden ${className}`}
             >
               {title && (
                 <div className="px-4 py-4 flex justify-between items-center shrink-0 border-b border-cream-200/50 dark:border-warm-gray-700/50">

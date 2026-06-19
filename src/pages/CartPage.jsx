@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { IoTrashOutline, IoAddOutline, IoRemoveOutline, IoCartOutline, IoArrowBackOutline, IoCheckmarkCircle, IoLogoWhatsapp, IoQrCodeOutline, IoCloudUploadOutline, IoCloseOutline } from 'react-icons/io5';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { paymentAPI, buildApiPath } from '../api';
+import { paymentAPI, buildApiPath, uploadAPI } from '../api';
 import { formatPrice, validateIndianPhone, normalizePhone } from '../utils/helpers';
 import FallbackImage from '../components/ui/FallbackImage';
 import FloatingWindow from '../components/ui/FloatingWindow';
@@ -319,6 +319,20 @@ export default function CartPage() {
     setPaymentError(null);
 
     try {
+      let uploadedScreenshotUrl = null;
+      if (screenshotFile) {
+        const uploadData = new FormData();
+        uploadData.append('image', screenshotFile);
+        const uploadRes = await uploadAPI.uploadImage(uploadData);
+        if (uploadRes.data.success) {
+          uploadedScreenshotUrl = uploadRes.data.url;
+        } else {
+          setPaymentError('Failed to upload payment screenshot. Please try again.');
+          setPaymentLoading(false);
+          return;
+        }
+      }
+
       const res = await paymentAPI.createUpiOrder({
         name: formData.name,
         email: formData.email,
@@ -339,9 +353,7 @@ export default function CartPage() {
           price: item.price,
           image: item.images?.[0] || item.image || ''
         })),
-        // TODO: Upload screenshot to Cloudinary first, store only the URL.
-        // Sending raw base64 bloats MongoDB documents (2–5 MB per order).
-        paymentScreenshot: screenshotPreview ? '[screenshot-pending-cloudinary-upload]' : null,
+        paymentScreenshot: uploadedScreenshotUrl,
       });
 
       if (res.data.success) {
