@@ -10,8 +10,8 @@ const ArtworkQuickView = lazy(() => import('./ArtworkQuickView'));
 // ── Availability helpers ─────────────────────────────────────────────────────
 
 /**
- * Resolve availabilityStatus — local paintings.js entries may omit the field,
- * so we fall back to the legacy `inStock` boolean and default to 'available'.
+ * Resolve availabilityStatus — MongoDB products always have this field.
+ * Fall back to the legacy `inStock` boolean just in case.
  */
 function resolveStatus(painting) {
   if (painting.availabilityStatus) return painting.availabilityStatus;
@@ -49,7 +49,7 @@ const STATUS_CONFIG = {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted, paintingsList }) {
+export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted, allArtworks }) {
   const navigate = useNavigate();
   const { id, title, artist, price, originalPrice, category, size, inStock } = painting;
   const images = painting.images && painting.images.length > 0 ? painting.images : [painting.image];
@@ -254,8 +254,8 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
         <ArtworkQuickView 
           artwork={painting} 
           isOpen={quickViewOpen} 
-          onClose={() => setQuickViewOpen(false)} 
-          paintings={paintingsList || [painting]}
+          onClose={() => setQuickViewOpen(false)}
+          allArtworks={allArtworks || [painting]}
         />
       </Suspense>
     </>

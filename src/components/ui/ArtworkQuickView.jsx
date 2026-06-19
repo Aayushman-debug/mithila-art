@@ -17,9 +17,9 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { userAPI } from '../../api';
 import { formatPrice } from '../../utils/helpers';
-import { paintings } from '../../data/paintings';
 
-export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
+
+export default function ArtworkQuickView({ artwork, isOpen, onClose, allArtworks = [] }) {
   const navigate = useNavigate();
   const { addItem } = useCart();
   const { user, isAuthenticated } = useAuth();
@@ -107,11 +107,11 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
   
   const isAvailable = activeStatus !== 'out_of_stock' && activeStock !== 0 && activeStock !== false && currentArtwork.inStock !== false;
 
-  const currentIndex = paintings.findIndex(p => p.id === currentArtwork?.id || p.productId === currentArtwork?.id || p._id === currentArtwork?._id);
+  const currentIndex = allArtworks.findIndex(p => p.id === currentArtwork?.id || p.productId === currentArtwork?.id || p._id === currentArtwork?._id);
   
   const handlePrev = () => {
     if (currentIndex > 0) {
-      const nextArt = paintings[currentIndex - 1];
+      const nextArt = allArtworks[currentIndex - 1];
       setCurrentArtwork(nextArt);
       setActiveImageIndex(0);
       setSelectedVariant(nextArt.variants?.[0] || null);
@@ -119,8 +119,8 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
   };
 
   const handleNext = () => {
-    if (currentIndex !== -1 && currentIndex < paintings.length - 1) {
-      const nextArt = paintings[currentIndex + 1];
+    if (currentIndex !== -1 && currentIndex < allArtworks.length - 1) {
+      const nextArt = allArtworks[currentIndex + 1];
       setCurrentArtwork(nextArt);
       setActiveImageIndex(0);
       setSelectedVariant(nextArt.variants?.[0] || null);
@@ -157,7 +157,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
           </button>
           <button 
             onClick={handleNext} 
-            disabled={currentIndex === -1 || currentIndex >= paintings.length - 1} 
+            disabled={currentIndex === -1 || currentIndex >= allArtworks.length - 1} 
             className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-warm-gray-100 dark:hover:bg-warm-gray-800 hover:text-charcoal dark:hover:text-cream-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next Artwork <IoChevronForwardOutline />

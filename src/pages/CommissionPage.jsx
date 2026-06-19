@@ -6,9 +6,19 @@ import { IoCheckmarkCircle, IoArrowForwardOutline, IoArrowBackOutline, IoTimeOut
 import SectionHeading from '../components/ui/SectionHeading';
 import { commissionAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
-import { categories, paintings } from '../data/paintings';
 import { useToast } from '../context/ToastContext';
 import { validateEmail, validateIndianPhone } from '../utils/helpers';
+
+// Categories aligned with MongoDB product data
+const categories = [
+  { id: 'kohbar', name: 'Kohbar' },
+  { id: 'bharni', name: 'Bharni' },
+  { id: 'kachni', name: 'Kachni' },
+  { id: 'godhana', name: 'Godhana' },
+  { id: 'religious', name: 'Religious' },
+  { id: 'nature', name: 'Nature' },
+  { id: 'contemporary', name: 'Contemporary' },
+];
 
 const steps = ['Your Details', 'Artwork Preferences', 'Review & Submit'];
 
@@ -78,14 +88,8 @@ export default function CommissionPage() {
   // Prefill search params if any
   useEffect(() => {
     if (paintingId && paintingTitle) {
-      const paintingObj = paintings.find(p => p.id === paintingId);
-      const styleName = paintingObj 
-        ? (categories.find(c => c.id === paintingObj.category)?.name || '') 
-        : '';
-      
       setFormData(prev => ({
         ...prev,
-        style: styleName || prev.style,
         description: `I am interested in commissioning a custom artwork inspired by the painting "${paintingTitle}" (ID: ${paintingId}).\n\n` + prev.description,
       }));
     }

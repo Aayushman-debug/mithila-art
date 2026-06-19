@@ -14,7 +14,7 @@ import {
 } from 'react-icons/fa';
 import { IoGridOutline } from 'react-icons/io5';
 
-import { paintings } from '../data/paintings';
+
 import { formatPrice, generateWhatsAppLink } from '../utils/helpers';
 import { productAPI } from '../api';
 import FallbackImage from '../components/ui/FallbackImage';
@@ -147,7 +147,7 @@ export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [products, setProducts] = useState(paintings);
+  const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [showWakingUpMsg, setShowWakingUpMsg] = useState(false);
 
@@ -173,10 +173,12 @@ export default function GalleryPage() {
           }));
           setProducts(mappedProducts);
         } else {
-          setProducts(paintings);
+          setProducts([]);
         }
       } catch (err) {
-        setProducts(paintings);
+        // MongoDB is the only source of truth — no fallback
+        console.error('Failed to load products from MongoDB:', err);
+        setProducts([]);
       } finally {
         clearTimeout(timeoutId);
         setProductsLoading(false);

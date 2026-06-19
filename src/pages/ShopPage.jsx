@@ -30,7 +30,6 @@ import PaintingCardSkeleton from '../components/ui/PaintingCardSkeleton';
 
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { paintings, categories } from '../data/paintings';
 import { productAPI, userAPI } from '../api';
 import { formatPrice, scrollToTop } from '../utils/helpers';
 
@@ -61,6 +60,17 @@ const sizeOptions = [
   { label: 'Small (up to 18")', value: 'small' },
   { label: 'Medium (18–30")', value: 'medium' },
   { label: 'Large (30"+)', value: 'large' },
+];
+
+/* ───────────────── categories (MongoDB source of truth) ───────────────── */
+const categories = [
+  { id: 'kohbar', name: 'Kohbar', nameHindi: 'कोहबर' },
+  { id: 'bharni', name: 'Bharni', nameHindi: 'भरनी' },
+  { id: 'kachni', name: 'Kachni', nameHindi: 'कचनी' },
+  { id: 'godhana', name: 'Godhana', nameHindi: 'गोधना' },
+  { id: 'religious', name: 'Religious', nameHindi: 'धार्मिक' },
+  { id: 'nature', name: 'Nature', nameHindi: 'प्रकृति' },
+  { id: 'contemporary', name: 'Contemporary', nameHindi: 'समकालीन' },
 ];
 
 /* ───────────────── sort options ───────────────── */
@@ -343,7 +353,7 @@ export default function ShopPage() {
   const { addItem } = useCart();
   const { isAuthenticated, user } = useAuth();
 
-  const [products, setProducts] = useState(paintings);
+  const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState(null);
   const [showWakingUpMsg, setShowWakingUpMsg] = useState(false);
@@ -478,11 +488,12 @@ export default function ShopPage() {
           }));
           setProducts(mappedProducts);
         } else {
-          setProducts(paintings);
+          setProducts([]);
         }
       } catch (err) {
+        // MongoDB is the only source of truth — no static fallback
         setProductsError(err.response?.data?.message || 'Unable to load products');
-        setProducts(paintings);
+        setProducts([]);
       } finally {
         clearTimeout(timeoutId);
         setProductsLoading(false);
@@ -887,7 +898,7 @@ export default function ShopPage() {
                               onAddToCart={handleAddToCart}
                               onToggleWishlist={handleToggleWishlist}
                               isWishlisted={wishlistIds.includes(painting.id)}
-                              paintingsList={filteredPaintings}
+                              allArtworks={filteredPaintings}
                             />
                           </motion.div>
                         ) : (

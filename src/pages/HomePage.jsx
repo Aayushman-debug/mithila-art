@@ -31,7 +31,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import GlassCard from '../components/ui/GlassCard';
 import PaintingCard from '../components/ui/PaintingCard';
 import { useCart } from '../context/CartContext';
-import { paintings, categories } from '../data/paintings';
+import { productAPI } from '../api';
 import { testimonials } from '../data/testimonials';
 import { formatPrice, scrollToTop, generateWhatsAppLink } from '../utils/helpers';
 import mummyPainting from '../assets/home/Mummy.jpeg';
@@ -277,7 +277,21 @@ function FeaturedCategories() {
    ════════════════════════════════════════════════════════════════ */
 function FeaturedPaintings() {
   const { addItem } = useCart();
-  const featured = paintings.slice(0, 6);
+  const [featured, setFeatured] = useState([]);
+  
+  useEffect(() => {
+    productAPI.getProducts().then(res => {
+      if (res.data?.success && res.data?.products) {
+        const mapped = res.data.products.map(p => ({
+          ...p,
+          id: p.productId || p._id,
+          images: p.images?.length > 0 ? p.images : (p.image ? [{ url: p.image }] : []),
+          artist: p.artist || 'Mithila Artist',
+        }));
+        setFeatured(mapped.slice(0, 6));
+      }
+    }).catch(() => {});
+  }, []);
   
   // For the desktop sticky horizontal scroll
   const targetRef = useRef(null);

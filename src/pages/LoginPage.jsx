@@ -10,7 +10,7 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useToast } from '../context/ToastContext';
 import { validateEmail } from '../utils/helpers';
 import SocialLoginButtons from '../components/auth/SocialLoginButtons';
-import { paintings } from '../data/paintings';
+import { productAPI } from '../api';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -80,15 +80,17 @@ export default function LoginPage() {
 
       if (pendingAction) {
         if (pendingAction.type === 'addToCart' || pendingAction.type === 'buyNow') {
-          const painting = paintings.find((p) => p.id === pendingAction.paintingId);
-          if (painting) {
-            addItem(painting);
-            // For buyNow go straight to cart; for addToCart go back where they came from
-            if (pendingAction.type === 'buyNow') {
-              redirectTo = '/cart';
-            } else {
-              redirectTo = location.state?.from?.pathname || '/shop';
+          // Fetch from MongoDB — paintings.js is no longer the source of truth
+          productAPI.getProductById(pendingAction.paintingId).then(res => {
+            if (res.data?.success && res.data?.product) {
+              const p = res.data.product;
+              addItem({ ...p, id: p.productId || p._id });
             }
+          }).catch(() => {});
+          if (pendingAction.type === 'buyNow') {
+            redirectTo = '/cart';
+          } else {
+            redirectTo = location.state?.from?.pathname || '/shop';
           }
         }
       }

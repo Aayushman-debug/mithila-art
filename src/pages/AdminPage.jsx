@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline, IoTicketOutline, IoPeopleOutline } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
-import paintings from '../data/paintings';
+
 import { formatPrice } from '../utils/helpers';
 import CouponsManager from '../components/admin/CouponsManager';
 import ProductModal from '../components/admin/ProductModal';
@@ -209,12 +209,11 @@ export default function AdminPage() {
           if (res?.data?.success && res.data.products?.length > 0) {
             setRealProducts(res.data.products);
           } else {
-            // Fallback: enrich local paintings with default availabilityStatus
-            setRealProducts(paintings.map(p => ({ ...p, _id: p.id, availabilityStatus: p.inStock ? 'available' : 'out_of_stock' })));
+            setRealProducts([]);
           }
         }).catch(() => {
-          // API unavailable — fall back to local data
-          setRealProducts(paintings.map(p => ({ ...p, _id: p.id, availabilityStatus: p.inStock ? 'available' : 'out_of_stock' })));
+          // MongoDB is the only source of truth — no static fallback
+          setRealProducts([]);
         });
       });
     }
@@ -445,7 +444,7 @@ export default function AdminPage() {
             {activeTab === 'dashboard' && (
               <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <StatCard label="Total Paintings" value={paintings.length.toString()} icon={IoCubeOutline} color="bg-mithila-blue" />
+                  <StatCard label="Total Paintings" value={realProducts.length.toString()} icon={IoCubeOutline} color="bg-mithila-blue" />
                   <StatCard label="Total Users" value={(realUsers || []).length.toString()} icon={IoPeopleOutline} color="bg-purple-500" />
                   <StatCard label="Total Orders" value={(realOrders || []).length.toString()} icon={IoReceiptOutline} color="bg-mithila-green" />
                   <StatCard label="Revenue" value={`₹${totalRevenue}`} icon={IoGridOutline} color="bg-earth-500" />
