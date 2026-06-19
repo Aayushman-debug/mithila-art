@@ -162,6 +162,9 @@ export default function AdminPage() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
   
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  
   useEffect(() => {
     setLoggedIn(isAuthenticated);
   }, [isAuthenticated]);
@@ -801,7 +804,7 @@ export default function AdminPage() {
                       </thead>
                       <tbody>
                         {realUsers.map((u) => (
-                          <tr key={u._id} className="border-b border-cream-50 hover:bg-cream-50 dark:hover:bg-warm-gray-700 dark:bg-warm-gray-900/50 transition-colors">
+                          <tr key={u._id} onClick={() => { setSelectedUser(u); setShowUserModal(true); }} className="border-b border-cream-50 hover:bg-cream-50 dark:hover:bg-warm-gray-700 dark:bg-warm-gray-900/50 transition-colors cursor-pointer">
                             <td className="px-4 py-3 font-body font-medium text-sm text-charcoal dark:text-cream-100">{u.name}</td>
                             <td className="px-4 py-3 font-body text-sm text-warm-gray-600 dark:text-warm-gray-300">{u.email}</td>
                             <td className="px-4 py-3">
@@ -822,7 +825,7 @@ export default function AdminPage() {
                   {/* Mobile Card View for Users */}
                   <div className="md:hidden flex flex-col gap-4 p-4">
                     {realUsers.map((u) => (
-                      <div key={u._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-2">
+                      <div key={u._id} onClick={() => { setSelectedUser(u); setShowUserModal(true); }} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-2 cursor-pointer hover:border-earth-300 transition-colors">
                         <div className="flex justify-between items-center">
                           <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{u.name}</p>
                           <span className={`text-xs px-2 py-1 rounded-full font-body font-medium ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-warm-gray-100 text-warm-gray-600'}`}>{u.role}</span>
@@ -931,8 +934,92 @@ export default function AdminPage() {
         onSave={() => { showToast('Variant saved successfully'); fetchProducts(); }} 
       />
       
+      {/* User Details Modal */}
+      <AnimatePresence>
+        {showUserModal && selectedUser && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-earth-900/90 p-4">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="relative bg-white dark:bg-warm-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+              <div className="p-4 border-b border-cream-200 dark:border-warm-gray-700 flex justify-between items-center bg-cream-50 dark:bg-warm-gray-900">
+                <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100">User Profile</h3>
+                <button onClick={() => setShowUserModal(false)} className="p-2 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm">
+                  <IoCloseOutline size={24} />
+                </button>
+              </div>
+              <div className="p-6 overflow-y-auto flex-1 space-y-6">
+                
+                {/* Header Info */}
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-earth-500/10 text-earth-600 flex items-center justify-center font-display font-bold text-2xl uppercase">
+                    {selectedUser.name?.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-xl text-charcoal dark:text-cream-100">{selectedUser.name}</h4>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium inline-block mt-1 ${selectedUser.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-warm-gray-100 text-warm-gray-600'}`}>{selectedUser.role}</span>
+                  </div>
+                </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Contact Info */}
+                  <div className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+                    <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Contact Info</h5>
+                    <div className="space-y-2 text-sm font-body">
+                      <p><span className="text-warm-gray-500">Email:</span> <span className="text-charcoal dark:text-cream-100">{selectedUser.email}</span></p>
+                      <p><span className="text-warm-gray-500">Phone:</span> <span className="text-charcoal dark:text-cream-100">{selectedUser.phone || 'N/A'}</span></p>
+                      <p><span className="text-warm-gray-500">Verified:</span> <span className={selectedUser.isVerified ? 'text-mithila-green font-medium' : 'text-warm-gray-500 font-medium'}>{selectedUser.isVerified ? 'Yes' : 'No'}</span></p>
+                    </div>
+                  </div>
 
+                  {/* Activity */}
+                  <div className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+                    <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Activity</h5>
+                    <div className="grid grid-cols-2 gap-2 text-sm font-body">
+                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
+                        <p className="text-xl font-display font-bold text-earth-600">{selectedUser.orders?.length || 0}</p>
+                        <p className="text-xs text-warm-gray-500">Orders</p>
+                      </div>
+                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
+                        <p className="text-xl font-display font-bold text-mithila-orange">{selectedUser.commissions?.length || 0}</p>
+                        <p className="text-xs text-warm-gray-500">Commissions</p>
+                      </div>
+                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
+                        <p className="text-xl font-display font-bold text-mithila-blue">{selectedUser.cart?.length || 0}</p>
+                        <p className="text-xs text-warm-gray-500">Cart Items</p>
+                      </div>
+                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
+                        <p className="text-xl font-display font-bold text-purple-500">{selectedUser.wishlist?.length || 0}</p>
+                        <p className="text-xs text-warm-gray-500">Wishlist</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Addresses */}
+                <div>
+                  <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Saved Addresses</h5>
+                  {selectedUser.addresses?.length > 0 ? (
+                    <div className="space-y-3">
+                      {selectedUser.addresses.map((addr, idx) => (
+                        <div key={idx} className="bg-white dark:bg-warm-gray-800 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-sm font-body">
+                          <p className="font-semibold text-charcoal dark:text-cream-100 mb-1">{addr.label || 'Home'}</p>
+                          <p className="text-warm-gray-600 dark:text-warm-gray-300">{addr.line1}</p>
+                          <p className="text-warm-gray-600 dark:text-warm-gray-300">{addr.city}, {addr.state} {addr.pincode}</p>
+                          {addr.phone && <p className="text-warm-gray-500 mt-1">Phone: {addr.phone}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm font-body text-warm-gray-500 bg-white dark:bg-warm-gray-800 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-center">No saved addresses.</p>
+                  )}
+                </div>
+
+                <div className="text-xs text-warm-gray-400 text-center font-body pt-2 border-t border-cream-100 dark:border-warm-gray-700 mt-4">
+                  Account created on {new Date(selectedUser.createdAt).toLocaleString()}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Screenshot Modal */}
       <AnimatePresence>
         {showScreenshotModal && (
