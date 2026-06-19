@@ -7,7 +7,41 @@ const Coupon = require('../models/Coupon');
 const getUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password -resetPasswordToken -resetPasswordExpires').lean();
-    res.status(200).json({ success: true, users });
+    
+    // Enhance user data with real activity (including guest orders with same email) and real phone numbers
+    const enhancedUsers = await Promise.all(users.map(async (user) => {
+      const emailQuery = user.email ? { email: user.email.toLowerCase() } : null;
+      const userQuery = { user: user._id };
+      const query = emailQuery ? { $or: [userQuery, emailQuery] } : userQuery;
+
+      const userOrders = await CartOrder.find(query).lean();
+      const userCommissions = await Commission.find(query).lean();
+
+      let displayPhone = user.phone;
+      if (!displayPhone || displayPhone === '0000000000') {
+        const orderWithPhone = userOrders.find(o => o.phone && o.phone !== '0000000000');
+        if (orderWithPhone) {
+          displayPhone = orderWithPhone.phone;
+        } else {
+          const commWithPhone = userCommissions.find(c => c.phone && c.phone !== '0000000000');
+          if (commWithPhone) {
+            displayPhone = commWithPhone.phone;
+          } else {
+            displayPhone = 'Not Provided';
+          }
+        }
+      }
+
+      return {
+        ...user,
+        phone: displayPhone,
+        // Override arrays so the frontend's selectedUser.orders?.length works correctly
+        orders: new Array(userOrders.length).fill(null),
+        commissions: new Array(userCommissions.length).fill(null)
+      };
+    }));
+
+    res.status(200).json({ success: true, users: enhancedUsers });
   } catch (error) {
     console.error('Get users error:', error);
     res.status(500).json({ success: false, message: error.message || 'Could not fetch users' });
