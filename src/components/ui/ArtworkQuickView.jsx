@@ -6,7 +6,9 @@ import {
   IoHeart, 
   IoCartOutline, 
   IoFlashOutline, 
-  IoShareSocialOutline
+  IoShareSocialOutline,
+  IoChevronBackOutline,
+  IoChevronForwardOutline
 } from 'react-icons/io5';
 import FloatingWindow from './FloatingWindow';
 import FallbackImage from './FallbackImage';
@@ -15,34 +17,37 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { userAPI } from '../../api';
 import { formatPrice } from '../../utils/helpers';
+import { paintings } from '../../data/paintings';
 
 export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
   const navigate = useNavigate();
   const { addItem } = useCart();
   const { user, isAuthenticated } = useAuth();
   
+  const [currentArtwork, setCurrentArtwork] = useState(artwork);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setCurrentArtwork(artwork);
       setActiveImageIndex(0); // Reset on open
     }
-  }, [isOpen]);
+  }, [isOpen, artwork]);
 
   useEffect(() => {
-    if (isAuthenticated && artwork && isOpen) {
+    if (isAuthenticated && currentArtwork && isOpen) {
       userAPI.getWishlist().then(res => {
         if (res.data.success) {
           const inWishlist = res.data.wishlist.some(item => 
-            (item.productId === artwork._id || item.productId === artwork.productId)
+            (item.productId === currentArtwork._id || item.productId === currentArtwork.productId)
           );
           setIsWishlisted(inWishlist);
         }
       }).catch(err => console.error('Wishlist error:', err));
     }
-  }, [isAuthenticated, artwork, isOpen]);
+  }, [isAuthenticated, currentArtwork, isOpen]);
 
   const handleToggleWishlist = async () => {
     if (!isAuthenticated) {
@@ -52,7 +57,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
     const previousState = isWishlisted;
     setIsWishlisted(!isWishlisted);
     try {
-      await userAPI.toggleWishlist({ productId: artwork._id });
+      await userAPI.toggleWishlist({ productId: currentArtwork._id || currentArtwork.id });
     } catch (err) {
       console.error('Toggle wishlist failed:', err);
       setIsWishlisted(previousState);
@@ -61,7 +66,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
 
   const handleAddToCart = () => {
     setAddingToCart(true);
-    addItem(artwork);
+    addItem(currentArtwork);
     setTimeout(() => {
       setAddingToCart(false);
       onClose();
@@ -70,19 +75,71 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
   };
 
   const handleBuyNow = () => {
-    addItem(artwork);
+    addItem(currentArtwork);
     onClose();
     navigate('/cart');
   };
 
-  if (!artwork) return null;
+  if (!currentArtwork) return null;
 
-  const images = artwork.images?.length > 0 ? artwork.images : [{ url: artwork.image }];
-  const mainImage = images[activeImageIndex]?.url || images[activeImageIndex] || artwork.image;
-  const isAvailable = artwork.availabilityStatus !== 'out_of_stock' && artwork.inStock !== false;
+  const images = currentArtwork.images?.length > 0 ? currentArtwork.images : [{ url: currentArtwork.image }];
+  const mainImage = images[activeImageIndex]?.url || images[activeImageIndex] || currentArtwork.image;
+  const isAvailable = currentArtwork.availabilityStatus !== 'out_of_stock' && currentArtwork.inStock !== false;
+
+  const currentIndex = paintings.findIndex(p => p.id === currentArtwork?.id || p.productId === currentArtwork?.id || p._id === currentArtwork?._id);
+  
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentArtwork(paintings[currentIndex - 1]);
+      setActiveImageIndex(0);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex !== -1 && currentIndex < paintings.length - 1) {
+      setCurrentArtwork(paintings[currentIndex + 1]);
+      setActiveImageIndex(0);
+    }
+  };
 
   return (
-    <FloatingWindow isOpen={isOpen} onClose={onClose} size="xl" title={artwork.title}>
+    <FloatingWindow isOpen={isOpen} onClose={onClose} size="xl" title={currentArtwork.title}>
+      {/* Quick View Navigation */}
+      <div className="flex items-center justify-between mb-6 pb-2 border-b border-cream-200/50 dark:border-warm-gray-700/50">
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={onClose} 
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-warm-gray-100 dark:hover:bg-warm-gray-800 hover:text-charcoal dark:hover:text-cream-50 transition-colors"
+          >
+            <IoChevronBackOutline />
+            Back
+          </button>
+          <button 
+            onClick={onClose} 
+            className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-mithila-red hover:bg-mithila-red/10 transition-colors"
+            title="Close Quick View"
+          >
+            Close ✕
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={handlePrev} 
+            disabled={currentIndex <= 0} 
+            className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-warm-gray-100 dark:hover:bg-warm-gray-800 hover:text-charcoal dark:hover:text-cream-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <IoChevronBackOutline /> Prev Artwork
+          </button>
+          <button 
+            onClick={handleNext} 
+            disabled={currentIndex === -1 || currentIndex >= paintings.length - 1} 
+            className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-warm-gray-100 dark:hover:bg-warm-gray-800 hover:text-charcoal dark:hover:text-cream-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Next Artwork <IoChevronForwardOutline />
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-full pb-4">
         
         {/* Left Column: Image Gallery */}
@@ -115,13 +172,13 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
                 transition={{ duration: 0.3 }}
                 className="w-full h-full relative flex justify-center"
               >
-                <FallbackImage src={mainImage} alt={artwork.title} className="w-full h-full object-contain drop-shadow-2xl mix-blend-multiply dark:mix-blend-normal" />
+                <FallbackImage src={mainImage} alt={currentArtwork.title} className="w-full h-full object-contain drop-shadow-2xl mix-blend-multiply dark:mix-blend-normal" />
               </motion.div>
             </AnimatePresence>
             
             <div className="absolute top-4 left-4">
               <span className="px-3 py-1 rounded-full bg-white/80 dark:bg-warm-gray-800/80 backdrop-blur-md border border-white/40 dark:border-warm-gray-600/40 text-charcoal dark:text-cream-50 font-body text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                {artwork.category || 'Mithila Art'}
+                {currentArtwork.category || 'Mithila Art'}
               </span>
             </div>
           </div>
@@ -132,7 +189,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
           <div className="space-y-6">
             <div className="space-y-2">
               <p className="text-2xl font-display text-earth-600 dark:text-earth-400 font-semibold">
-                {formatPrice(artwork.price)}
+                {formatPrice(currentArtwork.price)}
               </p>
               {!isAvailable && (
                 <span className="inline-block px-3 py-1 bg-mithila-red/10 text-mithila-red rounded-full text-xs font-bold">
@@ -192,24 +249,24 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose }) {
                 <div className="grid grid-cols-2 gap-y-3 text-sm font-body">
                   <div>
                     <span className="text-warm-gray-500 dark:text-warm-gray-400 block mb-0.5 text-xs">Medium</span>
-                    <span className="font-medium text-charcoal dark:text-cream-100">{artwork.medium || 'Natural Pigments on Handmade Paper'}</span>
+                    <span className="font-medium text-charcoal dark:text-cream-100">{currentArtwork.medium || 'Natural Pigments on Handmade Paper'}</span>
                   </div>
-                  {artwork.size && (
+                  {currentArtwork.size && (
                     <div>
                       <span className="text-warm-gray-500 dark:text-warm-gray-400 block mb-0.5 text-xs">Dimensions</span>
-                      <span className="font-medium text-charcoal dark:text-cream-100">{artwork.size}</span>
+                      <span className="font-medium text-charcoal dark:text-cream-100">{currentArtwork.size}</span>
                     </div>
                   )}
                 </div>
               </div>
               
-              {artwork.description && (
+              {currentArtwork.description && (
                 <div className="pt-2">
                   <span className="text-warm-gray-500 dark:text-warm-gray-400 block mb-1.5 text-xs uppercase tracking-wider font-semibold">The Story</span>
                   <p className="text-warm-gray-600 dark:text-warm-gray-300 font-body leading-relaxed text-sm line-clamp-4">
-                    {artwork.description}
+                    {currentArtwork.description}
                   </p>
-                  <button onClick={() => navigate(`/artwork/${artwork._id || artwork.productId}`)} className="text-earth-600 dark:text-earth-400 text-xs font-bold uppercase mt-2 hover:underline">
+                  <button onClick={() => navigate(`/artwork/${currentArtwork._id || currentArtwork.productId || currentArtwork.id}`)} className="text-earth-600 dark:text-earth-400 text-xs font-bold uppercase mt-2 hover:underline">
                     View Full Details
                   </button>
                 </div>

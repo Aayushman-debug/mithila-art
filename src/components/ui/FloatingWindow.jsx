@@ -13,21 +13,24 @@ export default function FloatingWindow({
 }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  // Focus trap and ESC to close
+  // Focus trap, scroll lock, and ESC to close
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
         onClose();
       }
     };
+    
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.addEventListener('keydown', handleKeyDown);
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
     }
+    
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);

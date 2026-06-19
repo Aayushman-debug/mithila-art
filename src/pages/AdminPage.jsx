@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, IoBrushOutline, IoLogOutOutline, IoAddOutline, IoTrashOutline, IoPencilOutline, IoEyeOutline, IoLockClosedOutline, IoCheckmarkOutline, IoCloseOutline, IoImageOutline, IoTicketOutline, IoPeopleOutline } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
-import { paintings } from '../data/paintings';
+import paintings from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
 import CouponsManager from '../components/admin/CouponsManager';
+import ProductModal from '../components/admin/ProductModal';
 import FallbackImage from '../components/ui/FallbackImage';
 import FloatingWindow from '../components/ui/FloatingWindow';
 
@@ -193,19 +194,19 @@ export default function AdminPage() {
     if (loggedIn) {
       import('../api').then(({ adminAPI }) => {
         adminAPI.getOrders().then(res => {
-          if (res.data.success) setRealOrders(res.data.orders);
+          if (res?.data?.success) setRealOrders(res.data.orders || []);
         }).catch(err => console.error('Failed to fetch admin orders', err));
 
         adminAPI.getCommissions().then(res => {
-          if (res.data.success) setRealCommissions(res.data.commissions);
+          if (res?.data?.success) setRealCommissions(res.data.commissions || []);
         }).catch(err => console.error('Failed to fetch admin commissions', err));
 
         adminAPI.getUsers().then(res => {
-          if (res.data.success) setRealUsers(res.data.users);
+          if (res?.data?.success) setRealUsers(res.data.users || []);
         }).catch(err => console.error('Failed to fetch admin users', err));
 
         adminAPI.getProducts().then(res => {
-          if (res.data.success && res.data.products.length > 0) {
+          if (res?.data?.success && res.data.products?.length > 0) {
             setRealProducts(res.data.products);
           } else {
             // Fallback: enrich local paintings with default availabilityStatus
@@ -369,7 +370,7 @@ export default function AdminPage() {
     );
   }
 
-  const totalRevenue = realOrders.reduce((sum, order) => sum + (order.grandTotal || 0), 0);
+  const totalRevenue = (realOrders || []).reduce((sum, order) => sum + (order.grandTotal || 0), 0);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen bg-cream-50 dark:bg-warm-gray-900">
@@ -445,23 +446,23 @@ export default function AdminPage() {
               <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                   <StatCard label="Total Paintings" value={paintings.length.toString()} icon={IoCubeOutline} color="bg-mithila-blue" />
-                  <StatCard label="Total Users" value={realUsers.length.toString()} icon={IoPeopleOutline} color="bg-purple-500" />
-                  <StatCard label="Total Orders" value={realOrders.length.toString()} icon={IoReceiptOutline} color="bg-mithila-green" />
+                  <StatCard label="Total Users" value={(realUsers || []).length.toString()} icon={IoPeopleOutline} color="bg-purple-500" />
+                  <StatCard label="Total Orders" value={(realOrders || []).length.toString()} icon={IoReceiptOutline} color="bg-mithila-green" />
                   <StatCard label="Revenue" value={`₹${totalRevenue}`} icon={IoGridOutline} color="bg-earth-500" />
-                  <StatCard label="Commissions" value={realCommissions.length.toString()} icon={IoBrushOutline} color="bg-mithila-orange" />
-                  <StatCard label="Pending Orders" value={realOrders.filter(o => o.status === 'Pending' || o.status === 'New').length.toString()} icon={IoReceiptOutline} color="bg-warm-gray-400" />
-                  <StatCard label="Pending Comms." value={realCommissions.filter(c => c.status === 'submitted' || c.status === 'Pending').length.toString()} icon={IoBrushOutline} color="bg-warm-gray-400" />
+                  <StatCard label="Commissions" value={(realCommissions || []).length.toString()} icon={IoBrushOutline} color="bg-mithila-orange" />
+                  <StatCard label="Pending Orders" value={(realOrders || []).filter(o => o.status === 'Pending' || o.status === 'New').length.toString()} icon={IoReceiptOutline} color="bg-warm-gray-400" />
+                  <StatCard label="Pending Comms." value={(realCommissions || []).filter(c => c.status === 'submitted' || c.status === 'Pending').length.toString()} icon={IoBrushOutline} color="bg-warm-gray-400" />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white dark:bg-warm-gray-800 rounded-2xl p-6 shadow-card">
                     <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-100 mb-4">Recent Orders</h3>
                     <div className="space-y-3">
-                      {realOrders.length > 0 ? realOrders.slice(0, 4).map((order) => (
+                      {(realOrders || []).length > 0 ? (realOrders || []).slice(0, 4).map((order) => (
                         <div key={order._id} className="flex items-center justify-between p-3 bg-cream-50 dark:bg-warm-gray-900 rounded-xl border border-cream-100 dark:border-warm-gray-700">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{order.name}</p>
-                            <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">#{order.orderId || order._id.slice(-8)}</p>
+                            <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">#{order.orderId || order._id?.slice(-8)}</p>
                           </div>
                           <div className="text-right">
                             <p className="font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</p>
@@ -654,7 +655,7 @@ export default function AdminPage() {
                       <tbody>
                         {realOrders.map((order) => (
                           <tr key={order._id} className="border-b border-cream-50 hover:bg-cream-50 dark:hover:bg-warm-gray-700 dark:bg-warm-gray-900/50 transition-colors">
-                            <td className="px-4 py-3 font-mono text-sm text-earth-700 font-medium">#{order.orderId || order._id.slice(-8)}</td>
+                            <td className="px-4 py-3 font-mono text-sm text-earth-700 font-medium">#{order.orderId || order._id?.slice(-8)}</td>
                             <td className="px-4 py-3">
                               <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{order.name}</p>
                               <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">{order.email}</p>
@@ -733,7 +734,7 @@ export default function AdminPage() {
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{order.name}</p>
-                            <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">#{order.orderId || order._id.slice(-8)}</p>
+                            <p className="text-xs text-warm-gray-500 dark:text-warm-gray-400">#{order.orderId || order._id?.slice(-8)}</p>
                           </div>
                           <div className="text-right">
                             <p className="font-display font-semibold text-earth-700">{formatPrice(order.grandTotal)}</p>
