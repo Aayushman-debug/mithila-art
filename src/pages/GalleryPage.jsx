@@ -125,11 +125,11 @@ function GalleryItem({ item, index }) {
             View Details
           </motion.button>
           <motion.button
-            className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-mithila-red/50 hover:border-mithila-red/30 transition-colors"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-mithila-red/50 hover:border-mithila-red/30 transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <FaHeart className="text-xs" />
+            <FaHeart className="text-sm" />
           </motion.button>
         </motion.div>
       </motion.div>
@@ -315,7 +315,7 @@ export default function GalleryPage() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-gray-500 hover:text-charcoal"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-warm-gray-500 hover:text-charcoal"
                   >
                     <FaTimes className="text-sm" />
                   </button>

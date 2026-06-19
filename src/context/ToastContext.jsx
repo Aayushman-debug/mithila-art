@@ -21,12 +21,12 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={{ showToast, removeToast }}>
       {children}
-      <div className="fixed right-4 bottom-6 z-50 flex flex-col gap-3">
+      <div className="fixed left-4 right-4 sm:left-auto sm:right-4 bottom-24 sm:bottom-6 z-50 flex flex-col gap-3 pointer-events-none">
         {toasts.map((t) => (
-          <div key={t.id} className={`max-w-sm w-full px-4 py-3 rounded-xl shadow-lg ring-1 ring-black/5 transform-gpu transition-all duration-200 ${t.type === 'error' ? 'bg-mithila-red/95 text-white' : t.type === 'success' ? 'bg-mithila-green/95 text-white' : 'bg-white text-warm-gray-800'}`}>
-            <div className="flex items-start gap-3">
+          <div key={t.id} className={`pointer-events-auto sm:max-w-sm w-full px-4 py-3 rounded-xl shadow-lg ring-1 ring-black/5 transform-gpu transition-all duration-200 ${t.type === 'error' ? 'bg-mithila-red/95 text-white' : t.type === 'success' ? 'bg-mithila-green/95 text-white' : 'bg-white text-warm-gray-800'}`}>
+            <div className="flex items-center gap-3">
               <div className="flex-1 text-sm break-words">{t.message}</div>
-              <button onClick={() => removeToast(t.id)} className="text-xs opacity-80">✕</button>
+              <button onClick={() => removeToast(t.id)} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity">✕</button>
             </div>
           </div>
         ))}

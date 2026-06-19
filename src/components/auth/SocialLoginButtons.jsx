@@ -31,6 +31,12 @@ export default function SocialLoginButtons({ onError }) {
   };
 
   const handleFacebookSuccess = async (response) => {
+    if (response.status === 'unknown' || response.error) {
+      setLoading(false);
+      onError('Facebook login configuration error. The developer needs to enable JSSDK in the Facebook App settings.');
+      return;
+    }
+    
     if (response.accessToken) {
       setLoading(true);
       const result = await loginWithFacebook(response.accessToken);
@@ -83,7 +89,7 @@ export default function SocialLoginButtons({ onError }) {
               <button
                 onClick={renderProps.onClick}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-warm-gray-300 dark:border-warm-gray-600 rounded-md bg-white dark:bg-warm-gray-800 text-charcoal dark:text-cream-100 hover:bg-cream-50 dark:hover:bg-warm-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-1 dark:focus:ring-offset-warm-gray-900"
+                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 min-h-[44px] border border-warm-gray-300 dark:border-warm-gray-600 rounded-md bg-white dark:bg-warm-gray-800 text-charcoal dark:text-cream-100 hover:bg-cream-50 dark:hover:bg-warm-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-1 dark:focus:ring-offset-warm-gray-900"
               >
                 <FaFacebook className="text-[#1877F2] text-xl" />
                 <span className="font-medium text-sm font-roboto">Continue with Facebook</span>

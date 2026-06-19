@@ -129,13 +129,13 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
             <>
               <button
                 onClick={prevImg}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/60 z-10"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/60 z-10"
               >
                 <IoChevronBackOutline size={16} />
               </button>
               <button
                 onClick={nextImg}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/60 z-10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/60 z-10"
               >
                 <IoChevronForwardOutline size={16} />
               </button>
@@ -162,7 +162,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={(e) => { e.stopPropagation(); navigate(`/artwork/${painting._id || painting.id}`); }}
-              className="flex-1 py-2.5 bg-white/95 backdrop-blur-md text-charcoal font-display font-semibold text-sm rounded-xl flex items-center justify-center gap-2 hover:bg-white shadow-lg transition-colors whitespace-nowrap"
+              className="flex-1 py-2.5 bg-white/95 backdrop-blur-md text-charcoal font-display font-semibold text-sm rounded-xl flex items-center justify-center gap-2 hover:bg-white shadow-lg transition-colors whitespace-nowrap min-h-[44px]"
             >
               <IoEyeOutline size={18} />
               View Artwork
@@ -176,7 +176,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
               e.stopPropagation();
               onToggleWishlist?.(painting);
             }}
-            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:text-mithila-red z-10"
+            className="absolute top-3 right-3 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:text-mithila-red z-10"
           >
             {isWishlisted ? <IoHeart size={18} className="text-mithila-red" /> : <IoHeartOutline size={18} />}
           </button>
@@ -223,7 +223,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleCardAction}
-                className="flex items-center gap-1 px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold rounded-xl transition-colors whitespace-nowrap"
+                className="flex items-center gap-1 px-3 py-2 min-h-[44px] min-w-[44px] justify-center bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
               >
                 <IoMailOutline size={13} />
                 Commission
@@ -233,7 +233,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
                 whileTap={!isCartDisabled ? { scale: 0.95 } : {}}
                 onClick={handleCardAction}
                 disabled={isCartDisabled}
-                className={`flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold rounded-xl transition-colors whitespace-nowrap ${
+                className={`flex items-center justify-center gap-1 px-3 py-2 min-h-[44px] min-w-[44px] text-xs font-bold rounded-xl transition-colors whitespace-nowrap ${
                   isCartDisabled
                     ? 'bg-warm-gray-200 dark:bg-warm-gray-700 text-warm-gray-500 cursor-not-allowed'
                     : 'bg-earth-500 hover:bg-earth-600 text-white'

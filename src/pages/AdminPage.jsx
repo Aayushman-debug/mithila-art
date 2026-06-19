@@ -614,8 +614,8 @@ export default function AdminPage() {
                             ))}
                           </select>
                           <div className="flex gap-2">
-                            <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-2 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-earth-500"><IoPencilOutline size={16} /></button>
-                            <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-2 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
+                            <button onClick={() => { setProductToEdit(p); setIsProductModalOpen(true); }} className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-earth-500"><IoPencilOutline size={16} /></button>
+                            <button onClick={() => handleDeleteProduct(p._id || p.id)} className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
                           </div>
                         </div>
                       </div>
@@ -758,15 +758,15 @@ export default function AdminPage() {
                           </select>
                           
                           <div className="flex gap-1">
-                            <button className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-earth-500"><IoEyeOutline size={16} /></button>
+                            <button className="p-1.5 min-h-[44px] min-w-[44px] flex justify-center items-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-earth-500"><IoEyeOutline size={16} /></button>
                             {order.paymentMethod === 'upi' && order.paymentScreenshot && (
-                              <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-earth-500"><IoImageOutline size={16} /></button>
+                              <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 min-h-[44px] min-w-[44px] flex justify-center items-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-earth-500"><IoImageOutline size={16} /></button>
                             )}
-                            <button onClick={() => handleDeleteOrder(order._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
+                            <button onClick={() => handleDeleteOrder(order._id)} className="p-1.5 min-h-[44px] min-w-[44px] flex justify-center items-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-warm-gray-500 hover:text-mithila-red"><IoTrashOutline size={16} /></button>
                             {order.paymentMethod === 'upi' && order.paymentVerification === 'pending' && (
                               <>
-                                <button onClick={() => handleVerifyPayment(order._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-mithila-green"><IoCheckmarkOutline size={16} /></button>
-                                <button onClick={() => handleRejectPayment(order._id)} className="p-1.5 rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-mithila-red"><IoCloseOutline size={16} /></button>
+                                <button onClick={() => handleVerifyPayment(order._id)} className="p-1.5 min-h-[44px] min-w-[44px] flex justify-center items-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-mithila-green"><IoCheckmarkOutline size={16} /></button>
+                                <button onClick={() => handleRejectPayment(order._id)} className="p-1.5 min-h-[44px] min-w-[44px] flex justify-center items-center rounded-lg bg-white dark:bg-warm-gray-800 border border-cream-200 dark:border-warm-gray-700 text-mithila-red"><IoCloseOutline size={16} /></button>
                               </>
                             )}
                           </div>

@@ -139,7 +139,7 @@ export default function Navbar() {
               {/* Theme toggle */}
               <motion.button
                 onClick={toggleTheme}
-                className={`hidden md:block p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                className={`hidden md:flex p-2 min-w-[44px] min-h-[44px] items-center justify-center rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
                   isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                 }`}
                 whileTap={{ scale: 0.9, rotate: 180 }}
@@ -162,7 +162,7 @@ export default function Navbar() {
               <div className="relative hidden md:block">
                 <motion.button
                   onClick={() => setShowPaletteMenu(prev => !prev)}
-                  className={`p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                  className={`flex p-2 min-w-[44px] min-h-[44px] items-center justify-center rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
                     isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                   } ${showPaletteMenu ? 'bg-earth-500/20' : ''}`}
                   whileTap={{ scale: 0.9 }}
@@ -232,7 +232,7 @@ export default function Navbar() {
               {/* Cart */}
               <Link
                 to="/cart"
-                className={`relative p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                className={`relative flex p-2 min-w-[44px] min-h-[44px] items-center justify-center rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
                   isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300 hover:text-earth-500' : 'text-cream-200 hover:text-white'
                 }`}
               >
@@ -315,7 +315,7 @@ export default function Navbar() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`xl:hidden p-2 rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
+                className={`xl:hidden flex p-2 min-w-[44px] min-h-[44px] items-center justify-center rounded-full transition-all duration-300 hover:bg-earth-500/10 ${
                   isNavbarScrolled ? 'text-warm-gray-600 dark:text-cream-300' : 'text-cream-200'
                 }`}
                 aria-label="Toggle menu"
@@ -353,7 +353,7 @@ export default function Navbar() {
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 rounded-full hover:bg-cream-200 transition-colors"
+                    className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-cream-200 transition-colors"
                   >
                     <IoClose size={24} className="text-warm-gray-600" />
                   </button>

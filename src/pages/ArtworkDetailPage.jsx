@@ -127,8 +127,8 @@ export default function ArtworkDetailPage() {
 
       <div className="container-custom px-4 md:px-8">
         {/* Back Navigation */}
-        <button onClick={() => navigate(-1)} className="group flex items-center gap-2 text-warm-gray-500 hover:text-charcoal mb-8 transition-colors">
-          <div className="w-8 h-8 rounded-full bg-white border border-cream-200 flex items-center justify-center group-hover:border-earth-300 transition-colors">
+        <button onClick={() => navigate(-1)} className="group flex items-center gap-2 text-warm-gray-500 hover:text-charcoal mb-8 transition-colors p-2 -ml-2 min-h-[44px]">
+          <div className="w-10 h-10 min-w-[44px] min-h-[44px] rounded-full bg-white border border-cream-200 flex items-center justify-center group-hover:border-earth-300 transition-colors">
             <IoChevronBackOutline />
           </div>
           <span className="font-body text-sm font-medium">Back to Gallery</span>

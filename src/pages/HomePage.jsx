@@ -371,7 +371,7 @@ function FeaturedPaintings() {
             <div className="hidden sm:flex gap-3">
               <button
                 onClick={() => scroll('left')}
-                className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                   canScrollLeft
                     ? 'border-earth-500 text-earth-500 hover:bg-earth-500 hover:text-white'
                     : 'border-warm-gray-200 text-warm-gray-300 opacity-50'
@@ -381,7 +381,7 @@ function FeaturedPaintings() {
               </button>
               <button
                 onClick={() => scroll('right')}
-                className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                   canScrollRight
                     ? 'border-earth-500 text-earth-500 hover:bg-earth-500 hover:text-white'
                     : 'border-warm-gray-200 text-warm-gray-300 opacity-50'

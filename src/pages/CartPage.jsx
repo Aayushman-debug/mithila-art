@@ -418,7 +418,7 @@ export default function CartPage() {
               className="bg-earth-900 rounded-2xl p-6 max-w-sm w-full text-center relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <button onClick={() => setShowQrModal(false)} className="absolute top-4 right-4 text-cream-300 hover:text-white transition-colors">
+              <button onClick={() => setShowQrModal(false)} className="absolute top-4 right-4 text-cream-300 hover:text-white transition-colors p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">
                 <IoCloseOutline size={24} />
               </button>
               <h3 className="font-display font-bold text-xl text-cream-50 mb-2">Scan to Pay</h3>
@@ -500,7 +500,7 @@ export default function CartPage() {
                                 <div className="flex items-center bg-mithila-orange/10 rounded-xl overflow-hidden px-3 py-1.5">
                                   <span className="font-body font-semibold text-xs text-mithila-orange tracking-wider">ORIGINAL 1 OF 1</span>
                                 </div>
-                                <button onClick={() => removeItem(item.id)} className="p-2 text-warm-gray-500 hover:text-mithila-red transition-colors">
+                                <button onClick={() => removeItem(item.id)} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-warm-gray-500 hover:text-mithila-red transition-colors">
                                   <IoTrashOutline size={18} />
                                 </button>
                               </div>
@@ -698,9 +698,9 @@ export default function CartPage() {
                                 <img src={screenshotPreview} alt="Payment screenshot preview" className="w-full max-h-64 object-contain rounded-xl border border-cream-200 dark:border-warm-gray-700" />
                                 <button
                                   onClick={() => { setScreenshotFile(null); setScreenshotPreview(null); }}
-                                  className="absolute top-2 right-2 w-8 h-8 bg-earth-900/70 rounded-full flex items-center justify-center text-white hover:bg-earth-900 transition-colors"
+                                  className="absolute top-2 right-2 w-11 h-11 bg-earth-900/70 rounded-full flex items-center justify-center text-white hover:bg-earth-900 transition-colors"
                                 >
-                                  <IoCloseOutline size={18} />
+                                  <IoCloseOutline size={20} />
                                 </button>
                               </motion.div>
                             )}
@@ -768,7 +768,7 @@ export default function CartPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="font-semibold text-earth-700 dark:text-earth-400">-{formatPrice(discountAmount)}</div>
-                          <button onClick={handleRemoveCoupon} className="text-xs text-warm-gray-500 hover:text-mithila-red">Remove</button>
+                          <button onClick={handleRemoveCoupon} className="text-xs text-warm-gray-500 hover:text-mithila-red p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">Remove</button>
                         </div>
                       </div>
                     )}

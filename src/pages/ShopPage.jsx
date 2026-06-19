@@ -1027,7 +1027,7 @@ export default function ShopPage() {
                     <h3 className="font-display font-bold text-xl text-charcoal dark:text-cream-100">Filters</h3>
                     <motion.button
                       onClick={() => setMobileFiltersOpen(false)}
-                      className="w-10 h-10 rounded-full bg-cream-50 dark:bg-warm-gray-700 flex items-center justify-center hover:bg-cream-100 dark:hover:bg-warm-gray-600 transition-colors"
+                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-cream-50 dark:bg-warm-gray-700 flex items-center justify-center hover:bg-cream-100 dark:hover:bg-warm-gray-600 transition-colors"
                       whileTap={{ scale: 0.9 }}
                     >
                       <IoCloseOutline size={22} className="text-charcoal dark:text-cream-200" />
@@ -1045,7 +1045,7 @@ export default function ShopPage() {
                   />
                   <motion.button
                     onClick={() => setMobileFiltersOpen(false)}
-                    className="btn-primary w-full mt-8"
+                    className="btn-primary w-full mt-8 min-h-[44px]"
                     whileTap={{ scale: 0.95 }}
                   >
                     Show {filteredPaintings.length} Results

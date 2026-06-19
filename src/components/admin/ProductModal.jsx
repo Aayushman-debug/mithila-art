@@ -133,7 +133,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
         <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white dark:bg-warm-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
           <div className="p-4 border-b border-cream-200 dark:border-warm-gray-700 flex justify-between items-center bg-cream-50 dark:bg-warm-gray-900">
             <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100">{productToEdit ? 'Edit Variant' : 'New Variant'}</h3>
-            <button onClick={onClose} className="p-2 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
+            <button onClick={onClose} aria-label="Close modal" className="p-2 min-h-[44px] min-w-[44px] flex justify-center items-center text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
           </div>
 
           <div className="p-4 md:p-6 overflow-y-auto flex-1">
@@ -205,7 +205,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
                   {formData.images.map((img, i) => (
                     <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-cream-200 dark:border-warm-gray-700">
                       <img src={img.url} className="w-full h-full object-cover" alt="Product" />
-                      <button type="button" onClick={() => removeImage(i, img.public_id)} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full shadow hover:bg-red-600 transition-colors"><IoTrashOutline size={14} /></button>
+                      <button type="button" aria-label="Remove image" onClick={() => removeImage(i, img.public_id)} className="absolute top-1 right-1 min-w-[44px] min-h-[44px] flex justify-center items-center bg-red-500 text-white rounded-full shadow hover:bg-red-600 transition-colors"><IoTrashOutline size={16} /></button>
                     </div>
                   ))}
 
@@ -223,8 +223,8 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
           </div>
 
           <div className="p-4 border-t border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-cream-200 transition-colors">Cancel</button>
-            <button type="submit" form="productForm" disabled={isSaving || isUploading} className="btn-primary flex items-center justify-center min-w-[100px]">
+            <button type="button" onClick={onClose} className="px-4 py-2 min-h-[44px] rounded-lg font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-cream-200 transition-colors">Cancel</button>
+            <button type="submit" form="productForm" disabled={isSaving || isUploading} className="btn-primary min-h-[44px] flex items-center justify-center min-w-[100px]">
               {isSaving ? 'Saving...' : 'Save Variant'}
             </button>
           </div>
