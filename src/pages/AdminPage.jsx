@@ -5,9 +5,9 @@ import { IoGridOutline, IoCubeOutline, IoReceiptOutline, IoDocumentTextOutline, 
 import { useAuth } from '../context/AuthContext';
 import { paintings } from '../data/paintings';
 import { formatPrice } from '../utils/helpers';
-import ProductModal from '../components/admin/ProductModal';
 import CouponsManager from '../components/admin/CouponsManager';
 import FallbackImage from '../components/ui/FallbackImage';
+import FloatingWindow from '../components/ui/FloatingWindow';
 
 const AVAILABILITY_OPTIONS = [
   { value: 'available',           label: 'Available' },
@@ -164,6 +164,12 @@ export default function AdminPage() {
   
   const [showUserModal, setShowUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [showCommissionModal, setShowCommissionModal] = useState(false);
+  const [selectedCommission, setSelectedCommission] = useState(null);
   
   useEffect(() => {
     setLoggedIn(isAuthenticated);
@@ -686,7 +692,7 @@ export default function AdminPage() {
                             <td className="px-4 py-3 text-sm text-warm-gray-500 dark:text-warm-gray-400 font-body">{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-2">
-                                <button className="p-1.5 rounded-lg hover:bg-cream-100 dark:bg-warm-gray-800 dark:hover:bg-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Order"><IoEyeOutline size={16} /></button>
+                                <button onClick={() => { setSelectedOrder(order); setShowOrderModal(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 dark:bg-warm-gray-800 dark:hover:bg-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Order"><IoEyeOutline size={16} /></button>
                                 {order.paymentMethod === 'upi' && order.paymentScreenshot && (
                                   <button onClick={() => { setSelectedScreenshot(order.paymentScreenshot); setShowScreenshotModal(true); }} className="p-1.5 rounded-lg hover:bg-cream-100 dark:bg-warm-gray-800 dark:hover:bg-warm-gray-700 text-warm-gray-500 dark:text-warm-gray-400 hover:text-earth-500 transition-colors" title="View Screenshot">
                                     <IoImageOutline size={16} />
@@ -723,7 +729,7 @@ export default function AdminPage() {
                   {/* Mobile Card View for Orders */}
                   <div className="md:hidden flex flex-col gap-4 p-4">
                     {realOrders.map((order) => (
-                      <div key={order._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3">
+                      <div key={order._id} onClick={() => { setSelectedOrder(order); setShowOrderModal(true); }} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3 cursor-pointer hover:border-earth-300 transition-colors">
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{order.name}</p>
@@ -744,7 +750,7 @@ export default function AdminPage() {
                           </span>
                         </div>
 
-                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-cream-200 dark:border-warm-gray-700">
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-cream-200 dark:border-warm-gray-700" onClick={(e) => e.stopPropagation()}>
                           <select 
                             value={order.status || 'Pending'} 
                             onChange={(e) => handleStatusChange(order._id, e.target.value)}
@@ -860,7 +866,7 @@ export default function AdminPage() {
                       </thead>
                       <tbody>
                         {realCommissions.map((com) => (
-                          <tr key={com._id} className="border-b border-cream-50 hover:bg-cream-50 dark:hover:bg-warm-gray-700 dark:bg-warm-gray-900/50 transition-colors">
+                          <tr key={com._id} onClick={() => { setSelectedCommission(com); setShowCommissionModal(true); }} className="border-b border-cream-50 hover:bg-cream-50 dark:hover:bg-warm-gray-700 dark:bg-warm-gray-900/50 transition-colors cursor-pointer">
                             <td className="px-4 py-3 font-mono text-sm text-earth-700">#{com.referenceId || com._id.slice(-6)}</td>
                             <td className="px-4 py-3">
                               <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{com.name}</p>
@@ -886,7 +892,7 @@ export default function AdminPage() {
                   {/* Mobile Card View for Commissions */}
                   <div className="md:hidden flex flex-col gap-4 p-4">
                     {realCommissions.map((com) => (
-                      <div key={com._id} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3">
+                      <div key={com._id} onClick={() => { setSelectedCommission(com); setShowCommissionModal(true); }} className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 flex flex-col gap-3 cursor-pointer hover:border-earth-300 transition-colors">
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{com.name}</p>
@@ -935,109 +941,218 @@ export default function AdminPage() {
       />
       
       {/* User Details Modal */}
-      <AnimatePresence>
-        {showUserModal && selectedUser && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-earth-900/90 p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="relative bg-white dark:bg-warm-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-              <div className="p-4 border-b border-cream-200 dark:border-warm-gray-700 flex justify-between items-center bg-cream-50 dark:bg-warm-gray-900">
-                <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100">User Profile</h3>
-                <button onClick={() => setShowUserModal(false)} className="p-2 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm">
-                  <IoCloseOutline size={24} />
-                </button>
+      <FloatingWindow 
+        isOpen={showUserModal && selectedUser} 
+        onClose={() => setShowUserModal(false)} 
+        title="User Profile" 
+        size="lg"
+      >
+        {selectedUser && (
+          <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+            
+            {/* Header Info */}
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-earth-500/10 text-earth-600 flex items-center justify-center font-display font-bold text-2xl uppercase shrink-0">
+                {selectedUser.name?.charAt(0)}
               </div>
-              <div className="p-6 overflow-y-auto flex-1 space-y-6">
-                
-                {/* Header Info */}
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-earth-500/10 text-earth-600 flex items-center justify-center font-display font-bold text-2xl uppercase">
-                    {selectedUser.name?.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="font-display font-bold text-xl text-charcoal dark:text-cream-100">{selectedUser.name}</h4>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium inline-block mt-1 ${selectedUser.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-warm-gray-100 text-warm-gray-600'}`}>{selectedUser.role}</span>
-                  </div>
-                </div>
+              <div>
+                <h4 className="font-display font-bold text-xl text-charcoal dark:text-cream-100">{selectedUser.name}</h4>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-body font-medium inline-block mt-1 ${selectedUser.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-warm-gray-100 text-warm-gray-600'}`}>{selectedUser.role}</span>
+              </div>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Contact Info */}
-                  <div className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
-                    <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Contact Info</h5>
-                    <div className="space-y-2 text-sm font-body">
-                      <p><span className="text-warm-gray-500">Email:</span> <span className="text-charcoal dark:text-cream-100">{selectedUser.email}</span></p>
-                      <p><span className="text-warm-gray-500">Phone:</span> <span className="text-charcoal dark:text-cream-100">{selectedUser.phone || 'N/A'}</span></p>
-                      <p><span className="text-warm-gray-500">Verified:</span> <span className={selectedUser.isVerified ? 'text-mithila-green font-medium' : 'text-warm-gray-500 font-medium'}>{selectedUser.isVerified ? 'Yes' : 'No'}</span></p>
-                    </div>
-                  </div>
-
-                  {/* Activity */}
-                  <div className="bg-cream-50 dark:bg-warm-gray-900 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
-                    <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Activity</h5>
-                    <div className="grid grid-cols-2 gap-2 text-sm font-body">
-                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
-                        <p className="text-xl font-display font-bold text-earth-600">{selectedUser.orders?.length || 0}</p>
-                        <p className="text-xs text-warm-gray-500">Orders</p>
-                      </div>
-                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
-                        <p className="text-xl font-display font-bold text-mithila-orange">{selectedUser.commissions?.length || 0}</p>
-                        <p className="text-xs text-warm-gray-500">Commissions</p>
-                      </div>
-                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
-                        <p className="text-xl font-display font-bold text-mithila-blue">{selectedUser.cart?.length || 0}</p>
-                        <p className="text-xs text-warm-gray-500">Cart Items</p>
-                      </div>
-                      <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center">
-                        <p className="text-xl font-display font-bold text-purple-500">{selectedUser.wishlist?.length || 0}</p>
-                        <p className="text-xs text-warm-gray-500">Wishlist</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Addresses */}
-                <div>
-                  <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Saved Addresses</h5>
-                  {selectedUser.addresses?.length > 0 ? (
-                    <div className="space-y-3">
-                      {selectedUser.addresses.map((addr, idx) => (
-                        <div key={idx} className="bg-white dark:bg-warm-gray-800 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-sm font-body">
-                          <p className="font-semibold text-charcoal dark:text-cream-100 mb-1">{addr.label || 'Home'}</p>
-                          <p className="text-warm-gray-600 dark:text-warm-gray-300">{addr.line1}</p>
-                          <p className="text-warm-gray-600 dark:text-warm-gray-300">{addr.city}, {addr.state} {addr.pincode}</p>
-                          {addr.phone && <p className="text-warm-gray-500 mt-1">Phone: {addr.phone}</p>}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm font-body text-warm-gray-500 bg-white dark:bg-warm-gray-800 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-center">No saved addresses.</p>
-                  )}
-                </div>
-
-                <div className="text-xs text-warm-gray-400 text-center font-body pt-2 border-t border-cream-100 dark:border-warm-gray-700 mt-4">
-                  Account created on {new Date(selectedUser.createdAt).toLocaleString()}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Contact Info */}
+              <div className="bg-cream-50 dark:bg-warm-gray-900/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+                <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Contact Info</h5>
+                <div className="space-y-2 text-sm font-body">
+                  <p className="flex justify-between"><span className="text-warm-gray-500">Email:</span> <span className="text-charcoal dark:text-cream-100 font-medium truncate ml-2">{selectedUser.email}</span></p>
+                  <p className="flex justify-between"><span className="text-warm-gray-500">Phone:</span> <span className="text-charcoal dark:text-cream-100 font-medium">{selectedUser.phone || 'N/A'}</span></p>
+                  <p className="flex justify-between"><span className="text-warm-gray-500">Verified:</span> <span className={selectedUser.isVerified ? 'text-mithila-green font-medium' : 'text-warm-gray-500 font-medium'}>{selectedUser.isVerified ? 'Yes' : 'No'}</span></p>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+
+              {/* Activity */}
+              <div className="bg-cream-50 dark:bg-warm-gray-900/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+                <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Activity</h5>
+                <div className="grid grid-cols-2 gap-2 text-sm font-body">
+                  <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center border border-cream-100 dark:border-warm-gray-700/50">
+                    <p className="text-xl font-display font-bold text-earth-600">{selectedUser.orders?.length || 0}</p>
+                    <p className="text-[10px] text-warm-gray-500 uppercase tracking-wide">Orders</p>
+                  </div>
+                  <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center border border-cream-100 dark:border-warm-gray-700/50">
+                    <p className="text-xl font-display font-bold text-mithila-orange">{selectedUser.commissions?.length || 0}</p>
+                    <p className="text-[10px] text-warm-gray-500 uppercase tracking-wide">Commissions</p>
+                  </div>
+                  <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center border border-cream-100 dark:border-warm-gray-700/50">
+                    <p className="text-xl font-display font-bold text-mithila-blue">{selectedUser.cart?.length || 0}</p>
+                    <p className="text-[10px] text-warm-gray-500 uppercase tracking-wide">Cart Items</p>
+                  </div>
+                  <div className="bg-white dark:bg-warm-gray-800 p-2 rounded-lg text-center border border-cream-100 dark:border-warm-gray-700/50">
+                    <p className="text-xl font-display font-bold text-purple-500">{selectedUser.wishlist?.length || 0}</p>
+                    <p className="text-[10px] text-warm-gray-500 uppercase tracking-wide">Wishlist</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Addresses */}
+            <div>
+              <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Saved Addresses</h5>
+              {selectedUser.addresses?.length > 0 ? (
+                <div className="space-y-3">
+                  {selectedUser.addresses.map((addr, idx) => (
+                    <div key={idx} className="bg-cream-50 dark:bg-warm-gray-800/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-sm font-body">
+                      <p className="font-semibold text-charcoal dark:text-cream-100 mb-1">{addr.label || 'Home'}</p>
+                      <p className="text-warm-gray-600 dark:text-warm-gray-300">{addr.line1}</p>
+                      <p className="text-warm-gray-600 dark:text-warm-gray-300">{addr.city}, {addr.state} {addr.pincode}</p>
+                      {addr.phone && <p className="text-warm-gray-500 mt-1">Phone: {addr.phone}</p>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm font-body text-warm-gray-500 bg-cream-50 dark:bg-warm-gray-800/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-center">No saved addresses.</p>
+              )}
+            </div>
+
+            <div className="text-xs text-warm-gray-400 text-center font-body pt-4 border-t border-cream-100 dark:border-warm-gray-700">
+              Account created on {new Date(selectedUser.createdAt).toLocaleString()}
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </FloatingWindow>
       {/* Screenshot Modal */}
-      <AnimatePresence>
-        {showScreenshotModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-earth-900/90 p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="relative bg-white dark:bg-warm-gray-800 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-              <div className="p-4 border-b border-cream-200 dark:border-warm-gray-700 flex justify-between items-center bg-cream-50 dark:bg-warm-gray-900">
-                <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100">Payment Screenshot</h3>
-                <button onClick={() => setShowScreenshotModal(false)} className="p-2 text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm">
-                  <IoCloseOutline size={24} />
-                </button>
+      <FloatingWindow
+        isOpen={showScreenshotModal}
+        onClose={() => setShowScreenshotModal(false)}
+        title="Payment Screenshot"
+        size="md"
+      >
+        <div className="p-6 overflow-auto bg-cream-50 dark:bg-warm-gray-900/50 flex items-center justify-center min-h-[300px]">
+          <img src={selectedScreenshot} alt="Payment Screenshot" className="max-w-full max-h-full object-contain rounded-xl shadow-md border border-cream-200 dark:border-warm-gray-700" />
+        </div>
+      </FloatingWindow>
+
+      {/* Order Details Modal */}
+      <FloatingWindow
+        isOpen={showOrderModal && selectedOrder}
+        onClose={() => setShowOrderModal(false)}
+        title={`Order #${selectedOrder?.orderId || selectedOrder?._id?.slice(-8)}`}
+        size="lg"
+      >
+        {selectedOrder && (
+          <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-cream-50 dark:bg-warm-gray-900/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+                <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Customer</h5>
+                <div className="space-y-1 text-sm font-body">
+                  <p className="font-medium text-charcoal dark:text-cream-100">{selectedOrder.name}</p>
+                  <p className="text-warm-gray-600 dark:text-warm-gray-300">{selectedOrder.email}</p>
+                  <p className="text-warm-gray-600 dark:text-warm-gray-300">{selectedOrder.phone}</p>
+                </div>
               </div>
-              <div className="p-6 overflow-auto bg-cream-50 dark:bg-warm-gray-900/50 flex items-center justify-center flex-1">
-                <img src={selectedScreenshot} alt="Payment Screenshot" className="max-w-full max-h-full object-contain rounded-xl shadow-md border border-cream-200 dark:border-warm-gray-700" />
+              <div className="bg-cream-50 dark:bg-warm-gray-900/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+                <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-3">Shipping Address</h5>
+                {selectedOrder.shippingAddress ? (
+                  <div className="space-y-1 text-sm font-body text-warm-gray-600 dark:text-warm-gray-300">
+                    <p>{selectedOrder.shippingAddress.line1}</p>
+                    <p>{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.pincode}</p>
+                  </div>
+                ) : (
+                  <p className="text-sm text-warm-gray-500">Not provided</p>
+                )}
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+
+            <div className="bg-white dark:bg-warm-gray-800 rounded-xl border border-cream-100 dark:border-warm-gray-700 overflow-hidden">
+              <div className="p-4 border-b border-cream-100 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900/50">
+                <h5 className="font-display font-semibold text-sm text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider">Order Items</h5>
+              </div>
+              <div className="divide-y divide-cream-100 dark:divide-warm-gray-700">
+                {selectedOrder.items?.map((item, idx) => (
+                  <div key={idx} className="p-4 flex items-center gap-4">
+                    <FallbackImage src={item.image} alt={item.title} className="w-16 h-16 rounded-lg object-cover bg-cream-50 dark:bg-warm-gray-900" />
+                    <div className="flex-1">
+                      <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{item.title}</p>
+                      <p className="text-xs text-warm-gray-500">{item.size} • Qty: {item.quantity}</p>
+                    </div>
+                    <p className="font-display font-semibold text-earth-700">{formatPrice(item.price * item.quantity)}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="p-4 bg-cream-50 dark:bg-warm-gray-900/50 space-y-2">
+                <div className="flex justify-between text-sm font-body">
+                  <span className="text-warm-gray-600 dark:text-warm-gray-300">Subtotal</span>
+                  <span className="font-medium text-charcoal dark:text-cream-100">{formatPrice(selectedOrder.total)}</span>
+                </div>
+                {selectedOrder.discount > 0 && (
+                  <div className="flex justify-between text-sm font-body text-mithila-green">
+                    <span>Discount</span>
+                    <span>-{formatPrice(selectedOrder.discount)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-sm font-body">
+                  <span className="text-warm-gray-600 dark:text-warm-gray-300">Shipping</span>
+                  <span className="font-medium text-charcoal dark:text-cream-100">{selectedOrder.shippingFee === 0 ? 'Free' : formatPrice(selectedOrder.shippingFee)}</span>
+                </div>
+                <div className="pt-2 border-t border-cream-200 dark:border-warm-gray-700 flex justify-between">
+                  <span className="font-display font-semibold text-charcoal dark:text-cream-100">Total</span>
+                  <span className="font-display font-bold text-lg text-earth-700">{formatPrice(selectedOrder.grandTotal)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </FloatingWindow>
+
+      {/* Commission Details Modal */}
+      <FloatingWindow
+        isOpen={showCommissionModal && selectedCommission}
+        onClose={() => setShowCommissionModal(false)}
+        title={`Commission Request #${selectedCommission?.referenceId || selectedCommission?._id?.slice(-6)}`}
+        size="md"
+      >
+        {selectedCommission && (
+          <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+            <div className="flex justify-between items-center bg-cream-50 dark:bg-warm-gray-900/50 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700">
+              <div>
+                <p className="text-xs text-warm-gray-500 uppercase tracking-wider font-semibold mb-1">Status</p>
+                <span className={`text-sm px-3 py-1 rounded-full font-body font-medium ${statusColors[selectedCommission.status] || 'bg-warm-gray-100'}`}>{selectedCommission.status}</span>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-warm-gray-500 uppercase tracking-wider font-semibold mb-1">Date Submitted</p>
+                <p className="text-sm font-body font-medium text-charcoal dark:text-cream-100">{new Date(selectedCommission.submittedAt).toLocaleDateString()}</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <h5 className="text-xs font-semibold text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-1">Client Details</h5>
+                <div className="bg-white dark:bg-warm-gray-800 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-sm font-body space-y-2">
+                  <p><span className="text-warm-gray-500">Name:</span> <span className="font-medium text-charcoal dark:text-cream-100">{selectedCommission.name}</span></p>
+                  <p><span className="text-warm-gray-500">Email:</span> <span className="font-medium text-charcoal dark:text-cream-100">{selectedCommission.email}</span></p>
+                  {selectedCommission.phone && <p><span className="text-warm-gray-500">Phone:</span> <span className="font-medium text-charcoal dark:text-cream-100">{selectedCommission.phone}</span></p>}
+                  <p><span className="text-warm-gray-500">Location:</span> <span className="font-medium text-charcoal dark:text-cream-100">{selectedCommission.location}</span></p>
+                </div>
+              </div>
+
+              <div>
+                <h5 className="text-xs font-semibold text-warm-gray-500 dark:text-warm-gray-400 uppercase tracking-wider mb-1">Commission Details</h5>
+                <div className="bg-white dark:bg-warm-gray-800 p-4 rounded-xl border border-cream-100 dark:border-warm-gray-700 text-sm font-body space-y-2">
+                  <div className="grid grid-cols-2 gap-4">
+                    <p><span className="block text-warm-gray-500 mb-0.5">Style</span> <span className="font-medium text-earth-600">{selectedCommission.style || 'Custom'}</span></p>
+                    <p><span className="block text-warm-gray-500 mb-0.5">Size</span> <span className="font-medium text-charcoal dark:text-cream-100">{selectedCommission.size || 'Standard'}</span></p>
+                  </div>
+                  <div className="pt-2">
+                    <span className="block text-warm-gray-500 mb-1">Description</span>
+                    <p className="text-charcoal dark:text-cream-200 leading-relaxed whitespace-pre-wrap">{selectedCommission.description}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </FloatingWindow>
 
       {/* Availability Toast */}
       <AnimatePresence>

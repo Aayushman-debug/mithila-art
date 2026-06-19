@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { paymentAPI, buildApiPath } from '../api';
 import { formatPrice, validateIndianPhone, normalizePhone } from '../utils/helpers';
 import FallbackImage from '../components/ui/FallbackImage';
+import FloatingWindow from '../components/ui/FloatingWindow';
 
 export default function CartPage() {
   const { items, removeItem, clearCart, syncCart, total, itemCount } = useCart();
@@ -405,39 +406,27 @@ export default function CartPage() {
         <meta name="description" content="Review your selected Mithila paintings and proceed to checkout." />
       </Helmet>
 
-      {/* QR Code Modal */}
-      <AnimatePresence>
-        {showQrModal && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-            onClick={() => setShowQrModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
-              className="bg-earth-900 rounded-2xl p-6 max-w-sm w-full text-center relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button onClick={() => setShowQrModal(false)} className="absolute top-4 right-4 text-cream-300 hover:text-white transition-colors p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">
-                <IoCloseOutline size={24} />
-              </button>
-              <h3 className="font-display font-bold text-xl text-cream-50 mb-2">Scan to Pay</h3>
-              <p className="text-cream-300/70 text-sm font-body mb-4">Scan with any UPI app to pay</p>
-              <div className="bg-white rounded-xl p-3 mb-4 inline-block">
-                <img src="/upi-qr.jpg" alt="UPI QR Code" className="w-56 h-56 object-contain" />
-              </div>
-              <div className="space-y-2">
-                <p className="text-cream-300 text-sm font-body">
-                  Amount: <span className="font-semibold text-cream-50">{formatPrice(finalTotal)}</span>
-                </p>
-                <p className="text-cream-300/60 text-xs font-body">
-                  UPI ID: <span className="text-earth-400 font-mono select-all">9142168466@axl</span>
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <FloatingWindow
+        isOpen={showQrModal}
+        onClose={() => setShowQrModal(false)}
+        title="Scan to Pay"
+        size="sm"
+      >
+        <div className="text-center">
+          <p className="text-warm-gray-600 dark:text-warm-gray-400 text-sm font-body mb-4">Scan with any UPI app to pay</p>
+          <div className="bg-white rounded-xl p-3 mb-4 inline-block">
+            <img src="/upi-qr.jpg" alt="UPI QR Code" className="w-56 h-56 object-contain" />
+          </div>
+          <div className="space-y-2">
+            <p className="text-charcoal dark:text-cream-50 text-sm font-body font-medium">
+              Amount: <span className="font-bold text-earth-500">{formatPrice(finalTotal)}</span>
+            </p>
+            <p className="text-warm-gray-500 dark:text-warm-gray-400 text-xs font-body">
+              UPI ID: <span className="text-earth-500 font-mono select-all">9142168466@axl</span>
+            </p>
+          </div>
+        </div>
+      </FloatingWindow>
 
       <div className="container-custom section-padding">
         {/* Breadcrumb */}

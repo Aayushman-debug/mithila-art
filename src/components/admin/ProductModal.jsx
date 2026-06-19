@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { IoCloseOutline, IoCloudUploadOutline, IoTrashOutline } from 'react-icons/io5';
+import { IoCloudUploadOutline, IoTrashOutline } from 'react-icons/io5';
 import { uploadAPI, productAPI } from '../../api';
+import FloatingWindow from '../ui/FloatingWindow';
 
 export default function ProductModal({ isOpen, onClose, productToEdit, onSave }) {
   const [formData, setFormData] = useState({
@@ -128,16 +128,15 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-earth-900/90 p-4">
-        <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white dark:bg-warm-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-          <div className="p-4 border-b border-cream-200 dark:border-warm-gray-700 flex justify-between items-center bg-cream-50 dark:bg-warm-gray-900">
-            <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream-100">{productToEdit ? 'Edit Variant' : 'New Variant'}</h3>
-            <button onClick={onClose} aria-label="Close modal" className="p-2 min-h-[44px] min-w-[44px] flex justify-center items-center text-warm-gray-500 dark:text-warm-gray-400 hover:text-mithila-red transition-colors bg-white dark:bg-warm-gray-800 rounded-full shadow-sm"><IoCloseOutline size={24} /></button>
-          </div>
-
-          <div className="p-4 md:p-6 overflow-y-auto flex-1">
-            <form id="productForm" onSubmit={handleSubmit} className="space-y-6">
+    <FloatingWindow 
+      isOpen={isOpen} 
+      onClose={onClose} 
+      title={productToEdit ? 'Edit Variant' : 'New Variant'} 
+      size="2xl"
+    >
+      <div className="flex flex-col h-full max-h-[80vh]">
+        <div className="p-4 md:p-6 overflow-y-auto custom-scrollbar flex-1">
+          <form id="productForm" onSubmit={handleSubmit} className="space-y-6">
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -217,19 +216,18 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
                 </div>
               </div>
 
-              {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
+          {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
 
-            </form>
-          </div>
+          </form>
+        </div>
 
-          <div className="p-4 border-t border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 min-h-[44px] rounded-lg font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-cream-200 transition-colors">Cancel</button>
-            <button type="submit" form="productForm" disabled={isSaving || isUploading} className="btn-primary min-h-[44px] flex items-center justify-center min-w-[100px]">
-              {isSaving ? 'Saving...' : 'Save Variant'}
-            </button>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        <div className="p-4 border-t border-cream-200 dark:border-warm-gray-700/50 flex justify-end gap-3 mt-auto shrink-0">
+          <button type="button" onClick={onClose} className="px-4 py-2 min-h-[44px] rounded-xl font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-cream-100 dark:hover:bg-warm-gray-800 transition-colors">Cancel</button>
+          <button type="submit" form="productForm" disabled={isSaving || isUploading} className="px-6 py-2 min-h-[44px] flex items-center justify-center rounded-xl bg-gradient-gold text-white font-medium hover:shadow-gold transition-all disabled:opacity-50 min-w-[120px]">
+            {isSaving ? 'Saving...' : 'Save Variant'}
+          </button>
+        </div>
+      </div>
+    </FloatingWindow>
   );
 }

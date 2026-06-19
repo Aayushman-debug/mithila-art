@@ -1,15 +1,17 @@
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import WhatsAppButton from './components/layout/WhatsAppButton';
-import FloatingCompareButton from './components/layout/FloatingCompareButton';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 import ScrollProgress from './components/layout/ScrollProgress';
 import { AdminRoute, ProtectedRoute } from './components/ui/ProtectedRoute';
 import GlobalErrorBoundary from './components/ui/GlobalErrorBoundary';
 import { prefetchProducts } from './api';
+
+const CommandPalette = lazy(() => import('./components/ui/CommandPalette'));
+const FloatingCompareButton = lazy(() => import('./components/layout/FloatingCompareButton'));
 
 // Lazy load pages for performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -49,9 +51,15 @@ function ScrollToTop() {
 export default function App() {
   const location = useLocation();
 
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
   // Warm the product cache on app mount — wakes the backend and pre-fetches products
   useEffect(() => {
     prefetchProducts();
+
+    const handleToggle = () => setIsCommandPaletteOpen(true);
+    window.addEventListener('toggle-command-palette', handleToggle);
+    return () => window.removeEventListener('toggle-command-palette', handleToggle);
   }, []);
 
   return (
@@ -99,7 +107,10 @@ export default function App() {
 
       <Footer />
       <WhatsAppButton />
-      <FloatingCompareButton />
+      <Suspense fallback={null}>
+        <FloatingCompareButton />
+        <CommandPalette isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
+      </Suspense>
     </div>
   );
 }

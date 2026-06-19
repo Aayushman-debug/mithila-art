@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoAddOutline, IoTrashOutline, IoCheckmarkOutline, IoCloseOutline } from 'react-icons/io5';
 import { adminAPI } from '../../api';
+import FloatingWindow from '../ui/FloatingWindow';
 
 export default function CouponsManager({ showToast }) {
   const [coupons, setCoupons] = useState([]);
@@ -104,69 +105,74 @@ export default function CouponsManager({ showToast }) {
         </button>
       </div>
 
-      <AnimatePresence>
-        {isAdding && (
-          <motion.form 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            onSubmit={handleAddCoupon}
-            className="bg-white dark:bg-warm-gray-800 p-6 rounded-2xl border border-cream-200 dark:border-warm-gray-700 shadow-sm overflow-hidden"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-xs font-semibold text-warm-gray-600 dark:text-warm-gray-300 mb-1">Coupon Code</label>
-                <input 
-                  type="text" 
-                  name="code" 
-                  value={formData.code} 
-                  onChange={handleInputChange} 
-                  placeholder="e.g. SUMMER20"
-                  className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 text-sm font-body uppercase"
-                />
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-warm-gray-600 dark:text-warm-gray-300 mb-1">Discount Type</label>
-                  <select 
-                    name="type" 
-                    value={formData.type} 
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 text-sm font-body"
-                  >
-                    <option value="percent">Percentage (%)</option>
-                    <option value="flat">Flat Amount (₹)</option>
-                  </select>
-                </div>
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-warm-gray-600 dark:text-warm-gray-300 mb-1">Value</label>
+      <FloatingWindow
+        isOpen={isAdding}
+        onClose={() => setIsAdding(false)}
+        title="Add New Coupon"
+        size="md"
+      >
+        <div className="flex flex-col h-full max-h-[80vh]">
+          <div className="p-4 md:p-6 overflow-y-auto custom-scrollbar flex-1">
+            <form id="couponForm" onSubmit={handleAddCoupon} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-warm-gray-600 dark:text-warm-gray-300 mb-1">Coupon Code</label>
                   <input 
-                    type="number" 
-                    name="value" 
-                    value={formData.value} 
+                    type="text" 
+                    name="code" 
+                    value={formData.code} 
                     onChange={handleInputChange} 
-                    placeholder={formData.type === 'percent' ? "e.g. 15" : "e.g. 500"}
-                    className="w-full px-3 py-2 rounded-lg border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 text-sm font-body"
+                    placeholder="e.g. SUMMER20"
+                    className="w-full px-3 py-2 rounded-xl border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 text-sm font-body uppercase focus:outline-none focus:ring-2 focus:ring-earth-500"
                   />
                 </div>
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="block text-xs font-semibold text-warm-gray-600 dark:text-warm-gray-300 mb-1">Discount Type</label>
+                    <select 
+                      name="type" 
+                      value={formData.type} 
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 rounded-xl border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 text-sm font-body focus:outline-none focus:ring-2 focus:ring-earth-500"
+                    >
+                      <option value="percent">Percentage (%)</option>
+                      <option value="flat">Flat Amount (₹)</option>
+                    </select>
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-xs font-semibold text-warm-gray-600 dark:text-warm-gray-300 mb-1">Value</label>
+                    <input 
+                      type="number" 
+                      name="value" 
+                      value={formData.value} 
+                      onChange={handleInputChange} 
+                      placeholder={formData.type === 'percent' ? "e.g. 15" : "e.g. 500"}
+                      className="w-full px-3 py-2 rounded-xl border border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900 text-sm font-body focus:outline-none focus:ring-2 focus:ring-earth-500"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            <div className="flex gap-6 mb-6">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="freeShipping" checked={formData.freeShipping} onChange={handleInputChange} className="rounded text-earth-500 focus:ring-earth-500" />
-                <span className="text-sm font-body text-charcoal dark:text-cream-200">Includes Free Shipping</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="singleUse" checked={formData.singleUse} onChange={handleInputChange} className="rounded text-earth-500 focus:ring-earth-500" />
-                <span className="text-sm font-body text-charcoal dark:text-cream-200">Single Use Per Customer</span>
-              </label>
-            </div>
-
-            <button type="submit" className="btn-primary w-full md:w-auto text-sm">Save Coupon</button>
-          </motion.form>
-        )}
-      </AnimatePresence>
+              
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" name="freeShipping" checked={formData.freeShipping} onChange={handleInputChange} className="w-4 h-4 rounded text-earth-500 focus:ring-earth-500 border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900" />
+                  <span className="text-sm font-body text-charcoal dark:text-cream-200">Includes Free Shipping</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" name="singleUse" checked={formData.singleUse} onChange={handleInputChange} className="w-4 h-4 rounded text-earth-500 focus:ring-earth-500 border-cream-200 dark:border-warm-gray-700 bg-cream-50 dark:bg-warm-gray-900" />
+                  <span className="text-sm font-body text-charcoal dark:text-cream-200">Single Use Per Customer</span>
+                </label>
+              </div>
+            </form>
+          </div>
+          <div className="p-4 border-t border-cream-200 dark:border-warm-gray-700/50 flex justify-end gap-3 mt-auto shrink-0">
+            <button type="button" onClick={() => setIsAdding(false)} className="px-4 py-2 min-h-[44px] rounded-xl font-medium text-warm-gray-600 dark:text-warm-gray-300 hover:bg-cream-100 dark:hover:bg-warm-gray-800 transition-colors">Cancel</button>
+            <button type="submit" form="couponForm" className="px-6 py-2 min-h-[44px] flex items-center justify-center rounded-xl bg-gradient-gold text-white font-medium hover:shadow-gold transition-all min-w-[120px]">
+              Save Coupon
+            </button>
+          </div>
+        </div>
+      </FloatingWindow>
 
       <div className="bg-white dark:bg-warm-gray-800 rounded-2xl border border-cream-200 dark:border-warm-gray-700 overflow-hidden shadow-sm">
         <div className="hidden md:block overflow-x-auto">
