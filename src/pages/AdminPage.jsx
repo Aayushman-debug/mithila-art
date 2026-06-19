@@ -1074,8 +1074,10 @@ export default function AdminPage() {
                   <div key={idx} className="p-4 flex items-center gap-4">
                     <FallbackImage src={item.image} alt={item.title} className="w-16 h-16 rounded-lg object-cover bg-cream-50 dark:bg-warm-gray-900" />
                     <div className="flex-1">
-                      <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">{item.title}</p>
-                      <p className="text-xs text-warm-gray-500">{item.size} • Qty: {item.quantity}</p>
+                      <p className="font-body font-medium text-sm text-charcoal dark:text-cream-100">
+                        {item.title} {item.variantName && <span className="text-earth-500 ml-1">({item.variantName})</span>}
+                      </p>
+                      <p className="text-xs text-warm-gray-500">{item.size ? `${item.size} • ` : ''}Qty: {item.quantity}</p>
                     </div>
                     <p className="font-display font-semibold text-earth-700">{formatPrice(item.price * item.quantity)}</p>
                   </div>

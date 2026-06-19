@@ -133,6 +133,9 @@ export default function OrdersPage() {
                         <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-100 leading-snug mb-1">
                           {item.title}
                         </h3>
+                        {item.variantName && (
+                          <p className="text-earth-500 font-body text-sm font-medium mb-1">{item.variantName}</p>
+                        )}
                         <p className="text-warm-gray-500 font-body text-sm mb-2">Qty: {item.quantity}</p>
                         <p className="font-display font-bold text-earth-700 dark:text-earth-400">
                           {formatPrice(item.price)}
