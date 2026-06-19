@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { IoCloudUploadOutline, IoTrashOutline } from 'react-icons/io5';
+import { IoCloudUploadOutline, IoTrashOutline, IoAddOutline, IoImageOutline } from 'react-icons/io5';
 import { uploadAPI, productAPI } from '../../api';
 import FloatingWindow from '../ui/FloatingWindow';
+import FallbackImage from '../ui/FallbackImage';
 
 export default function ProductModal({ isOpen, onClose, productToEdit, onSave }) {
   const [formData, setFormData] = useState({
@@ -120,7 +121,7 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
     });
   };
 
-  const removeVariant = (index) => {
+  const handleRemoveVariant = (index) => {
     setFormData(prev => ({
       ...prev,
       variants: prev.variants.filter((_, i) => i !== index)
@@ -252,6 +253,8 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
               <option value="available">Available</option>
               <option value="only_1_left">Only 1 Left</option>
               <option value="out_of_stock">Out of Stock</option>
+              <option value="coming_soon">Coming Soon</option>
+              <option value="commission_available">Commission Available</option>
             </select>
           </div>
         </div>
@@ -339,6 +342,8 @@ export default function ProductModal({ isOpen, onClose, productToEdit, onSave })
                         <option value="available">Available</option>
                         <option value="only_1_left">Only 1 Left</option>
                         <option value="out_of_stock">Out of Stock</option>
+                        <option value="coming_soon">Coming Soon</option>
+                        <option value="commission_available">Commission Available</option>
                       </select>
                     </div>
                   </div>

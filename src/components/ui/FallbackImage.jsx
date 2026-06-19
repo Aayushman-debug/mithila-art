@@ -10,6 +10,12 @@ const FallbackImage = ({ src, alt, className, fallbackSrc = null, ...props }) =>
   const imgRef = React.useRef(null);
 
   useEffect(() => {
+    if (!src) {
+      setIsLoading(false);
+      setHasError(true);
+      return;
+    }
+    
     let finalSrc = src;
     if (typeof src === 'string') {
       if (src.startsWith('/uploads') || src.startsWith('uploads/')) {

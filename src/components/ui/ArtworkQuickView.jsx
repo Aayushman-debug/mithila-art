@@ -165,10 +165,10 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose, allArtworks
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-full pb-4">
+      <div className="flex flex-col md:flex-row gap-8 h-[75vh] md:h-[70vh] pb-4">
         
         {/* Left Column: Image Gallery */}
-        <div className="md:col-span-7 flex flex-col md:flex-row gap-4 h-[50vh] md:h-[70vh]">
+        <div className="md:w-7/12 flex flex-col md:flex-row gap-4 h-[45vh] md:h-full shrink-0">
           {/* Thumbnails / Variant Selector */}
           {hasVariants ? (
             <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto md:w-20 shrink-0 pb-2 md:pb-0 custom-scrollbar">
@@ -230,7 +230,7 @@ export default function ArtworkQuickView({ artwork, isOpen, onClose, allArtworks
         </div>
 
         {/* Right Column: Details */}
-        <div className="md:col-span-5 flex flex-col justify-start md:overflow-y-auto custom-scrollbar md:pr-4 pb-20 md:pb-0">
+        <div className="md:w-5/12 flex flex-col justify-start overflow-y-auto custom-scrollbar md:pr-4 pb-20 md:pb-0 h-[30vh] md:h-full">
           <div className="space-y-6">
             <div className="space-y-2">
               <p className="text-2xl font-display text-earth-600 dark:text-earth-400 font-semibold">

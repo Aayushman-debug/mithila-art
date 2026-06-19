@@ -36,16 +36,17 @@ function cartReducer(state, action) {
       return action.payload;
 
     case ActionTypes.ADD_ITEM: {
-      const existing = state.find((item) => item.id === action.payload.id);
+      const cartKey = action.payload.cartKey;
+      const existing = state.find((item) => item.cartKey === cartKey);
       if (existing) {
-        // Enforce 1-of-1 logic for original artwork
+        // Enforce 1-of-1 logic for original artwork / same variant
         return state;
       }
       return [...state, { ...action.payload, quantity: 1 }];
     }
 
     case ActionTypes.REMOVE_ITEM:
-      return state.filter((item) => item.id !== action.payload);
+      return state.filter((item) => item.cartKey !== action.payload);
 
     case ActionTypes.CLEAR_CART:
       return [];
@@ -116,16 +117,25 @@ export function CartProvider({ children }) {
     (painting) => {
       const firstImg = painting.images?.[0];
       const imageToUse = (typeof firstImg === 'object' ? firstImg?.url : firstImg) || painting.image;
+      const productId = painting._id || painting.id || painting.productId;
+      // If a variant is selected, append variantId to make a unique cart key
+      const cartKey = painting.variantId ? `${productId}__${painting.variantId}` : productId;
 
       dispatch({
         type: ActionTypes.ADD_ITEM,
         payload: {
-          id: painting._id || painting.id || painting.productId,
+          cartKey,
+          id: productId,
           title: painting.title,
           price: painting.price,
-          image: imageToUse,
+          image: painting.variantId ? (painting.image || imageToUse) : imageToUse,
           artist: painting.artist,
           size: painting.size,
+          medium: painting.medium,
+          category: painting.category,
+          // variant fields (undefined if no variant)
+          variantId: painting.variantId || undefined,
+          variantName: painting.variantName || undefined,
         },
       });
     },
@@ -133,7 +143,7 @@ export function CartProvider({ children }) {
   );
 
   const removeItem = useCallback(
-    (id) => dispatch({ type: ActionTypes.REMOVE_ITEM, payload: id }),
+    (cartKey) => dispatch({ type: ActionTypes.REMOVE_ITEM, payload: cartKey }),
     [],
   );
 

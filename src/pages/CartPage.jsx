@@ -487,13 +487,18 @@ export default function CartPage() {
 
                     <div className="space-y-4">
                       {items.map((item) => (
-                        <motion.div key={item.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }}
+                        <motion.div key={item.cartKey || item.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }}
                           className="bg-white dark:bg-warm-gray-800 rounded-2xl p-4 shadow-card dark:shadow-none dark:border dark:border-warm-gray-700/50 flex gap-4"
                         >
                           <FallbackImage src={item.images?.[0] || item.image} alt={item.title} className="w-24 h-28 sm:w-32 sm:h-36 object-cover rounded-xl" />
                           <div className="flex-1 min-w-0">
                             <p className="text-earth-500 text-xs font-semibold tracking-wider uppercase">{item.category}</p>
                             <h3 className="font-display font-semibold text-lg text-charcoal dark:text-cream-200 leading-snug truncate">{item.title}</h3>
+                            {item.variantName && (
+                              <p className="text-xs font-body font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 inline-block px-2 py-0.5 rounded-full mt-1 mb-1">
+                                {item.variantName}
+                              </p>
+                            )}
                             <p className="text-body-sm text-warm-gray-500 mb-3">{item.size}</p>
                             <div className="flex items-center justify-between flex-wrap gap-2">
                               <span className="font-display font-bold text-xl text-earth-700 dark:text-earth-400">{formatPrice(item.price)}</span>
@@ -501,7 +506,7 @@ export default function CartPage() {
                                 <div className="flex items-center bg-mithila-orange/10 rounded-xl overflow-hidden px-3 py-1.5">
                                   <span className="font-body font-semibold text-xs text-mithila-orange tracking-wider">ORIGINAL 1 OF 1</span>
                                 </div>
-                                <button onClick={() => removeItem(item.id)} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-warm-gray-500 hover:text-mithila-red transition-colors">
+                                <button onClick={() => removeItem(item.cartKey || item.id)} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-warm-gray-500 hover:text-mithila-red transition-colors">
                                   <IoTrashOutline size={18} />
                                 </button>
                               </div>

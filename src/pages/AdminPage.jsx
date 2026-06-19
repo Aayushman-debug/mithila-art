@@ -937,7 +937,11 @@ export default function AdminPage() {
         isOpen={isProductModalOpen} 
         onClose={() => setIsProductModalOpen(false)} 
         productToEdit={productToEdit} 
-        onSave={() => { showToast('Variant saved successfully'); fetchProducts(); }} 
+        onSave={() => { 
+          setIsProductModalOpen(false);
+          showToast('Variant saved successfully'); 
+          fetchProducts(); 
+        }} 
       />
       
       {/* User Details Modal */}

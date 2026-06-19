@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { 
   IoChevronBackOutline, 
+  IoChevronForwardOutline,
   IoHeartOutline, 
   IoHeart, 
   IoCartOutline, 
@@ -32,6 +33,8 @@ export default function ArtworkDetailPage() {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
+  // Lightweight product list for Prev/Next navigation (fetched once)
+  const [productNav, setProductNav] = useState([]);
 
   useEffect(() => {
     const fetchArtwork = async () => {
@@ -56,6 +59,17 @@ export default function ArtworkDetailPage() {
     };
     fetchArtwork();
   }, [id]);
+
+  // Fetch lightweight nav list once on mount
+  useEffect(() => {
+    productAPI.getProducts({ limit: 200, fields: '_id,productId,title' })
+      .then(res => {
+        if (res.data?.success && res.data.products?.length > 0) {
+          setProductNav(res.data.products);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated && artwork) {
@@ -145,13 +159,47 @@ export default function ArtworkDetailPage() {
       </Helmet>
 
       <div className="container-custom px-4 md:px-8">
-        {/* Back Navigation */}
-        <button onClick={() => navigate(-1)} className="group flex items-center gap-2 text-warm-gray-500 hover:text-charcoal mb-8 transition-colors p-2 -ml-2 min-h-[44px]">
-          <div className="w-10 h-10 min-w-[44px] min-h-[44px] rounded-full bg-white border border-cream-200 flex items-center justify-center group-hover:border-earth-300 transition-colors">
-            <IoChevronBackOutline />
-          </div>
-          <span className="font-body text-sm font-medium">Back to Gallery</span>
-        </button>
+        {/* Navigation Row: Back + Prev/Next */}
+        <div className="flex items-center justify-between mb-8">
+          <button onClick={() => navigate(-1)} className="group flex items-center gap-2 text-warm-gray-500 hover:text-charcoal transition-colors p-2 -ml-2 min-h-[44px]">
+            <div className="w-10 h-10 min-w-[44px] min-h-[44px] rounded-full bg-white border border-cream-200 flex items-center justify-center group-hover:border-earth-300 transition-colors">
+              <IoChevronBackOutline />
+            </div>
+            <span className="font-body text-sm font-medium hidden sm:inline">Back to Gallery</span>
+          </button>
+
+          {/* Prev / Next artwork */}
+          {productNav.length > 0 && (() => {
+            const currentIdx = productNav.findIndex(
+              p => p._id === id || p.productId === id
+            );
+            const prevProduct = currentIdx > 0 ? productNav[currentIdx - 1] : null;
+            const nextProduct = currentIdx !== -1 && currentIdx < productNav.length - 1 ? productNav[currentIdx + 1] : null;
+            return (
+              <div className="flex items-center gap-2">
+                <button
+                  disabled={!prevProduct}
+                  onClick={() => prevProduct && navigate(`/artwork/${prevProduct._id || prevProduct.productId}`)}
+                  className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl text-sm font-body font-medium text-warm-gray-600 border border-cream-200 bg-white hover:border-earth-300 hover:text-charcoal disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                >
+                  <IoChevronBackOutline size={16} />
+                  <span className="hidden sm:inline">Prev</span>
+                </button>
+                <span className="text-xs text-warm-gray-400 font-body px-1 hidden sm:block">
+                  {currentIdx + 1} / {productNav.length}
+                </span>
+                <button
+                  disabled={!nextProduct}
+                  onClick={() => nextProduct && navigate(`/artwork/${nextProduct._id || nextProduct.productId}`)}
+                  className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl text-sm font-body font-medium text-warm-gray-600 border border-cream-200 bg-white hover:border-earth-300 hover:text-charcoal disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                >
+                  <span className="hidden sm:inline">Next</span>
+                  <IoChevronForwardOutline size={16} />
+                </button>
+              </div>
+            );
+          })()}
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           

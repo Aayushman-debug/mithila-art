@@ -482,7 +482,8 @@ export default function ShopPage() {
           const mappedProducts = response.data.products.map(p => ({
             ...p,
             id: p.productId || p._id,
-            images: (p.images && p.images.length > 0) ? p.images : (p.gallery && p.gallery.length > 0 ? p.gallery : (p.image ? [p.image] : [])),
+            image: p.coverImage || p.image,
+            images: (p.images && p.images.length > 0) ? p.images : (p.gallery && p.gallery.length > 0 ? p.gallery : (p.coverImage ? [p.coverImage] : (p.image ? [p.image] : []))),
             inStock: p.stock > 0 && p.available !== false,
             artist: p.artist || 'Mithila Artist',
           }));
