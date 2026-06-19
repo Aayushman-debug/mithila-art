@@ -49,7 +49,7 @@ const STATUS_CONFIG = {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted }) {
+export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, isWishlisted, paintingsList }) {
   const navigate = useNavigate();
   const { id, title, artist, price, originalPrice, category, size, inStock } = painting;
   const images = painting.images && painting.images.length > 0 ? painting.images : [painting.image];
@@ -255,6 +255,7 @@ export default function PaintingCard({ painting, onAddToCart, onToggleWishlist, 
           artwork={painting} 
           isOpen={quickViewOpen} 
           onClose={() => setQuickViewOpen(false)} 
+          paintings={paintingsList || [painting]}
         />
       </Suspense>
     </>

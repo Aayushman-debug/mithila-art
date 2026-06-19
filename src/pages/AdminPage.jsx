@@ -506,7 +506,7 @@ export default function AdminPage() {
                         <IoTrashOutline size={18} /> Clean Database
                       </button>
                       <button onClick={() => { setProductToEdit(null); setIsProductModalOpen(true); }} className="flex items-center gap-2 px-4 py-2 bg-earth-500 text-white rounded-xl text-sm font-body font-medium hover:bg-earth-600 transition-colors">
-                        <IoAddOutline size={18} /> Add Variant
+                        <IoAddOutline size={18} /> Add Artwork
                       </button>
                     </div>
                   </div>

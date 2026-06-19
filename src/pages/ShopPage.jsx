@@ -887,6 +887,7 @@ export default function ShopPage() {
                               onAddToCart={handleAddToCart}
                               onToggleWishlist={handleToggleWishlist}
                               isWishlisted={wishlistIds.includes(painting.id)}
+                              paintingsList={filteredPaintings}
                             />
                           </motion.div>
                         ) : (
