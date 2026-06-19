@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookLoginModule from 'react-facebook-login/dist/facebook-login-render-props';
+const FacebookLogin = FacebookLoginModule.default || FacebookLoginModule;
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaFacebook } from 'react-icons/fa';
