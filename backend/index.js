@@ -10,6 +10,7 @@ const crypto = require("crypto");
 require("dotenv").config();
 const { createTransporter } = require('./utils/emailService');
 const { validateEmail, isDisposableEmail, validateIndianPhone, normalizePhone } = require('./utils/validation');
+const { verifyRazorpaySignature } = require('./utils/razorpayVerify');
 const seedProducts = require('./utils/seeder');
 
 // Auth routes
@@ -839,11 +840,7 @@ app.post("/verify-payment", async (req, res) => {
     }
 
     // Verify signature
-    const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
-    hmac.update(orderId + "|" + paymentId);
-    const generated_signature = hmac.digest("hex");
-
-    if (generated_signature !== signature) {
+    if (!verifyRazorpaySignature(orderId, paymentId, signature)) {
       return res.status(400).json({
         success: false,
         error: "Payment verification failed - Invalid signature"
@@ -951,11 +948,7 @@ app.post("/verify-cart-payment", async (req, res) => {
       return res.status(503).json({ success: false, error: 'Payment gateway secret not configured' });
     }
 
-    const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
-    hmac.update(orderId + "|" + paymentId);
-    const generated_signature = hmac.digest("hex");
-
-    if (generated_signature !== signature) {
+    if (!verifyRazorpaySignature(orderId, paymentId, signature)) {
       await CartOrder.findByIdAndUpdate(cartOrderId, { paymentStatus: 'failed' });
       return res.status(400).json({ success: false, error: 'Payment verification failed - Invalid signature' });
     }

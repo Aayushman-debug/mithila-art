@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FaFacebook } from 'react-icons/fa';
 
 export default function SocialLoginButtons({ onError }) {
   const [loading, setLoading] = useState(false);
-  const { loginWithGoogle } = useAuth();
+  const { loginWithGoogle, loginWithFacebook } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,6 +26,23 @@ export default function SocialLoginButtons({ onError }) {
       handleSuccess(result.user);
     } else {
       onError(result.message || 'Google login failed');
+    }
+  };
+
+  const handleFacebookSuccess = async (response) => {
+    if (response.accessToken) {
+      setLoading(true);
+      const result = await loginWithFacebook(response.accessToken);
+      setLoading(false);
+      
+      if (result.success) {
+        handleSuccess(result.user);
+      } else {
+        onError(result.message || 'Facebook login failed');
+      }
+    } else {
+      setLoading(false);
+      onError('Facebook authentication failed or was cancelled');
     }
   };
 
@@ -50,6 +69,25 @@ export default function SocialLoginButtons({ onError }) {
             width="100%"
             text="continue_with"
             shape="rectangular"
+          />
+        </div>
+        
+        <div className="w-full flex justify-center">
+          <FacebookLogin
+            appId={import.meta.env.VITE_FACEBOOK_APP_ID || ''}
+            autoLoad={false}
+            fields="name,email,picture"
+            callback={handleFacebookSuccess}
+            render={renderProps => (
+              <button
+                onClick={renderProps.onClick}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-warm-gray-300 dark:border-warm-gray-600 rounded-md bg-white dark:bg-warm-gray-800 text-charcoal dark:text-cream-100 hover:bg-cream-50 dark:hover:bg-warm-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-1 dark:focus:ring-offset-warm-gray-900"
+              >
+                <FaFacebook className="text-[#1877F2] text-xl" />
+                <span className="font-medium text-sm font-roboto">Continue with Facebook</span>
+              </button>
+            )}
           />
         </div>
       </div>
