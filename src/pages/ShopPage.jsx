@@ -560,6 +560,17 @@ export default function ShopPage() {
   }, [products, searchTerm, selectedCategories, priceRange, selectedSizes, sortBy]);
 
 
+  // --- DEBUG LOGGING ADDED FOR INITIALIZATION BUG INVESTIGATION ---
+  useEffect(() => {
+    console.log("=== SHOP PAGE RENDER STATE ===");
+    console.log("products length:", products.length);
+    console.log("filteredProducts length:", filteredPaintings.length);
+    console.log("viewMode:", viewMode);
+    console.log("first product:", products[0]);
+    console.log("===============================");
+  }, [products, filteredPaintings, viewMode]);
+
+
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
@@ -873,10 +884,7 @@ export default function ShopPage() {
                 )}
 
                 {filteredPaintings.length > 0 ? (
-                  <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="visible"
+                  <div
                     className={
                       viewMode === 'grid'
                         ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'
@@ -886,11 +894,7 @@ export default function ShopPage() {
                     <AnimatePresence mode="popLayout">
                       {filteredPaintings.map((painting) =>
                         viewMode === 'grid' ? (
-                          <motion.div
-                            key={painting.id}
-                            variants={fadeUp}
-                            layout
-                          >
+                          <div key={painting.id}>
                             <PaintingCard
                               painting={painting}
                               onAddToCart={handleAddToCart}
@@ -898,7 +902,7 @@ export default function ShopPage() {
                               isWishlisted={wishlistIds.includes(painting.id)}
                               allArtworks={filteredPaintings}
                             />
-                          </motion.div>
+                          </div>
                         ) : (
                           /* ── List View Card ── */
                           <motion.div
@@ -913,7 +917,7 @@ export default function ShopPage() {
                           >
                             <div className="relative w-40 md:w-52 flex-shrink-0 overflow-hidden">
                               <img
-                                src={painting.images?.[0] || painting.image}
+                                src={typeof painting.images?.[0] === 'object' ? painting.images[0].url : (painting.images?.[0] || painting.image)}
                                 alt={painting.title}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 loading="lazy"
@@ -977,7 +981,7 @@ export default function ShopPage() {
                         )
                       )}
                     </AnimatePresence>
-                  </motion.div>
+                  </div>
                 ) : (
                   /* ── Empty State ── */
                   <motion.div
