@@ -549,13 +549,27 @@ app.post("/create-cart-order", authenticate, async (req, res) => {
       if (!dbProduct) {
         return res.status(404).json({ success: false, error: `Product not found: ${item.title}` });
       }
-      calculatedSubtotal += dbProduct.price * (item.quantity || 1);
+      let itemPrice = dbProduct.price;
+      let itemImage = dbProduct.image || '';
+      
+      if (item.variantId && dbProduct.variants && dbProduct.variants.length > 0) {
+        const variant = dbProduct.variants.find(v => v.variantId === item.variantId);
+        if (variant) {
+          itemPrice = variant.price;
+          itemImage = variant.image?.url || variant.image || itemImage;
+        }
+      }
+
+      calculatedSubtotal += itemPrice * (item.quantity || 1);
       validatedItems.push({
         productId: dbProduct.productId,
         title: dbProduct.title,
         quantity: item.quantity || 1,
-        price: dbProduct.price,
-        image: dbProduct.image || ''
+        price: itemPrice,
+        image: itemImage,
+        variantId: item.variantId || undefined,
+        variantName: item.variantName || undefined,
+        variantImage: item.variantId ? itemImage : undefined
       });
     }
 
@@ -713,13 +727,27 @@ app.post("/create-upi-order", authenticate, async (req, res) => {
       if (!dbProduct) {
         return res.status(404).json({ success: false, error: `Product not found: ${item.title}` });
       }
-      calculatedSubtotal += dbProduct.price * (item.quantity || 1);
+      let itemPrice = dbProduct.price;
+      let itemImage = dbProduct.image || '';
+      
+      if (item.variantId && dbProduct.variants && dbProduct.variants.length > 0) {
+        const variant = dbProduct.variants.find(v => v.variantId === item.variantId);
+        if (variant) {
+          itemPrice = variant.price;
+          itemImage = variant.image?.url || variant.image || itemImage;
+        }
+      }
+
+      calculatedSubtotal += itemPrice * (item.quantity || 1);
       validatedItems.push({
         productId: dbProduct.productId,
         title: dbProduct.title,
         quantity: item.quantity || 1,
-        price: dbProduct.price,
-        image: dbProduct.image || ''
+        price: itemPrice,
+        image: itemImage,
+        variantId: item.variantId || undefined,
+        variantName: item.variantName || undefined,
+        variantImage: item.variantId ? itemImage : undefined
       });
     }
 
