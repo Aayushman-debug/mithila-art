@@ -57,7 +57,6 @@ const defaultAllowedOrigins = [
   "http://localhost:3001",
   "http://localhost:5173",
   "https://mithila-art-dhe3.vercel.app",
-  "https://mithila-art-ashen.vercel.app",
 ];
 
 const getDynamicOrigins = () => {
